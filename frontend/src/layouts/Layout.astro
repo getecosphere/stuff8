@@ -36,26 +36,36 @@ const {
     </style>
   </head>
   <body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen">
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+    <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2 group">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-extrabold text-slate-950 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+        <a href="/" class="flex items-center gap-3 group">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-black text-slate-950 text-sm shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
             S8
           </div>
-          <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-slate-100 to-slate-400 bg-clip-text text-transparent">Stuff8</span>
+          <div class="flex flex-col">
+            <span class="text-lg font-bold tracking-tight text-slate-100 leading-none">Stuff8</span>
+            <span class="text-[10px] text-slate-400 font-medium tracking-wide">Personal Asset Manager</span>
+          </div>
         </a>
 
-        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
-          <a href="#inventory" class="hover:text-emerald-400 transition-colors">My Inventory</a>
-          <a href="#marketplace" class="hover:text-emerald-400 transition-colors">Marketplace</a>
-          <a href="#bidding" class="hover:text-emerald-400 transition-colors">Bids & Offers</a>
-          <a href="#photos" class="hover:text-emerald-400 transition-colors">Media Vault</a>
-        </nav>
+        <div id="header-user-badge" class="flex items-center gap-3">
+          <button id="btn-onboarding-wizard" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all">
+            <span>🧭 Onboarding Wizard</span>
+          </button>
+          
+          <!-- Authenticated State -->
+          <div id="user-profile-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-medium text-slate-300">
+            <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
+              <span id="user-avatar-initial">?</span>
+            </div>
+            <span id="user-display-name">Not Signed In</span>
+            <button id="btn-logout" title="Sign Out / Switch Account" class="text-slate-500 hover:text-slate-200 ml-1 text-xs">✕</button>
+          </div>
 
-        <div class="flex items-center gap-3">
-          <a href="#inventory" class="px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md shadow-emerald-500/10 transition-all">
-            Open Inventory
-          </a>
+          <!-- Unauthenticated State Button -->
+          <button id="btn-header-login" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-md shadow-emerald-500/10 hidden transition-all">
+            Sign In / Sign Up
+          </button>
         </div>
       </div>
     </header>
