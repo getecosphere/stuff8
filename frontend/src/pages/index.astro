@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Stuff8 — Personal Inventory First, Marketplace Second">
+  <div class="relative overflow-hidden pt-12 pb-20">
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <!-- Hero -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-6">
+          <span>Domain Driven Composition</span>
+        </div>
+        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-100 mb-6 leading-tight">
+          Know what you own.<br />
+          <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Sell what you don't.</span>
+        </h1>
+        <p class="text-lg text-slate-400 leading-relaxed mb-8">
+          Stuff8 is a personal asset inventory system. Organize your physical belongings in a digital catalog, and toggle any item to <code class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 font-mono text-sm">sellable = true</code> to publish directly to the marketplace.
+        </p>
+      </div>
+
+      <!-- Domain Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Inventory Domain -->
+        <div id="inventory" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold mb-4">
+              01
+            </div>
+            <h2 class="text-xl font-bold text-slate-100 mb-2">Inventory Domain</h2>
+            <p class="text-slate-400 text-sm mb-4">
+              Private source of truth. Tracks storage locations, purchase price, receipts, condition, and item status.
+            </p>
+          </div>
+          <span class="inline-flex items-center text-xs font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2.5 py-1 rounded-md w-max">
+            inventory/backend (Rust)
+          </span>
+        </div>
+
+        <!-- Photos Domain -->
+        <div id="photos" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-teal-500/40 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 font-bold mb-4">
+              02
+            </div>
+            <h2 class="text-xl font-bold text-slate-100 mb-2">Photos Domain</h2>
+            <p class="text-slate-400 text-sm mb-4">
+              S3 & MinIO storage integration. Manages direct image uploads, resizing, and presigned media access.
+            </p>
+          </div>
+          <span class="inline-flex items-center text-xs font-mono text-teal-400 bg-teal-950/60 border border-teal-800/40 px-2.5 py-1 rounded-md w-max">
+            photos/backend (Rust + S3)
+          </span>
+        </div>
+
+        <!-- Marketplace Domain -->
+        <div id="marketplace" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold mb-4">
+              03
+            </div>
+            <h2 class="text-xl font-bold text-slate-100 mb-2">Marketplace Domain</h2>
+            <p class="text-slate-400 text-sm mb-4">
+              Filtered projection of inventory. Exposes sellable items publicly with search, category filtering, and location discovery.
+            </p>
+          </div>
+          <span class="inline-flex items-center text-xs font-mono text-cyan-400 bg-cyan-950/60 border border-cyan-800/40 px-2.5 py-1 rounded-md w-max">
+            marketplace/backend (Rust)
+          </span>
+        </div>
+
+        <!-- Bidding Domain -->
+        <div id="bidding" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/40 transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold mb-4">
+              04
+            </div>
+            <h2 class="text-xl font-bold text-slate-100 mb-2">Bidding Domain</h2>
+            <p class="text-slate-400 text-sm mb-4">
+              Bidding & offer queue. Allows buyers to place bids and sellers to evaluate, select, and initiate direct contact.
+            </p>
+          </div>
+          <span class="inline-flex items-center text-xs font-mono text-indigo-400 bg-indigo-950/60 border border-indigo-800/40 px-2.5 py-1 rounded-md w-max">
+            bidding/backend (Rust)
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
