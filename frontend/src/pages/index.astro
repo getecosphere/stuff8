@@ -3,90 +3,488 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Stuff8 — Personal Inventory First, Marketplace Second">
-  <div class="relative overflow-hidden pt-12 pb-20">
-    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <!-- Hero -->
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-6">
-          <span>Domain Driven Composition</span>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    
+    <!-- Hero Banner -->
+    <div class="relative rounded-3xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-teal-950/80 border border-emerald-500/20 p-8 sm:p-12 overflow-hidden shadow-2xl">
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-4">
+          <span>Personal Inventory & Bidding Marketplace</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-100 mb-6 leading-tight">
-          Know what you own.<br />
-          <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Sell what you don't.</span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-100 mb-4">
+          Inventory First.<br />
+          <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Marketplace Second.</span>
         </h1>
-        <p class="text-lg text-slate-400 leading-relaxed mb-8">
-          Stuff8 is a personal asset inventory system. Organize your physical belongings in a digital catalog, and toggle any item to <code class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 font-mono text-sm">sellable = true</code> to publish directly to the marketplace.
+        <p class="text-slate-300 text-base sm:text-lg mb-6 leading-relaxed">
+          Catalog everything you own in your private inventory. When you no longer need an item, toggle <code class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 font-mono text-xs">sellable = true</code> to list it on the marketplace for bidding.
         </p>
-      </div>
 
-      <!-- Domain Cards Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Inventory Domain -->
-        <div id="inventory" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold mb-4">
-              01
-            </div>
-            <h2 class="text-xl font-bold text-slate-100 mb-2">Inventory Domain</h2>
-            <p class="text-slate-400 text-sm mb-4">
-              Private source of truth. Tracks storage locations, purchase price, receipts, condition, and item status.
-            </p>
-          </div>
-          <span class="inline-flex items-center text-xs font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2.5 py-1 rounded-md w-max">
-            inventory/backend (Rust)
-          </span>
-        </div>
-
-        <!-- Photos Domain -->
-        <div id="photos" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-teal-500/40 transition-all flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 font-bold mb-4">
-              02
-            </div>
-            <h2 class="text-xl font-bold text-slate-100 mb-2">Photos Domain</h2>
-            <p class="text-slate-400 text-sm mb-4">
-              S3 & MinIO storage integration. Manages direct image uploads, resizing, and presigned media access.
-            </p>
-          </div>
-          <span class="inline-flex items-center text-xs font-mono text-teal-400 bg-teal-950/60 border border-teal-800/40 px-2.5 py-1 rounded-md w-max">
-            photos/backend (Rust + S3)
-          </span>
-        </div>
-
-        <!-- Marketplace Domain -->
-        <div id="marketplace" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold mb-4">
-              03
-            </div>
-            <h2 class="text-xl font-bold text-slate-100 mb-2">Marketplace Domain</h2>
-            <p class="text-slate-400 text-sm mb-4">
-              Filtered projection of inventory. Exposes sellable items publicly with search, category filtering, and location discovery.
-            </p>
-          </div>
-          <span class="inline-flex items-center text-xs font-mono text-cyan-400 bg-cyan-950/60 border border-cyan-800/40 px-2.5 py-1 rounded-md w-max">
-            marketplace/backend (Rust)
-          </span>
-        </div>
-
-        <!-- Bidding Domain -->
-        <div id="bidding" class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/40 transition-all flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold mb-4">
-              04
-            </div>
-            <h2 class="text-xl font-bold text-slate-100 mb-2">Bidding Domain</h2>
-            <p class="text-slate-400 text-sm mb-4">
-              Bidding & offer queue. Allows buyers to place bids and sellers to evaluate, select, and initiate direct contact.
-            </p>
-          </div>
-          <span class="inline-flex items-center text-xs font-mono text-indigo-400 bg-indigo-950/60 border border-indigo-800/40 px-2.5 py-1 rounded-md w-max">
-            bidding/backend (Rust)
-          </span>
+        <div class="flex flex-wrap gap-4">
+          <button id="btn-add-item" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add New Inventory Item
+          </button>
+          <a href="#marketplace-section" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition-all flex items-center gap-2">
+            Browse Marketplace Listings
+          </a>
         </div>
       </div>
     </div>
+
+    <!-- Navigation Tabs -->
+    <div class="border-b border-slate-800 flex gap-8 text-sm font-semibold text-slate-400">
+      <button id="tab-btn-inventory" class="py-3 text-emerald-400 border-b-2 border-emerald-400 flex items-center gap-2">
+        <span>📦 Private Inventory</span>
+        <span id="inventory-count" class="px-2 py-0.5 text-xs rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800/40">0</span>
+      </button>
+      <button id="tab-btn-marketplace" class="py-3 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2">
+        <span>🏷️ Public Marketplace</span>
+        <span id="marketplace-count" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-300">0</span>
+      </button>
+      <button id="tab-btn-bids" class="py-3 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2">
+        <span>🤝 Offers & Bids</span>
+        <span id="bids-count" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-300">0</span>
+      </button>
+    </div>
+
+    <!-- Section 1: Private Inventory View -->
+    <section id="inventory-section" class="space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-100">My Belongings & Assets</h2>
+          <p class="text-slate-400 text-sm">Private inventory records. Toggle items to sellable to publish them publicly.</p>
+        </div>
+      </div>
+
+      <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Dynamic Inventory Items Rendered Here -->
+      </div>
+    </section>
+
+    <!-- Section 2: Public Marketplace View -->
+    <section id="marketplace-section" class="space-y-6 hidden">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-100">Public Marketplace Projection</h2>
+        <p class="text-slate-400 text-sm">Browse items published by owners. Submit price bids directly to sellers.</p>
+      </div>
+
+      <div id="marketplace-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Dynamic Marketplace Items Rendered Here -->
+      </div>
+    </section>
+
+    <!-- Section 3: Offers & Bidding Queue -->
+    <section id="bids-section" class="space-y-6 hidden">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-100">Active Bids & Offers Queue</h2>
+        <p class="text-slate-400 text-sm">Review incoming bids on your items or check status of your submitted offers.</p>
+      </div>
+
+      <div id="bids-list" class="space-y-4">
+        <!-- Dynamic Bids Rendered Here -->
+      </div>
+    </section>
+
   </div>
+
+  <!-- Modal: Add Inventory Item -->
+  <div id="modal-item" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-slate-100">Add Item to Inventory</h3>
+        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-200 text-xl font-bold">×</button>
+      </div>
+
+      <form id="form-item" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Item Title</label>
+          <input type="text" id="input-title" required placeholder="e.g. Sony A7 III Camera Body" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Category</label>
+            <select id="input-category" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none">
+              <option value="Electronics">Electronics</option>
+              <option value="Cameras">Cameras</option>
+              <option value="Bicycles">Bicycles</option>
+              <option value="Books">Books</option>
+              <option value="Musical Instruments">Musical Instruments</option>
+              <option value="Furniture">Furniture</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Condition</label>
+            <select id="input-condition" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none">
+              <option value="Like New">Like New</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Used">Used</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+          <textarea id="input-description" rows="2" placeholder="Item description and details..." class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Estimated Value ($)</label>
+            <input type="number" id="input-estimated-value" placeholder="1200" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Storage Location (Private)</label>
+            <input type="text" id="input-storage-location" placeholder="Closet Box 3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 flex items-center justify-between">
+          <div>
+            <span class="block text-sm font-semibold text-slate-200">Available For Sale?</span>
+            <span class="block text-xs text-slate-400">Exposes item on public marketplace</span>
+          </div>
+          <input type="checkbox" id="input-sellable" class="w-5 h-5 accent-emerald-500 rounded cursor-pointer" />
+        </div>
+
+        <div id="asking-price-container" class="hidden">
+          <label class="block text-xs font-semibold text-emerald-400 mb-1">Asking Price ($)</label>
+          <input type="number" id="input-asking-price" placeholder="950" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-emerald-500/50 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none" />
+        </div>
+
+        <div class="flex justify-end gap-3 pt-3 border-t border-slate-800">
+          <button type="button" id="btn-cancel-modal" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold shadow-md shadow-emerald-500/20">Save Inventory Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Place Bid -->
+  <div id="modal-bid" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-slate-100">Submit Offer / Bid</h3>
+        <button id="btn-close-bid-modal" class="text-slate-400 hover:text-slate-200 text-xl font-bold">×</button>
+      </div>
+
+      <form id="form-bid" class="space-y-4">
+        <input type="hidden" id="bid-item-id" />
+        <div>
+          <span id="bid-item-title" class="block font-bold text-emerald-400 text-base mb-1">Item Title</span>
+          <span id="bid-asking-price" class="block text-slate-400 text-xs">Asking Price: $0</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Your Name</label>
+          <input type="text" id="bid-buyer-name" required placeholder="John Doe" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Contact Info (Phone / WhatsApp / Email)</label>
+          <input type="text" id="bid-contact-info" required placeholder="+1 555-0199 or email@domain.com" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-emerald-400 mb-1">Your Offer Amount ($)</label>
+          <input type="number" id="bid-amount" required placeholder="850" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-emerald-500/50 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Message / Note to Seller (Optional)</label>
+          <textarea id="bid-note" rows="2" placeholder="Can pick up in cash tomorrow morning..." class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-sm focus:border-emerald-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-3 border-t border-slate-800">
+          <button type="button" id="btn-cancel-bid-modal" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold shadow-md shadow-emerald-500/20">Submit Bid</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // State management for Stuff8 UI
+    let items = [
+      {
+        id: '1',
+        owner_id: 'user_1',
+        title: 'Sony Alpha A7 III Body',
+        description: 'Full-frame mirrorless camera in excellent condition. 14k shutter count.',
+        category: 'Cameras',
+        condition: 'Like New',
+        photos: ['https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80'],
+        storage_location: 'Studio Cabinet B',
+        estimated_value: 1250,
+        asking_price: 1100,
+        sellable: true,
+        status: 'sellable'
+      },
+      {
+        id: '2',
+        owner_id: 'user_1',
+        title: 'MacBook Pro 16" M1 Max (32GB / 1TB)',
+        description: 'Space Gray laptop used for video editing. Includes original 140W charger.',
+        category: 'Electronics',
+        condition: 'Good',
+        photos: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80'],
+        storage_location: 'Work Desk Drawer',
+        estimated_value: 1800,
+        asking_price: null,
+        sellable: false,
+        status: 'collection'
+      }
+    ];
+
+    let bids = [
+      {
+        id: 'b1',
+        item_id: '1',
+        buyer_name: 'Alex Rivera',
+        contact_info: '+1 (555) 234-5678',
+        amount: 1050,
+        note: 'Can meet at downtown cafe tomorrow with cash.',
+        status: 'Pending'
+      }
+    ];
+
+    // DOM Elements
+    const gridInventory = document.getElementById('inventory-grid');
+    const gridMarketplace = document.getElementById('marketplace-grid');
+    const listBids = document.getElementById('bids-list');
+
+    const modalItem = document.getElementById('modal-item');
+    const modalBid = document.getElementById('modal-bid');
+
+    const inputSellable = document.getElementById('input-sellable') as HTMLInputElement;
+    const askingPriceContainer = document.getElementById('asking-price-container');
+
+    // Toggle tabs
+    const tabInventory = document.getElementById('tab-btn-inventory');
+    const tabMarketplace = document.getElementById('tab-btn-marketplace');
+    const tabBids = document.getElementById('tab-btn-bids');
+
+    const secInventory = document.getElementById('inventory-section');
+    const secMarketplace = document.getElementById('marketplace-section');
+    const secBids = document.getElementById('bids-section');
+
+    function switchTab(tab: 'inventory' | 'marketplace' | 'bids') {
+      secInventory?.classList.toggle('hidden', tab !== 'inventory');
+      secMarketplace?.classList.toggle('hidden', tab !== 'marketplace');
+      secBids?.classList.toggle('hidden', tab !== 'bids');
+
+      tabInventory?.classList.toggle('text-emerald-400', tab === 'inventory');
+      tabInventory?.classList.toggle('border-emerald-400', tab === 'inventory');
+      tabMarketplace?.classList.toggle('text-emerald-400', tab === 'marketplace');
+      tabMarketplace?.classList.toggle('border-emerald-400', tab === 'marketplace');
+      tabBids?.classList.toggle('text-emerald-400', tab === 'bids');
+      tabBids?.classList.toggle('border-emerald-400', tab === 'bids');
+    }
+
+    tabInventory?.addEventListener('click', () => switchTab('inventory'));
+    tabMarketplace?.addEventListener('click', () => switchTab('marketplace'));
+    tabBids?.addEventListener('click', () => switchTab('bids'));
+
+    // Modal Triggers
+    document.getElementById('btn-add-item')?.addEventListener('click', () => modalItem?.classList.remove('hidden'));
+    document.getElementById('btn-close-modal')?.addEventListener('click', () => modalItem?.classList.add('hidden'));
+    document.getElementById('btn-cancel-modal')?.addEventListener('click', () => modalItem?.classList.add('hidden'));
+
+    document.getElementById('btn-close-bid-modal')?.addEventListener('click', () => modalBid?.classList.add('hidden'));
+    document.getElementById('btn-cancel-bid-modal')?.addEventListener('click', () => modalBid?.classList.add('hidden'));
+
+    inputSellable?.addEventListener('change', (e) => {
+      askingPriceContainer?.classList.toggle('hidden', !inputSellable.checked);
+    });
+
+    // Render Function
+    function render() {
+      const invCount = document.getElementById('inventory-count');
+      const mktCount = document.getElementById('marketplace-count');
+      const bidCount = document.getElementById('bids-count');
+
+      if (invCount) invCount.textContent = items.length.toString();
+      const sellableItems = items.filter(i => i.sellable);
+      if (mktCount) mktCount.textContent = sellableItems.length.toString();
+      if (bidCount) bidCount.textContent = bids.length.toString();
+
+      // Render Inventory Cards
+      if (gridInventory) {
+        gridInventory.innerHTML = items.map(item => `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+            <div class="h-48 bg-slate-950 relative overflow-hidden">
+              <img src="${item.photos[0] || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'}" alt="${item.title}" class="w-full h-full object-cover" />
+              <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold ${item.sellable ? 'bg-emerald-500 text-slate-950 shadow-md' : 'bg-slate-800 text-slate-300'}">
+                ${item.sellable ? 'Available For Sale' : 'Private Collection'}
+              </span>
+            </div>
+            <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">${item.category}</span>
+                <h3 class="font-bold text-slate-100 text-lg leading-snug">${item.title}</h3>
+                <p class="text-slate-400 text-xs line-clamp-2 mt-1">${item.description}</p>
+              </div>
+
+              <div class="pt-3 border-t border-slate-800 text-xs space-y-1">
+                <div class="flex justify-between text-slate-400">
+                  <span>Storage:</span> <span class="font-medium text-slate-200">${item.storage_location || 'N/A'}</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                  <span>Est. Value:</span> <span class="font-medium text-slate-200">$${item.estimated_value || '0'}</span>
+                </div>
+                ${item.sellable ? `<div class="flex justify-between text-emerald-400 font-bold text-sm">
+                  <span>Asking Price:</span> <span>$${item.asking_price || '0'}</span>
+                </div>` : ''}
+              </div>
+
+              <button onclick="toggleSellable('${item.id}')" class="w-full py-2 rounded-xl border ${item.sellable ? 'border-amber-500/40 text-amber-400 hover:bg-amber-950/40' : 'border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/40'} text-xs font-bold transition-all">
+                ${item.sellable ? 'Withdraw from Marketplace' : '⚡ Enable "Sellable"'}
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render Marketplace Cards
+      if (gridMarketplace) {
+        gridMarketplace.innerHTML = sellableItems.map(item => `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-teal-500/40 transition-all flex flex-col justify-between">
+            <div class="h-48 bg-slate-950 relative overflow-hidden">
+              <img src="${item.photos[0] || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'}" alt="${item.title}" class="w-full h-full object-cover" />
+              <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-400 text-slate-950 shadow-md">
+                $${item.asking_price}
+              </span>
+            </div>
+            <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-semibold text-teal-400 uppercase tracking-wider">${item.category} • ${item.condition}</span>
+                <h3 class="font-bold text-slate-100 text-lg leading-snug">${item.title}</h3>
+                <p class="text-slate-400 text-xs line-clamp-2 mt-1">${item.description}</p>
+              </div>
+
+              <button onclick="openBidModal('${item.id}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-bold text-xs shadow-md transition-all">
+                Place Offer / Bid
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render Bids Queue
+      if (listBids) {
+        listBids.innerHTML = bids.map(bid => {
+          const item = items.find(i => i.id === bid.item_id);
+          return `
+            <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="space-y-1">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">${item ? item.title : 'Item'}</span>
+                <h4 class="font-bold text-slate-100 text-base">Offer: $${bid.amount} <span class="text-xs font-normal text-slate-400">by ${bid.buyer_name}</span></h4>
+                <p class="text-slate-400 text-xs">${bid.note || 'No note provided'}</p>
+                <span class="inline-block text-xs text-slate-400">Contact: <code class="text-slate-200 bg-slate-950 px-1.5 py-0.5 rounded">${bid.contact_info}</code></span>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-full text-xs font-bold ${bid.status === 'Accepted' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
+                  ${bid.status}
+                </span>
+                ${bid.status === 'Pending' ? `
+                  <button onclick="acceptBid('${bid.id}')" class="px-4 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-sm">Accept Offer</button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Attach Global Functions
+    (window as any).toggleSellable = (id: string) => {
+      const item = items.find(i => i.id === id);
+      if (item) {
+        item.sellable = !item.sellable;
+        if (item.sellable && !item.asking_price) {
+          item.asking_price = item.estimated_value || 100;
+        }
+        render();
+      }
+    };
+
+    (window as any).openBidModal = (id: string, title: string, price: number) => {
+      (document.getElementById('bid-item-id') as HTMLInputElement).value = id;
+      document.getElementById('bid-item-title')!.textContent = title;
+      document.getElementById('bid-asking-price')!.textContent = `Asking Price: $${price}`;
+      modalBid?.classList.remove('hidden');
+    };
+
+    (window as any).acceptBid = (bidId: string) => {
+      const bid = bids.find(b => b.id === bidId);
+      if (bid) {
+        bid.status = 'Accepted';
+        render();
+        alert(`Bid of $${bid.amount} accepted! Contact buyer at: ${bid.contact_info} for Cash on Delivery.`);
+      }
+    };
+
+    // Handle Add Item Form Submit
+    document.getElementById('form-item')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = (document.getElementById('input-title') as HTMLInputElement).value;
+      const category = (document.getElementById('input-category') as HTMLSelectElement).value;
+      const condition = (document.getElementById('input-condition') as HTMLSelectElement).value;
+      const description = (document.getElementById('input-description') as HTMLTextAreaElement).value;
+      const estVal = parseFloat((document.getElementById('input-estimated-value') as HTMLInputElement).value) || 0;
+      const location = (document.getElementById('input-storage-location') as HTMLInputElement).value;
+      const isSellable = (document.getElementById('input-sellable') as HTMLInputElement).checked;
+      const askingPrice = parseFloat((document.getElementById('input-asking-price') as HTMLInputElement).value) || estVal;
+
+      items.unshift({
+        id: Date.now().toString(),
+        owner_id: 'user_1',
+        title,
+        category,
+        condition,
+        description,
+        photos: ['https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'],
+        storage_location: location,
+        estimated_value: estVal,
+        asking_price: isSellable ? askingPrice : null,
+        sellable: isSellable,
+        status: isSellable ? 'sellable' : 'collection'
+      });
+
+      modalItem?.classList.add('hidden');
+      (document.getElementById('form-item') as HTMLFormElement).reset();
+      render();
+    });
+
+    // Handle Submit Bid Form
+    document.getElementById('form-bid')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const itemId = (document.getElementById('bid-item-id') as HTMLInputElement).value;
+      const buyerName = (document.getElementById('bid-buyer-name') as HTMLInputElement).value;
+      const contactInfo = (document.getElementById('bid-contact-info') as HTMLInputElement).value;
+      const amount = parseFloat((document.getElementById('bid-amount') as HTMLInputElement).value) || 0;
+      const note = (document.getElementById('bid-note') as HTMLTextAreaElement).value;
+
+      bids.unshift({
+        id: 'b' + Date.now(),
+        item_id: itemId,
+        buyer_name: buyerName,
+        contact_info: contactInfo,
+        amount,
+        note,
+        status: 'Pending'
+      });
+
+      modalBid?.classList.add('hidden');
+      (document.getElementById('form-bid') as HTMLFormElement).reset();
+      render();
+      switchTab('bids');
+    });
+
+    // Initial render
+    render();
+  </script>
 </Layout>
