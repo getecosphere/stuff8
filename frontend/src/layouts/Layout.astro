@@ -7,13 +7,13 @@ interface Props {
 }
 
 const { 
-  title = "Stuff8 — Personal Inventory First, Marketplace Second", 
-  description = "Organize your physical belongings in a digital inventory. Optionally turn unused items into marketplace listings with a single click." 
+  title = "Stuff8 — Catat Barang & Pasar Jual Beli", 
+  description = "Rapiin barang-barang kamu dalam inventaris digital. Ada barang nganggur? Tinggal sekali klik langsung pajang di marketplace!" 
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,36 +35,27 @@ const {
       }
     </style>
   </head>
-  <body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen">
-    <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40">
+  <body class="bg-slate-50 text-slate-900 flex flex-col min-h-screen">
+    <header class="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-xs">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <a href="/" class="flex items-center gap-3 group">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-black text-slate-950 text-sm shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-            S8
-          </div>
-          <div class="flex flex-col">
-            <span class="text-lg font-bold tracking-tight text-slate-100 leading-none">Stuff8</span>
-            <span class="text-[10px] text-slate-400 font-medium tracking-wide">Personal Asset Manager</span>
-          </div>
+          <img src="/logo.png" alt="Stuff8 Logo" class="h-8 w-auto object-contain group-hover:opacity-90 transition-opacity" />
+          <span class="sr-only">Stuff8 - Manajemen Barang & Pasar Jual Beli</span>
         </a>
 
         <div id="header-user-badge" class="flex items-center gap-3">
-          <button id="btn-onboarding-wizard" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-all">
-            <span>🧭 Onboarding Wizard</span>
-          </button>
-          
           <!-- Authenticated State -->
-          <div id="user-profile-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-medium text-slate-300">
-            <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
+          <div id="user-profile-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-medium text-slate-800">
+            <div class="w-5 h-5 rounded-full bg-navy-900 text-white flex items-center justify-center font-bold text-[10px]">
               <span id="user-avatar-initial">?</span>
             </div>
-            <span id="user-display-name">Not Signed In</span>
-            <button id="btn-logout" title="Sign Out / Switch Account" class="text-slate-500 hover:text-slate-200 ml-1 text-xs">✕</button>
+            <span id="user-display-name">Belum Masuk</span>
+            <button id="btn-logout" title="Keluar / Ganti Akun" class="text-slate-400 hover:text-slate-700 ml-1 text-xs">✕</button>
           </div>
 
           <!-- Unauthenticated State Button -->
-          <button id="btn-header-login" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-md shadow-emerald-500/10 hidden transition-all">
-            Sign In / Sign Up
+          <button id="btn-header-login" class="px-3 py-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs hidden transition-all">
+            Masuk / Daftar
           </button>
         </div>
       </div>
@@ -74,10 +65,11 @@ const {
       <slot />
     </main>
 
-    <footer class="border-t border-slate-800 bg-slate-950 py-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-slate-500">
-        <p>© 2026 Stuff8 — Personal Inventory & Bidding Marketplace (ECO DDD Estate)</p>
+    <footer class="border-t border-slate-200 bg-white py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
+        <p>© 2026 Stuff8 — Catat Barang Pribadi & Pasar Jual Beli (ECO DDD Estate)</p>
       </div>
     </footer>
   </body>
 </html>
+
