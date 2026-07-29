@@ -613,40 +613,58 @@ import Layout from '../layouts/Layout.astro';
   <div id="modal-bid" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl relative">
       <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h3 class="text-lg font-bold text-slate-900">Ajukan Penawaran Harga</h3>
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Simulasi Penawaran Harga</h3>
+          <p class="text-xs text-slate-500">Simulasikan penawaran pembeli untuk barang ini</p>
+        </div>
         <button id="btn-close-bid-modal" class="text-slate-400 hover:text-slate-700 text-xl font-bold">×</button>
       </div>
 
       <form id="form-bid" class="space-y-4">
         <input type="hidden" id="bid-item-id" />
-        <div>
-          <span id="bid-item-title" class="block font-bold text-navy-900 text-base mb-1">Nama Barang</span>
-          <span id="bid-asking-price" class="block text-slate-500 text-xs">Harga Buka: Rp 0</span>
+        
+        <!-- Logged in random user badge -->
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+          <div class="space-y-0.5">
+            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Penawar (Logged-in User)</span>
+            <span id="bid-sim-name" class="block text-sm font-bold text-navy-900">Budi Santoso</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Simulasi User</span>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Kamu</label>
-          <input type="text" id="bid-buyer-name" required placeholder="Budi Santoso" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+        <!-- Product info -->
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-0.5">
+          <span id="bid-item-title" class="block font-bold text-slate-900 text-sm">Nama Barang</span>
+          <span id="bid-asking-price" class="block text-slate-600 text-xs font-semibold">Harga Buka: Rp 0</span>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Kontak (WA / HP / Email)</label>
-          <input type="text" id="bid-contact-info" required placeholder="0812-3456-7890 atau email@domain.com" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-        </div>
+        <!-- Bidding price input with steppers and percentage buttons -->
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-800">Jumlah Penawaran Kamu</label>
+          
+          <div class="flex items-center gap-2">
+            <button type="button" id="btn-bid-step-down" class="px-3.5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-all select-none">
+              - 100rb
+            </button>
+            <input type="number" id="bid-amount" required step="100000" class="flex-1 px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-base font-bold text-center focus:border-navy-900 focus:outline-none" />
+            <button type="button" id="btn-bid-step-up" class="px-3.5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-all select-none">
+              + 100rb
+            </button>
+          </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-navy-900 mb-1">Harga Penawaran Kamu (Rp)</label>
-          <input type="number" id="bid-amount" required placeholder="16500000" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Pesan untuk Penjual (Opsional)</label>
-          <textarea id="bid-note" rows="2" placeholder="Bisa COD daerah Jakarta Selatan besok sore ya..." class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none"></textarea>
+          <!-- Quick percentage shortcuts -->
+          <div class="flex items-center justify-between gap-1.5 pt-1">
+            <button type="button" data-pct="-10" class="btn-bid-pct flex-1 text-[11px] py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border border-slate-200 transition-all">-10%</button>
+            <button type="button" data-pct="-5" class="btn-bid-pct flex-1 text-[11px] py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border border-slate-200 transition-all">-5%</button>
+            <button type="button" data-pct="0" class="btn-bid-pct flex-1 text-[11px] py-1.5 rounded-md bg-navy-900 text-white font-semibold shadow-xs transition-all">Pas Harga</button>
+            <button type="button" data-pct="5" class="btn-bid-pct flex-1 text-[11px] py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border border-slate-200 transition-all">+5%</button>
+            <button type="button" data-pct="10" class="btn-bid-pct flex-1 text-[11px] py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border border-slate-200 transition-all">+10%</button>
+          </div>
         </div>
 
         <div class="flex justify-end gap-3 pt-3 border-t border-slate-200">
           <button type="button" id="btn-cancel-bid-modal" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold">Batal</button>
-          <button type="submit" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-sm font-bold shadow-xs">Kirim Penawaran</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-sm font-bold shadow-xs transition-all">Kirim Penawaran</button>
         </div>
       </form>
     </div>
@@ -1178,6 +1196,22 @@ import Layout from '../layouts/Layout.astro';
       }
     }
 
+    const INDONESIAN_NAMES = [
+      'Budi Santoso',
+      'Siti Rahma',
+      'Rian Pratama',
+      'Dewi Lestari',
+      'Agus Wijaya',
+      'Andi Saputra',
+      'Maya Putri',
+      'Eko Prasetyo',
+      'Rina Marlina',
+      'Fajar Hidayat'
+    ];
+
+    let demoBids: Record<string, Array<{ buyer_name: string; amount: number; created_at: number }>> = {};
+    let currentBidBasePrice = 0;
+
     function renderVisitorMarketplaceGrid() {
       const visitorMktGrid = document.getElementById('public-marketplace-visitor-grid');
       if (!visitorMktGrid) return;
@@ -1203,27 +1237,50 @@ import Layout from '../layouts/Layout.astro';
           </div>
         `;
       } else {
-        visitorMktGrid.innerHTML = allListings.map(item => `
-          <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs">
-            <div class="h-48 bg-slate-100 relative overflow-hidden">
-              <img src="${(item.photos && item.photos[0]) || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'}" alt="${item.title}" class="w-full h-full object-cover" />
-              <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-navy-900 text-white shadow-xs">
-                Rp ${parseInt(item.asking_price || 0).toLocaleString('id-ID')}
-              </span>
-            </div>
-            <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
-              <div>
-                <span class="text-xs font-semibold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
-                <h3 class="font-bold text-slate-900 text-base leading-snug">${item.title}</h3>
-                <p class="text-slate-600 text-xs line-clamp-2 mt-1">${item.description}</p>
-              </div>
+        visitorMktGrid.innerHTML = allListings.map(item => {
+          const itemId = item.item_id || item.id;
+          const bidsForItem = (demoBids[itemId] || [])
+            .slice()
+            .sort((a, b) => b.amount - a.amount)
+            .slice(0, 3);
 
-              <button onclick="openBidModal('${item.item_id || item.id}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all">
-                Ajukan Penawaran Harga
-              </button>
+          const topBiddersHtml = bidsForItem.length > 0 ? `
+            <div class="absolute top-3 left-3 flex flex-col gap-1 z-10 max-w-[70%]">
+              ${bidsForItem.map((b, idx) => `
+                <div class="px-2 py-0.5 rounded bg-slate-900/85 text-white text-[10px] font-medium backdrop-blur-xs shadow-xs flex items-center gap-1 border border-white/10">
+                  <span class="text-amber-400 font-bold">#${idx + 1}</span>
+                  <span class="text-emerald-400 font-bold">Rp ${parseInt(b.amount.toString()).toLocaleString('id-ID')}</span>
+                  <span class="text-slate-300 text-[10px] truncate font-normal">• ${b.buyer_name}</span>
+                </div>
+              `).join('')}
             </div>
-          </div>
-        `).join('');
+          ` : '';
+
+          return `
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs">
+              <div class="h-48 bg-slate-100 relative overflow-hidden">
+                <img src="${(item.photos && item.photos[0]) || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'}" alt="${item.title}" class="w-full h-full object-cover" />
+                
+                ${topBiddersHtml}
+
+                <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-navy-900 text-white shadow-xs">
+                  Rp ${parseInt(item.asking_price || 0).toLocaleString('id-ID')}
+                </span>
+              </div>
+              <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                <div>
+                  <span class="text-xs font-semibold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
+                  <h3 class="font-bold text-slate-900 text-base leading-snug">${item.title}</h3>
+                  <p class="text-slate-600 text-xs line-clamp-2 mt-1">${item.description}</p>
+                </div>
+
+                <button onclick="openBidModal('${itemId}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all">
+                  Ajukan Penawaran Harga
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
       }
     }
 
@@ -1426,12 +1483,39 @@ import Layout from '../layouts/Layout.astro';
       (document.getElementById('bid-item-id') as HTMLInputElement).value = id;
       document.getElementById('bid-item-title')!.textContent = title;
       document.getElementById('bid-asking-price')!.textContent = `Harga Buka: Rp ${price.toLocaleString('id-ID')}`;
-      if (currentSession && currentSession.user) {
-        (document.getElementById('bid-buyer-name') as HTMLInputElement).value = currentSession.user.name || currentSession.user.username;
-        (document.getElementById('bid-contact-info') as HTMLInputElement).value = currentSession.user.email;
-      }
+      
+      currentBidBasePrice = price || 0;
+
+      // Randomly pick an Indonesian name for the bidder
+      const randomName = INDONESIAN_NAMES[Math.floor(Math.random() * INDONESIAN_NAMES.length)];
+      document.getElementById('bid-sim-name')!.textContent = randomName;
+
+      // Default amount is base asking price
+      (document.getElementById('bid-amount') as HTMLInputElement).value = currentBidBasePrice.toString();
+
       modalBid?.classList.remove('hidden');
     };
+
+    // Steppers and Percentage listeners for Bid Form
+    document.getElementById('btn-bid-step-down')?.addEventListener('click', () => {
+      const input = document.getElementById('bid-amount') as HTMLInputElement;
+      const currentVal = parseInt(input.value) || 0;
+      input.value = Math.max(0, currentVal - 100000).toString();
+    });
+
+    document.getElementById('btn-bid-step-up')?.addEventListener('click', () => {
+      const input = document.getElementById('bid-amount') as HTMLInputElement;
+      const currentVal = parseInt(input.value) || 0;
+      input.value = (currentVal + 100000).toString();
+    });
+
+    document.querySelectorAll('.btn-bid-pct').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const pct = parseInt((e.currentTarget as HTMLElement).getAttribute('data-pct') || '0');
+        const calculated = Math.round((currentBidBasePrice * (1 + pct / 100)) / 50000) * 50000;
+        (document.getElementById('bid-amount') as HTMLInputElement).value = calculated.toString();
+      });
+    });
 
     (window as any).acceptBid = async (bidId: string) => {
       try {
@@ -1448,110 +1532,25 @@ import Layout from '../layouts/Layout.astro';
       }
     };
 
-    // Direct Add Item Form
-    document.getElementById('form-item')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!currentSession || !currentSession.user) {
-        openWizard();
-        return;
-      }
-
-      const title = (document.getElementById('input-title') as HTMLInputElement).value;
-      const category = (document.getElementById('input-category') as HTMLSelectElement).value;
-      const condition = (document.getElementById('input-condition') as HTMLSelectElement).value;
-      const description = (document.getElementById('input-description') as HTMLTextAreaElement).value;
-      const estVal = parseFloat((document.getElementById('input-estimated-value') as HTMLInputElement).value) || 0;
-      const location = (document.getElementById('input-storage-location') as HTMLInputElement).value;
-      const isSellable = (document.getElementById('input-sellable') as HTMLInputElement).checked;
-      const askingPrice = parseFloat((document.getElementById('input-asking-price') as HTMLInputElement).value) || estVal;
-
-      try {
-        const res = await fetch(`${INVENTORY_API}/items`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            owner_id: currentSession.user.id,
-            title,
-            category,
-            condition,
-            description,
-            photos: ['https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'],
-            storage_location: location,
-            estimated_value: estVal,
-            asking_price: isSellable ? askingPrice : null,
-            sellable: isSellable,
-            status: isSellable ? 'sellable' : 'collection'
-          })
-        });
-
-        if (res.ok) {
-          const newItem = await res.json();
-
-          if (isSellable) {
-            await fetch(`${MARKETPLACE_API}/sync-item`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                item_id: newItem.id,
-                seller_id: currentSession.user.id,
-                title: newItem.title,
-                description: newItem.description,
-                category: newItem.category,
-                condition: newItem.condition,
-                photos: newItem.photos || [],
-                asking_price: askingPrice,
-                general_location: location || 'Local Area',
-                sellable: true
-              })
-            });
-          }
-
-          modalItem?.classList.add('hidden');
-          (document.getElementById('form-item') as HTMLFormElement).reset();
-          askingPriceContainer?.classList.add('hidden');
-          await loadData();
-        }
-      } catch (err) {
-        console.error('Failed to create inventory item:', err);
-      }
-    });
-
     // Handle Submit Bid Form
     document.getElementById('form-bid')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const itemId = (document.getElementById('bid-item-id') as HTMLInputElement).value;
-      const buyerName = (document.getElementById('bid-buyer-name') as HTMLInputElement).value;
-      const contactInfo = (document.getElementById('bid-contact-info') as HTMLInputElement).value;
-      const amount = parseFloat((document.getElementById('bid-amount') as HTMLInputElement).value) || 0;
-      const note = (document.getElementById('bid-note') as HTMLTextAreaElement).value;
+      const buyerName = document.getElementById('bid-sim-name')?.textContent || 'User Simulasi';
+      const amount = parseInt((document.getElementById('bid-amount') as HTMLInputElement).value) || 0;
 
-      const buyerId = currentSession && currentSession.user ? currentSession.user.id : 'buyer_' + Date.now();
-
-      try {
-        const res = await fetch(`${BIDDING_API}/bids`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            item_id: itemId,
-            buyer_id: buyerId,
-            buyer_name: buyerName,
-            contact_info: contactInfo,
-            amount,
-            note
-          })
-        });
-
-        if (res.ok) {
-          modalBid?.classList.add('hidden');
-          (document.getElementById('form-bid') as HTMLFormElement).reset();
-          await loadData();
-          if (currentSession && currentSession.user) {
-            switchTab('bids');
-          }
-        }
-      } catch (err) {
-        console.error('Failed to submit bid:', err);
+      if (!demoBids[itemId]) {
+        demoBids[itemId] = [];
       }
+
+      demoBids[itemId].push({
+        buyer_name: buyerName,
+        amount: amount,
+        created_at: Date.now()
+      });
+
+      modalBid?.classList.add('hidden');
+      renderVisitorMarketplaceGrid();
     });
 
     // Initial Startup Flow
