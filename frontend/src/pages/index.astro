@@ -729,7 +729,7 @@ import Layout from '../layouts/Layout.astro';
           <div>
             <div class="flex items-center gap-2">
               <h3 id="chat-bidder-name" class="font-bold text-white text-sm sm:text-base">Budi Santoso</h3>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Bidder Pilihan</span>
+              <span id="chat-buyer-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Bidder Pilihan</span>
             </div>
             <p id="chat-item-subtitle" class="text-slate-400 text-xs truncate max-w-xs sm:max-w-sm">Kamera Fujifilm X100V • Rp 21.000.000</p>
           </div>
@@ -818,7 +818,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="flex items-center gap-2">
           <span class="text-xl">📜</span>
           <div>
-            <h3 class="font-extrabold text-slate-900 text-base">Riwayat Kepemilikan Barang (Provenance)</h3>
+            <h3 class="font-extrabold text-slate-900 text-base">Riwayat Kepemilikan</h3>
             <p id="ownership-item-title" class="text-xs text-slate-500 font-semibold">Nama Barang</p>
           </div>
         </div>
@@ -836,6 +836,63 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
   </div>
+
+  <!-- CTA Section: Join Stuff8 -->
+  <section class="py-12 bg-white border-t border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center space-y-4">
+        <!-- Headline -->
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+          Siap Kelola Barang & Jualan Lebih Smart?
+        </h2>
+
+        <!-- Description -->
+        <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">
+          Udah liat kan gimana <strong class="text-slate-900">Stuff8</strong> bikin hidup lo lebih gampang? 
+          Dari catat barang, pasang harga, nego via chat realtime, sampe transaksi COD — semua dalam satu aplikasi!
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+          <button onclick="alert('Coming soon! 🚀')" class="group px-6 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+            <span>Mulai Pakai Stuff8 Sekarang</span>
+            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+
+          <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm border border-slate-300 transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path>
+            </svg>
+            <span>Coba Simulasi Lagi</span>
+          </button>
+        </div>
+
+        <!-- Features -->
+        <div class="flex flex-wrap items-center justify-center gap-4 pt-4 text-xs text-slate-500">
+          <div class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>100% Gratis</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Chat Realtime</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Provenance Tracking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <script>
     const AUTH_API = import.meta.env.PUBLIC_AUTH_URL ? `${import.meta.env.PUBLIC_AUTH_URL}/auth` : 'http://127.0.0.1:26376/api/auth';
@@ -1490,27 +1547,27 @@ import Layout from '../layouts/Layout.astro';
       timelineEl.innerHTML = records.map((rec, idx) => {
         const isLatest = idx === records.length - 1;
         const isSoldRecord = (rec.notes || '').toLowerCase().includes('terjual') || (rec.notes || '').toLowerCase().includes('sold');
+        const isInitialRecord = (rec.notes || '').toLowerCase().includes('terdaftar pertama') || (rec.notes || '').toLowerCase().includes('katalog inventory');
         const dateStr = rec.transferred_at ? (new Date(rec.transferred_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })) : 'Baru saja';
 
         return `
-          <div class="relative pl-6 pb-4 border-l-2 ${isLatest ? 'border-emerald-500' : 'border-slate-200'} last:pb-0">
-            <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full ${isSoldRecord ? 'bg-emerald-500 ring-4 ring-emerald-100' : 'bg-slate-400'} flex items-center justify-center text-[10px] text-white font-bold">
+          <div class="relative pl-8 pb-4 border-l-2 ${isLatest ? 'border-emerald-500' : 'border-slate-200'} last:pb-0">
+            <div class="absolute -left-[10px] top-0 w-5 h-5 rounded-full ${isSoldRecord ? 'bg-emerald-500 ring-4 ring-emerald-100' : 'bg-slate-400'} flex items-center justify-center text-[10px] text-white font-bold">
               ${isSoldRecord ? '✓' : idx + 1}
             </div>
-            <div class="p-3.5 rounded-xl ${isSoldRecord ? 'bg-emerald-50/70 border border-emerald-200' : 'bg-slate-50 border border-slate-200'} space-y-1.5 shadow-2xs">
-              <div class="flex items-center justify-between text-xs">
-                <span class="font-extrabold ${isSoldRecord ? 'text-emerald-900' : 'text-slate-800'}">
-                  ${isSoldRecord ? '🏷️ Terjual (SOLD) & Hak Milik Berpindah' : '📍 Pemilik Pertama (Penjual)'}
-                </span>
+            <div class="p-3.5 rounded-xl ${isSoldRecord ? 'bg-emerald-50/70 border border-emerald-200' : 'bg-slate-50 border border-slate-200'} space-y-2 shadow-2xs">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">${isSoldRecord ? '🏷️' : '📍'}</span>
+                  <strong class="text-sm ${isSoldRecord ? 'text-emerald-900' : 'text-slate-900'}">${rec.to_owner_name}</strong>
+                </div>
                 <span class="text-[11px] text-slate-500 font-mono">${dateStr}</span>
               </div>
-              <div class="text-xs text-slate-700 space-y-0.5">
-                <div><span class="text-slate-500">Pemilik Asal:</span> <strong>${rec.from_owner_name}</strong></div>
-                <div><span class="text-slate-500">Pemilik Baru:</span> <strong class="text-emerald-800">${rec.to_owner_name}</strong></div>
-                <div><span class="text-slate-500">Nilai Transaksi:</span> <strong class="text-emerald-700 font-mono">Rp ${(rec.price || 0).toLocaleString('id-ID')}</strong></div>
+              <div class="text-xs ${isSoldRecord ? 'text-emerald-700' : 'text-slate-600'} font-semibold">
+                Rp ${(rec.price || 0).toLocaleString('id-ID')}
               </div>
               <div class="text-[11px] text-slate-500 pt-1 border-t border-slate-200/60 italic">
-                "${rec.notes}"
+                ${rec.notes}
               </div>
             </div>
           </div>
@@ -1554,7 +1611,8 @@ import Layout from '../layouts/Layout.astro';
           const isSold = item.is_sold || item.isSold || false;
           const hasInterview = bidsForItem.some(b => (localChatMessages[b.id] && localChatMessages[b.id].length > 0) || b.status === 'Interviewing');
 
-          const topBiddersHtml = bidsForItem.length > 0 ? `
+          // Only show bidder info if item is NOT sold
+          const topBiddersHtml = (!isSold && bidsForItem.length > 0) ? `
             <div class="absolute top-3 left-3 flex flex-col gap-1 z-10 max-w-[70%]">
               ${bidsForItem.map((b, idx) => `
                 <div class="px-2 py-0.5 rounded bg-slate-900/85 text-white text-[10px] font-medium backdrop-blur-xs shadow-xs flex items-center gap-1 border border-white/10">
@@ -1990,340 +2048,16 @@ import Layout from '../layouts/Layout.astro';
     let activeChatBidId: string | null = null;
     let chatPollInterval: any = null;
     let activeVisitorProductTab: string = 'all';
+    let activeVisitorChatBidId: string | null = null;
     const localChatMessages: Record<string, Array<{ id: string; sender_id: string; sender_name: string; message: string; created_at: string }>> = {};
 
-    // Approved Bids Widget Renderer (For both Dashboard & Visitor Section with Product Tabs)
-    function renderApprovedBidsWidget() {
-      const container = document.getElementById('approved-bids-container');
-      const visitorContainer = document.getElementById('visitor-approved-bids-container');
-      const tabsContainer = document.getElementById('visitor-chat-product-tabs');
-      const badge = document.getElementById('approved-bids-count-badge');
-
-      const acceptedBids = bids.filter(b => {
-        const s = typeof b.status === 'string' ? b.status : Object.keys(b.status || {})[0] || '';
-        return s === 'Accepted' || s === 'accepted';
-      });
-
-      if (badge) badge.textContent = `${acceptedBids.length} Obrolan Aktif`;
-
-      if (container) {
-        if (acceptedBids.length === 0) {
-          container.innerHTML = `
-            <div class="col-span-full p-6 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-2">
-              <p class="text-slate-800 text-xs font-semibold">Belum Ada Penawaran Disetujui</p>
-              <p class="text-slate-600 text-[11px] max-w-md mx-auto leading-relaxed">
-                Ketika kamu menyetujui penawaran harga dari pembeli di tab "Penawaran & Nego", widget chat realtime akan aktif di sini untuk melakukan pendekatan dan menyepakati transaksi COD.
-              </p>
-            </div>
-          `;
-        } else {
-          container.innerHTML = acceptedBids.map(bid => renderSingleApprovedBidCard(bid)).join('');
-        }
-      }
-
-      // Collect active marketplace listings to ensure deals/bids section only shows for active marketplace items
-      const activeDemoListings = Object.values(demoItems).filter(item => item.isSellable).map(item => item.id);
-      const activeListingItemIds = new Set([
-        ...activeDemoListings,
-        ...marketplaceListings.map(m => m.item_id || m.id)
-      ]);
-
-      // Collect all active bids (strictly synchronized with marketplace item bids)
-      const allVisitorDeals: any[] = [];
-      activeListingItemIds.forEach(itemId => {
-        const itemBids = getBidsForItem(itemId);
-        itemBids.forEach(b => {
-          allVisitorDeals.push(b);
-          if (!bids.some(gb => gb.id === b.id)) bids.push(b);
-        });
-      });
-
-      // Dynamically hide/show the simulation section based on whether active deals/bids exist
-      const demoApprovedSection = document.getElementById('demo-approved-bids-section');
-      if (demoApprovedSection) {
-        if (allVisitorDeals.length === 0) {
-          demoApprovedSection.classList.add('hidden');
-        } else {
-          demoApprovedSection.classList.remove('hidden');
-        }
-      }
-
-      // Render Product Tabs for Visitor Section
-      if (tabsContainer) {
-        if (allVisitorDeals.length === 0) {
-          tabsContainer.innerHTML = '';
-        } else {
-          const itemMap: Record<string, number> = {};
-          allVisitorDeals.forEach(d => {
-            itemMap[d.item_id] = (itemMap[d.item_id] || 0) + 1;
-          });
-
-          const itemIds = Object.keys(itemMap);
-
-          tabsContainer.innerHTML = `
-            <button onclick="switchVisitorProductTab('all')" class="px-3.5 py-1.5 rounded-lg border transition-all text-xs font-bold shrink-0 ${
-              activeVisitorProductTab === 'all' 
-                ? 'bg-navy-900 text-white border-navy-900 shadow-xs' 
-                : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
-            }">
-              Semua Obrolan (${allVisitorDeals.length})
-            </button>
-            ${itemIds.map(itemId => {
-              const key = itemId.replace('demo-', '');
-              const itemObj = items.find(i => i.id === itemId) || marketplaceListings.find(m => m.item_id === itemId) || demoItems[key];
-              const title = itemObj ? itemObj.title : `Produk #${itemId.substring(0, 6)}`;
-              const shortTitle = title.length > 22 ? title.substring(0, 20) + '...' : title;
-              const count = itemMap[itemId];
-
-              return `
-                <button onclick="switchVisitorProductTab('${itemId}')" class="px-3.5 py-1.5 rounded-lg border transition-all text-xs font-semibold shrink-0 ${
-                  activeVisitorProductTab === itemId 
-                    ? 'bg-navy-900 text-white border-navy-900 font-bold shadow-xs' 
-                    : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
-                }">
-                  ${shortTitle} (${count})
-                </button>
-              `;
-            }).join('')}
-          `;
-        }
-      }
-
-      // Render Visitor Section Deals Master-Detail Layout (Vertical List -> Inline Chat)
-      if (visitorContainer) {
-        if (allVisitorDeals.length === 0) {
-          visitorContainer.className = "grid grid-cols-1 gap-4";
-          visitorContainer.innerHTML = `
-            <div class="col-span-full p-8 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-3">
-              <div class="w-12 h-12 rounded-full bg-white text-slate-600 font-bold text-xl flex items-center justify-center mx-auto border border-slate-200 shadow-2xs">
-                💬
-              </div>
-              <div class="space-y-1 max-w-md mx-auto">
-                <h4 class="text-slate-900 font-bold text-sm">Belum Ada Penawaran pada Barang Marketplace</h4>
-                <p class="text-slate-600 text-xs leading-relaxed">
-                  Alur simulasi ini menggunakan data riil. Silakan klik tombol <strong class="text-emerald-700 font-bold">"Ajukan Penawaran Harga"</strong> pada salah satu barang di marketplace di atas untuk mengirim penawaran dan menguji alur negosiasi & chat realtime per produk!
-                </p>
-              </div>
-            </div>
-          `;
-        } else {
-          const filteredDeals = activeVisitorProductTab === 'all' 
-            ? allVisitorDeals 
-            : allVisitorDeals.filter(d => d.item_id === activeVisitorProductTab);
-
-          renderVisitorDealsMasterDetail(filteredDeals);
-        }
-      }
-    }
-
-    let activeVisitorChatBidId: string | null = null;
-
-    function renderVisitorDealsMasterDetail(filteredDeals: any[]) {
-      const visitorContainer = document.getElementById('visitor-approved-bids-container');
-      if (!visitorContainer) return;
-
-      if (filteredDeals.length === 0) {
-        visitorContainer.className = "grid grid-cols-1 gap-4";
-        visitorContainer.innerHTML = `
-          <div class="col-span-full p-6 rounded-xl bg-slate-50 border border-slate-200 text-center text-slate-600 text-xs">
-            Belum ada penawaran untuk produk ini.
-          </div>
-        `;
-        return;
-      }
-
-      // Default active bid if not set or invalid
-      if (!activeVisitorChatBidId || !filteredDeals.some(d => d.id === activeVisitorChatBidId)) {
-        activeVisitorChatBidId = filteredDeals[0].id;
-      }
-
-      const activeBid = filteredDeals.find(d => d.id === activeVisitorChatBidId) || filteredDeals[0];
-      const key = (activeBid.item_id || '').replace('demo-', '');
-      const item = items.find(i => i.id === activeBid.item_id) || marketplaceListings.find(m => m.item_id === activeBid.item_id) || demoItems[key];
-      const itemTitle = item ? item.title : `Barang #${(activeBid.item_id || 'item').substring(0, 8)}`;
-
-      // Initialize default message if empty
-      if (!localChatMessages[activeBid.id] || localChatMessages[activeBid.id].length === 0) {
-        localChatMessages[activeBid.id] = [{
-          id: 'welcome_msg',
-          sender_id: activeBid.buyer_id || 'bidder',
-          sender_name: activeBid.buyer_name,
-          message: `Halo Penjual! Penawaran saya sebesar Rp ${(activeBid.amount || 0).toLocaleString('id-ID')} telah disetujui. Terima kasih banyak! Siap untuk janji ketemuan / COD.`,
-          created_at: new Date().toISOString()
-        }];
-      }
-
-      // Render Master-Detail 2-column layout inline
-      visitorContainer.className = "grid grid-cols-1 lg:grid-cols-12 gap-6 items-start";
-      visitorContainer.innerHTML = `
-        <!-- Left Column: Vertical Bidder List -->
-        <div class="lg:col-span-5 space-y-2">
-          <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider px-1 mb-2">Daftar Penawar (Pilih Bidder):</span>
-          <div class="space-y-2 max-h-[480px] overflow-y-auto pr-1">
-            ${filteredDeals.map(bid => {
-              const bKey = (bid.item_id || '').replace('demo-', '');
-              const bItem = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id) || demoItems[bKey];
-              const bTitle = bItem ? bItem.title : `Barang #${(bid.item_id || 'item').substring(0, 8)}`;
-              const bInitial = (bid.buyer_name || 'B').charAt(0).toUpperCase();
-              const isSelected = bid.id === activeVisitorChatBidId;
-              const msgs = localChatMessages[bid.id] || [];
-              const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Penawaran disetujui — Siap obrol transaksi COD';
-
-              return `
-                <div onclick="selectVisitorBidder('${bid.id}')" class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
-                  isSelected 
-                    ? 'bg-navy-900 text-white border-navy-900 shadow-xs' 
-                    : 'bg-white text-slate-900 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-2xs'
-                }">
-                  <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                      <div class="w-8 h-8 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-navy-900'} font-bold flex items-center justify-center text-xs shrink-0">
-                        ${bInitial}
-                      </div>
-                      <div class="min-w-0">
-                        <h5 class="font-bold text-xs truncate ${isSelected ? 'text-white' : 'text-slate-900'}">${bid.buyer_name}</h5>
-                        <span class="text-[10px] ${isSelected ? 'text-slate-300' : 'text-slate-500'} block truncate">${bTitle}</span>
-                      </div>
-                    </div>
-                    <span class="text-xs font-extrabold ${isSelected ? 'text-emerald-300' : 'text-emerald-700'} shrink-0">
-                      Rp ${(bid.amount || 0).toLocaleString('id-ID')}
-                    </span>
-                  </div>
-                  <div class="text-[11px] ${isSelected ? 'text-slate-300 border-white/10' : 'text-slate-500 border-slate-100'} truncate pt-1 border-t flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-emerald-400' : 'bg-emerald-500'} animate-pulse shrink-0"></span>
-                    <span class="truncate">${lastMsg}</span>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-
-        <!-- Right Column: Detail Card & Inline Real-Time Chat Panel -->
-        <div class="lg:col-span-7 rounded-2xl bg-white border border-slate-200 p-5 space-y-4 shadow-xs">
-          <!-- Detail Header -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-slate-100 text-navy-900 font-bold flex items-center justify-center border border-slate-200 text-base shrink-0">
-                ${(activeBid.buyer_name || 'B').charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <h4 class="font-bold text-slate-900 text-sm">${activeBid.buyer_name}</h4>
-                <span class="text-xs text-slate-500">Kontak: ${activeBid.contact_info}</span>
-              </div>
-            </div>
-            <div class="flex items-center gap-2 self-start sm:self-auto">
-              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Dalam Diskusi COD
-              </span>
-              <button type="button" onclick="openConfirmSoldModalFromChat('${activeBid.id}')" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1">
-                <span>🏷️ Tandai SOLD</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Product & Agreed Price Banner -->
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-            <span class="font-bold text-slate-800 truncate">${itemTitle}</span>
-            <div class="shrink-0 text-right">
-              <span class="text-slate-500 block text-[10px]">Harga Disepakati:</span>
-              <span class="text-emerald-700 font-extrabold text-sm">Rp ${(activeBid.amount || 0).toLocaleString('id-ID')}</span>
-            </div>
-          </div>
-
-          <!-- Inline Real-time Chat Box -->
-          <div id="visitor-inline-messages-container" class="h-64 sm:h-72 overflow-y-auto p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-            <!-- Messages rendered dynamically -->
-          </div>
-
-          <!-- Quick Chips -->
-          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] text-slate-600 no-scrollbar">
-            <button type="button" onclick="sendInlineVisitorMessage('Siap kak! Lokasi COD di mana?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Lokasi COD?</button>
-            <button type="button" onclick="sendInlineVisitorMessage('Jam berapa jam ketemuan?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Jam ketemuan?</button>
-            <button type="button" onclick="sendInlineVisitorMessage('Bisa bayar tunai / QRIS pas COD ya.')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Tunai / QRIS</button>
-          </div>
-
-          <!-- Message Input Form -->
-          <form id="visitor-inline-chat-form" onsubmit="event.preventDefault(); const input = document.getElementById('visitor-inline-chat-input'); if(input && input.value) sendInlineVisitorMessage(input.value);" class="flex items-center gap-2">
-            <input type="text" id="visitor-inline-chat-input" placeholder="Tulis pesan obrolan ke ${activeBid.buyer_name}..." required class="flex-1 px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:border-navy-900 focus:outline-none" />
-            <button type="submit" class="px-4 py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all shrink-0">
-              Kirim
-            </button>
-          </form>
-        </div>
-      `;
-
-      // Fetch messages for inline container
-      fetchChatMessages(activeBid.id);
-    }
-
-    (window as any).selectVisitorBidder = (bidId: string) => {
-      activeVisitorChatBidId = bidId;
-      activeChatBidId = bidId;
-      renderApprovedBidsWidget();
-    };
-
-    (window as any).sendInlineVisitorMessage = (text: string) => {
-      if (!activeVisitorChatBidId) return;
-      activeChatBidId = activeVisitorChatBidId;
-      sendChatMessage(text);
-      const inputEl = document.getElementById('visitor-inline-chat-input') as HTMLInputElement;
-      if (inputEl) inputEl.value = '';
-    };
-
-    (window as any).switchVisitorProductTab = (itemId: string) => {
-      activeVisitorProductTab = itemId;
-      renderApprovedBidsWidget();
-    };
-
-    function renderSingleApprovedBidCard(bid: any, isVisitorDemo: boolean = false) {
-      const key = (bid.item_id || '').replace('demo-', '');
-      const item = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id) || demoItems[key];
-      const itemTitle = item ? item.title : `Barang #${(bid.item_id || 'item').substring(0, 8)}`;
-      const initial = (bid.buyer_name || 'B').charAt(0).toUpperCase();
-      const msgs = localChatMessages[bid.id] || [];
-      const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Penawaran disetujui — Siap obrol transaksi COD';
-
-      return `
-        <div class="p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-3 shadow-xs">
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-slate-100 text-navy-900 font-bold flex items-center justify-center border border-slate-200 text-base shrink-0">
-                ${initial}
-              </div>
-              <div class="min-w-0">
-                <h4 class="font-bold text-slate-900 text-sm truncate">${bid.buyer_name}</h4>
-                <span class="text-[11px] text-slate-500 block truncate">Kontak: ${bid.contact_info}</span>
-              </div>
-            </div>
-            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
-              Penawaran Disetujui
-            </span>
-          </div>
-
-          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
-            <div class="text-slate-800 font-semibold text-xs truncate">${itemTitle}</div>
-            <div class="flex justify-between items-center text-xs">
-              <span class="text-slate-500">Harga Disepakati:</span>
-              <span class="text-emerald-700 font-extrabold text-sm">Rp ${(bid.amount || 0).toLocaleString('id-ID')}</span>
-            </div>
-            <div class="text-[11px] text-slate-500 truncate pt-1 border-t border-slate-200 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-              <span class="truncate">${lastMsg}</span>
-            </div>
-          </div>
-
-          <button onclick="openChatModal('${bid.id}')" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs flex items-center justify-center gap-2 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-            <span>Pendekatan & Chat Realtime →</span>
-          </button>
-        </div>
-      `;
-    }
-
-    // Fetch & Render Chat Messages
+    // Chat functions (must be defined before global onclick handlers)
     async function fetchChatMessages(bidId: string) {
-      const container = document.getElementById('chat-messages-container');
+      // Handle both inline visitor chat container AND modal chat container
+      const modalContainer = document.getElementById('chat-messages-container');
+      const inlineContainer = document.getElementById('visitor-inline-messages-container');
+      const container = inlineContainer || modalContainer;
+      
       if (!container) return;
 
       let msgList: any[] = [];
@@ -2446,6 +2180,355 @@ import Layout from '../layouts/Layout.astro';
       }, 1200);
     }
 
+    // Define global functions EARLY to ensure onclick handlers work when HTML is rendered
+    (window as any).selectVisitorBidder = (bidId: string) => {
+      activeVisitorChatBidId = bidId;
+      activeChatBidId = bidId;
+      renderApprovedBidsWidget();
+    };
+
+    (window as any).sendInlineVisitorMessage = (text: string) => {
+      if (!activeVisitorChatBidId) return;
+      activeChatBidId = activeVisitorChatBidId;
+      sendChatMessage(text);
+      const inputEl = document.getElementById('visitor-inline-chat-input') as HTMLInputElement;
+      if (inputEl) inputEl.value = '';
+    };
+
+    (window as any).switchVisitorProductTab = (itemId: string) => {
+      activeVisitorProductTab = itemId;
+      renderApprovedBidsWidget();
+    };
+
+    // Approved Bids Widget Renderer (For both Dashboard & Visitor Section with Product Tabs)
+    function renderApprovedBidsWidget() {
+      const container = document.getElementById('approved-bids-container');
+      const visitorContainer = document.getElementById('visitor-approved-bids-container');
+      const tabsContainer = document.getElementById('visitor-chat-product-tabs');
+      const badge = document.getElementById('approved-bids-count-badge');
+
+      const acceptedBids = bids.filter(b => {
+        const s = typeof b.status === 'string' ? b.status : Object.keys(b.status || {})[0] || '';
+        return s === 'Accepted' || s === 'accepted';
+      });
+
+      if (badge) badge.textContent = `${acceptedBids.length} Obrolan Aktif`;
+
+      if (container) {
+        if (acceptedBids.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full p-6 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-2">
+              <p class="text-slate-800 text-xs font-semibold">Belum Ada Penawaran Disetujui</p>
+              <p class="text-slate-600 text-[11px] max-w-md mx-auto leading-relaxed">
+                Ketika kamu menyetujui penawaran harga dari pembeli di tab "Penawaran & Nego", widget chat realtime akan aktif di sini untuk melakukan pendekatan dan menyepakati transaksi COD.
+              </p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = acceptedBids.map(bid => renderSingleApprovedBidCard(bid)).join('');
+        }
+      }
+
+      // Collect active marketplace listings to ensure deals/bids section only shows for active marketplace items
+      const activeDemoListings = Object.values(demoItems).filter(item => item.isSellable).map(item => item.id);
+      const activeListingItemIds = new Set([
+        ...activeDemoListings,
+        ...marketplaceListings.map(m => m.item_id || m.id)
+      ]);
+
+      // Collect all active bids (strictly synchronized with marketplace item bids)
+      const allVisitorDeals: any[] = [];
+      activeListingItemIds.forEach(itemId => {
+        const itemBids = getBidsForItem(itemId);
+        itemBids.forEach(b => {
+          allVisitorDeals.push(b);
+          if (!bids.some(gb => gb.id === b.id)) bids.push(b);
+        });
+      });
+
+      // Dynamically hide/show the simulation section based on whether active deals/bids exist
+      const demoApprovedSection = document.getElementById('demo-approved-bids-section');
+      if (demoApprovedSection) {
+        if (allVisitorDeals.length === 0) {
+          demoApprovedSection.classList.add('hidden');
+        } else {
+          demoApprovedSection.classList.remove('hidden');
+        }
+      }
+
+      // Render Product Tabs for Visitor Section
+      if (tabsContainer) {
+        if (allVisitorDeals.length === 0) {
+          tabsContainer.innerHTML = '';
+        } else {
+          const itemMap: Record<string, number> = {};
+          allVisitorDeals.forEach(d => {
+            itemMap[d.item_id] = (itemMap[d.item_id] || 0) + 1;
+          });
+
+          const itemIds = Object.keys(itemMap);
+
+          tabsContainer.innerHTML = `
+            <button onclick="switchVisitorProductTab('all')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg border transition-all text-[11px] sm:text-xs font-bold shrink-0 whitespace-nowrap ${
+              activeVisitorProductTab === 'all' 
+                ? 'bg-navy-900 text-white border-navy-900 shadow-xs' 
+                : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
+            }">
+              Semua (${allVisitorDeals.length})
+            </button>
+            ${itemIds.map(itemId => {
+              const key = itemId.replace('demo-', '');
+              const itemObj = items.find(i => i.id === itemId) || marketplaceListings.find(m => m.item_id === itemId) || demoItems[key];
+              const title = itemObj ? itemObj.title : `Produk #${itemId.substring(0, 6)}`;
+              // Shorter truncate for mobile
+              const shortTitle = title.length > 18 ? title.substring(0, 16) + '...' : title;
+              const count = itemMap[itemId];
+
+              return `
+                <button onclick="switchVisitorProductTab('${itemId}')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg border transition-all text-[11px] sm:text-xs font-semibold shrink-0 whitespace-nowrap ${
+                  activeVisitorProductTab === itemId 
+                    ? 'bg-navy-900 text-white border-navy-900 font-bold shadow-xs' 
+                    : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
+                }">
+                  ${shortTitle} (${count})
+                </button>
+              `;
+            }).join('')}
+          `;
+        }
+      }
+
+      // Render Visitor Section Deals Master-Detail Layout (Vertical List -> Inline Chat)
+      if (visitorContainer) {
+        if (allVisitorDeals.length === 0) {
+          visitorContainer.className = "grid grid-cols-1 gap-4";
+          visitorContainer.innerHTML = `
+            <div class="col-span-full p-8 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-3">
+              <div class="w-12 h-12 rounded-full bg-white text-slate-600 font-bold text-xl flex items-center justify-center mx-auto border border-slate-200 shadow-2xs">
+                💬
+              </div>
+              <div class="space-y-1 max-w-md mx-auto">
+                <h4 class="text-slate-900 font-bold text-sm">Belum Ada Penawaran pada Barang Marketplace</h4>
+                <p class="text-slate-600 text-xs leading-relaxed">
+                  Alur simulasi ini menggunakan data riil. Silakan klik tombol <strong class="text-emerald-700 font-bold">"Ajukan Penawaran Harga"</strong> pada salah satu barang di marketplace di atas untuk mengirim penawaran dan menguji alur negosiasi & chat realtime per produk!
+                </p>
+              </div>
+            </div>
+          `;
+        } else {
+          const filteredDeals = activeVisitorProductTab === 'all' 
+            ? allVisitorDeals 
+            : allVisitorDeals.filter(d => d.item_id === activeVisitorProductTab);
+
+          renderVisitorDealsMasterDetail(filteredDeals);
+        }
+      }
+    }
+
+    function renderVisitorDealsMasterDetail(filteredDeals: any[]) {
+      const visitorContainer = document.getElementById('visitor-approved-bids-container');
+      if (!visitorContainer) return;
+
+      if (filteredDeals.length === 0) {
+        visitorContainer.className = "grid grid-cols-1 gap-4";
+        visitorContainer.innerHTML = `
+          <div class="col-span-full p-6 rounded-xl bg-slate-50 border border-slate-200 text-center text-slate-600 text-xs">
+            Belum ada penawaran untuk produk ini.
+          </div>
+        `;
+        return;
+      }
+
+      // Default active bid if not set or invalid
+      if (!activeVisitorChatBidId || !filteredDeals.some(d => d.id === activeVisitorChatBidId)) {
+        activeVisitorChatBidId = filteredDeals[0].id;
+      }
+
+      const activeBid = filteredDeals.find(d => d.id === activeVisitorChatBidId) || filteredDeals[0];
+      // Get fresh bid data from bids array to ensure status is up-to-date
+      const freshBid = bids.find(b => b.id === activeBid.id) || activeBid;
+      const key = (activeBid.item_id || '').replace('demo-', '');
+      const item = items.find(i => i.id === activeBid.item_id) || marketplaceListings.find(m => m.item_id === activeBid.item_id) || demoItems[key];
+      const itemTitle = item ? item.title : `Barang #${(activeBid.item_id || 'item').substring(0, 8)}`;
+      
+      // Check if THIS specific bid is the winning/sold bid (use freshBid for latest status)
+      const isBidSold = freshBid.status === 'Sold';
+      // Check if item is sold (to anyone)
+      const isItemSold = item?.is_sold || item?.isSold || bids.some(b => b.item_id === activeBid.item_id && b.status === 'Sold');
+
+      // Initialize default message if empty
+      if (!localChatMessages[activeBid.id] || localChatMessages[activeBid.id].length === 0) {
+        localChatMessages[activeBid.id] = [{
+          id: 'welcome_msg',
+          sender_id: activeBid.buyer_id || 'bidder',
+          sender_name: activeBid.buyer_name,
+          message: `Halo Penjual! Penawaran saya sebesar Rp ${(activeBid.amount || 0).toLocaleString('id-ID')} telah disetujui. Terima kasih banyak! Siap untuk janji ketemuan / COD.`,
+          created_at: new Date().toISOString()
+        }];
+      }
+
+      // Render Master-Detail 2-column layout inline
+      visitorContainer.className = "grid grid-cols-1 lg:grid-cols-12 gap-6 items-start";
+      visitorContainer.innerHTML = `
+        <!-- Left Column: Vertical Bidder List -->
+        <div class="lg:col-span-5 space-y-2">
+          <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider px-1 mb-2">Daftar Penawar (Pilih Bidder):</span>
+          <div class="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+            ${filteredDeals.map(bid => {
+              const bKey = (bid.item_id || '').replace('demo-', '');
+              const bItem = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id) || demoItems[bKey];
+              const bTitle = bItem ? bItem.title : `Barang #${(bid.item_id || 'item').substring(0, 8)}`;
+              const bInitial = (bid.buyer_name || 'B').charAt(0).toUpperCase();
+              const isSelected = bid.id === activeVisitorChatBidId;
+              const msgs = localChatMessages[bid.id] || [];
+              const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Penawaran disetujui — Siap obrol transaksi COD';
+
+              return `
+                <div onclick="selectVisitorBidder('${bid.id}')" class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
+                  isSelected 
+                    ? 'bg-navy-900 text-white border-navy-900 shadow-xs' 
+                    : 'bg-white text-slate-900 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-2xs'
+                }">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <div class="w-8 h-8 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-navy-900'} font-bold flex items-center justify-center text-xs shrink-0">
+                        ${bInitial}
+                      </div>
+                      <div class="min-w-0">
+                        <h5 class="font-bold text-xs truncate ${isSelected ? 'text-white' : 'text-slate-900'}">${bid.buyer_name}</h5>
+                        <span class="text-[10px] ${isSelected ? 'text-slate-300' : 'text-slate-500'} block truncate">${bTitle}</span>
+                      </div>
+                    </div>
+                    <span class="text-xs font-extrabold ${isSelected ? 'text-emerald-300' : 'text-emerald-700'} shrink-0">
+                      Rp ${(bid.amount || 0).toLocaleString('id-ID')}
+                    </span>
+                  </div>
+                  <div class="text-[11px] ${isSelected ? 'text-slate-300 border-white/10' : 'text-slate-500 border-slate-100'} truncate pt-1 border-t flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-emerald-400' : 'bg-emerald-500'} animate-pulse shrink-0"></span>
+                    <span class="truncate">${lastMsg}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Right Column: Detail Card & Inline Real-Time Chat Panel -->
+        <div class="lg:col-span-7 rounded-2xl bg-white border border-slate-200 p-5 space-y-4 shadow-xs">
+          <!-- Detail Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-slate-100 text-navy-900 font-bold flex items-center justify-center border border-slate-200 text-base shrink-0">
+                ${(activeBid.buyer_name || 'B').charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="font-bold text-slate-900 text-sm">${activeBid.buyer_name}</h4>
+                  ${isBidSold ? `
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">👤 Pemilik Baru</span>
+                  ` : `
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Bidder</span>
+                  `}
+                </div>
+                <span class="text-xs text-slate-500">Kontak: ${activeBid.contact_info}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${isItemSold ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'} border">
+                ${isItemSold ? 'SOLD (Terjual)' : 'Dalam Diskusi COD'}
+              </span>
+              ${isItemSold ? `
+                <button type="button" disabled class="px-3.5 py-1.5 rounded-lg bg-slate-400 text-white font-bold text-xs shadow-xs cursor-not-allowed flex items-center gap-1">
+                  <span>✓ Sudah Terjual</span>
+                </button>
+              ` : `
+                <button type="button" onclick="openConfirmSoldModalFromChat('${activeBid.id}')" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1">
+                  <span>🏷️ Tandai SOLD</span>
+                </button>
+              `}
+            </div>
+          </div>
+
+          <!-- Product & Agreed Price Banner -->
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-800 truncate">${itemTitle}</span>
+            <div class="shrink-0 text-right">
+              <span class="text-slate-500 block text-[10px]">Harga Disepakati:</span>
+              <span class="text-emerald-700 font-extrabold text-sm">Rp ${(activeBid.amount || 0).toLocaleString('id-ID')}</span>
+            </div>
+          </div>
+
+          <!-- Inline Real-time Chat Box -->
+          <div id="visitor-inline-messages-container" class="h-64 sm:h-72 overflow-y-auto p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <!-- Messages rendered dynamically -->
+          </div>
+
+          <!-- Quick Chips -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] text-slate-600 no-scrollbar">
+            <button type="button" onclick="sendInlineVisitorMessage('Siap kak! Lokasi COD di mana?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Lokasi COD?</button>
+            <button type="button" onclick="sendInlineVisitorMessage('Jam berapa jam ketemuan?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Jam ketemuan?</button>
+            <button type="button" onclick="sendInlineVisitorMessage('Bisa bayar tunai / QRIS pas COD ya.')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Tunai / QRIS</button>
+          </div>
+
+          <!-- Message Input Form -->
+          <form id="visitor-inline-chat-form" onsubmit="event.preventDefault(); const input = document.getElementById('visitor-inline-chat-input'); if(input && input.value) sendInlineVisitorMessage(input.value);" class="flex items-center gap-2">
+            <input type="text" id="visitor-inline-chat-input" placeholder="Tulis pesan obrolan ke ${activeBid.buyer_name}..." required class="flex-1 px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:border-navy-900 focus:outline-none" />
+            <button type="submit" class="px-4 py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all shrink-0">
+              Kirim
+            </button>
+          </form>
+        </div>
+      `;
+
+      // Fetch messages for inline container
+      fetchChatMessages(activeBid.id);
+    }
+
+    function renderSingleApprovedBidCard(bid: any, isVisitorDemo: boolean = false) {
+      const key = (bid.item_id || '').replace('demo-', '');
+      const item = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id) || demoItems[key];
+      const itemTitle = item ? item.title : `Barang #${(bid.item_id || 'item').substring(0, 8)}`;
+      const initial = (bid.buyer_name || 'B').charAt(0).toUpperCase();
+      const msgs = localChatMessages[bid.id] || [];
+      const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Penawaran disetujui — Siap obrol transaksi COD';
+
+      return `
+        <div class="p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-3 shadow-xs">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-slate-100 text-navy-900 font-bold flex items-center justify-center border border-slate-200 text-base shrink-0">
+                ${initial}
+              </div>
+              <div class="min-w-0">
+                <h4 class="font-bold text-slate-900 text-sm truncate">${bid.buyer_name}</h4>
+                <span class="text-[11px] text-slate-500 block truncate">Kontak: ${bid.contact_info}</span>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+              Penawaran Disetujui
+            </span>
+          </div>
+
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+            <div class="text-slate-800 font-semibold text-xs truncate">${itemTitle}</div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-500">Harga Disepakati:</span>
+              <span class="text-emerald-700 font-extrabold text-sm">Rp ${(bid.amount || 0).toLocaleString('id-ID')}</span>
+            </div>
+            <div class="text-[11px] text-slate-500 truncate pt-1 border-t border-slate-200 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+              <span class="truncate">${lastMsg}</span>
+            </div>
+          </div>
+
+          <button onclick="openChatModal('${bid.id}')" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs flex items-center justify-center gap-2 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <span>Pendekatan & Chat Realtime →</span>
+          </button>
+        </div>
+      `;
+    }
+
     let currentConfirmSoldBidId: string | null = null;
 
     (window as any).openConfirmSoldModalFromChat = (bidIdOverride?: string) => {
@@ -2521,7 +2604,30 @@ import Layout from '../layouts/Layout.astro';
       }
 
       // Record Provenance entry
-      if (!ownershipHistoryStore[itemId]) ownershipHistoryStore[itemId] = [];
+      if (!ownershipHistoryStore[itemId]) {
+        // Determine initial asking price from various sources
+        let initialPrice = 0;
+        if (demoItems[key]) {
+          initialPrice = demoItems[key].value || 0;
+        } else if (item) {
+          initialPrice = item.asking_price || item.estimated_value || item.value || 0;
+        }
+        
+        // Add initial ownership record first
+        ownershipHistoryStore[itemId] = [{
+          id: 'prov_init_' + itemId,
+          item_id: itemId,
+          from_owner_id: 'original_creator',
+          from_owner_name: sellerName,
+          to_owner_id: 'seller_id',
+          to_owner_name: sellerName,
+          price: initialPrice,
+          transferred_at: new Date(Date.now() - 86400000 * 2).toISOString(), // 2 days ago
+          notes: 'Terdaftar pertama kali di Katalog Inventory & Marketplace'
+        }];
+      }
+      
+      // Add sold transaction record
       ownershipHistoryStore[itemId].push({
         id: 'prov_sold_' + Date.now(),
         item_id: itemId,
@@ -2606,20 +2712,52 @@ import Layout from '../layouts/Layout.astro';
       const subtitleEl = document.getElementById('chat-item-subtitle');
       const agreedEl = document.getElementById('chat-agreed-amount');
       const statusBadgeEl = document.getElementById('chat-bid-status-badge');
+      const buyerBadgeEl = document.getElementById('chat-buyer-badge');
 
-      const isSold = bid.status === 'Sold' || item?.is_sold || item?.isSold;
+      // Check if THIS specific bid is the winning/sold bid
+      const isBidSold = bid.status === 'Sold';
+      // Check if item is sold (to anyone)
+      const isItemSold = item?.is_sold || item?.isSold || bids.some(b => b.item_id === bid.item_id && b.status === 'Sold');
 
       if (nameEl) nameEl.textContent = bid.buyer_name;
       if (avatarEl) avatarEl.textContent = (bid.buyer_name || 'B').charAt(0).toUpperCase();
       if (subtitleEl) subtitleEl.textContent = `${itemTitle} • Rp ${(bid.amount || 0).toLocaleString('id-ID')}`;
       if (agreedEl) agreedEl.textContent = `Rp ${(bid.amount || 0).toLocaleString('id-ID')}`;
+      
+      // Update buyer badge based on whether THIS bid won
+      if (buyerBadgeEl) {
+        if (isBidSold) {
+          buyerBadgeEl.textContent = '👤 Pemilik Baru';
+          buyerBadgeEl.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        } else {
+          buyerBadgeEl.textContent = 'Bidder Pilihan';
+          buyerBadgeEl.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        }
+      }
+      
+      // Update status badge based on whether item is sold
       if (statusBadgeEl) {
-        if (isSold) {
+        if (isItemSold) {
           statusBadgeEl.textContent = 'SOLD (Terjual)';
           statusBadgeEl.className = 'font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300';
         } else {
           statusBadgeEl.textContent = 'Dalam Diskusi (Interview)';
           statusBadgeEl.className = 'font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300';
+        }
+      }
+
+      // Update Tandai SOLD button based on whether item is sold
+      const markSoldBtn = document.getElementById('btn-chat-mark-sold');
+      if (markSoldBtn) {
+        if (isItemSold) {
+          markSoldBtn.innerHTML = '<span>✓ Sudah Terjual</span>';
+          markSoldBtn.className = 'px-3.5 py-1.5 rounded-lg bg-slate-400 text-white font-bold text-xs shadow-xs cursor-not-allowed flex items-center gap-1';
+          markSoldBtn.setAttribute('disabled', 'true');
+          markSoldBtn.onclick = null;
+        } else {
+          markSoldBtn.innerHTML = '<span>🏷️ Tandai SOLD</span>';
+          markSoldBtn.className = 'px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1';
+          markSoldBtn.removeAttribute('disabled');
         }
       }
 
