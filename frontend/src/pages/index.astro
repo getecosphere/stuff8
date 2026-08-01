@@ -314,14 +314,7 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Inventory-first category picker -->
       <section id="inventory-category-section" class="space-y-2" aria-labelledby="inventory-category-title">
-        <div class="flex items-center justify-between gap-3">
-          <h1 id="inventory-category-title" class="text-sm font-bold text-slate-900">Kategori</h1>
-          <div class="flex items-center gap-2">
-            <button id="btn-add-item" type="button" class="min-h-9 shrink-0 rounded-lg bg-navy-900 px-3 text-xs font-bold text-white transition-colors hover:bg-navy-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">
-              + Barang
-            </button>
-          </div>
-        </div>
+        <h1 id="inventory-category-title" class="text-sm font-bold text-slate-900">Kategori</h1>
         <div id="inventory-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori inventaris">
           <!-- Dynamic category tabs rendered here -->
         </div>
@@ -1020,24 +1013,35 @@ import Layout from '../layouts/Layout.astro';
     }
 
     function updateAuthUIState() {
-      const pillEl = document.getElementById('user-profile-pill');
-      const loginBtnHeader = document.getElementById('btn-header-login');
-      const initialEl = document.getElementById('user-avatar-initial');
-      const nameEl = document.getElementById('user-display-name');
+      const sidebarSummary = document.getElementById('sidebar-user-summary');
+      const sidebarLogin = document.getElementById('btn-sidebar-login');
+      const sidebarAddItem = document.getElementById('btn-sidebar-add-item');
+      const sidebarLogout = document.getElementById('btn-logout');
+      const initialEl = document.getElementById('sidebar-user-avatar');
+      const nameEl = document.getElementById('sidebar-user-name');
 
       const isAuthenticated = !!(currentSession && currentSession.user);
 
       if (isAuthenticated) {
-        pillEl?.classList.remove('hidden');
-        loginBtnHeader?.classList.add('hidden');
+        sidebarSummary?.classList.remove('hidden');
+        sidebarSummary?.classList.add('flex');
+        sidebarLogin?.classList.add('hidden');
+        sidebarAddItem?.classList.remove('hidden');
+        sidebarAddItem?.classList.add('flex');
+        sidebarLogout?.classList.remove('hidden');
         if (initialEl) initialEl.textContent = (currentSession!.user.name || currentSession!.user.username || 'U').charAt(0).toUpperCase();
         if (nameEl) nameEl.textContent = currentSession!.user.name || currentSession!.user.username;
 
         signedOutLanding?.classList.add('hidden');
         signedInDashboard?.classList.remove('hidden');
       } else {
-        pillEl?.classList.add('hidden');
-        loginBtnHeader?.classList.remove('hidden');
+        sidebarSummary?.classList.add('hidden');
+        sidebarSummary?.classList.remove('flex');
+        sidebarLogin?.classList.remove('hidden');
+        sidebarLogin?.classList.add('flex');
+        sidebarAddItem?.classList.add('hidden');
+        sidebarAddItem?.classList.remove('flex');
+        sidebarLogout?.classList.add('hidden');
 
         signedOutLanding?.classList.remove('hidden');
         signedInDashboard?.classList.add('hidden');
@@ -1050,15 +1054,16 @@ import Layout from '../layouts/Layout.astro';
       document.getElementById('public-marketplace-visitor-grid')?.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // Modal Triggers
-    document.getElementById('btn-add-item')?.addEventListener('click', () => {
+    function openAddItem() {
       if (!currentSession || !currentSession.user) {
         openWizard();
       } else {
         syncCategorySelects();
         modalItem?.classList.remove('hidden');
       }
-    });
+    }
+
+    // Modal Triggers
     categoryTabs?.addEventListener('click', event => {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-category]');
       if (!button) return;
@@ -1116,8 +1121,38 @@ import Layout from '../layouts/Layout.astro';
       modalWizard?.classList.add('hidden');
     }
 
+    const sidebar = document.getElementById('app-sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const sidebarToggle = document.getElementById('btn-sidebar-toggle');
+
+    function closeSidebar() {
+      sidebar?.classList.add('translate-x-full');
+      sidebarBackdrop?.classList.add('hidden');
+      sidebarToggle?.setAttribute('aria-expanded', 'false');
+    }
+
+    function openSidebar() {
+      sidebar?.classList.remove('translate-x-full');
+      sidebarBackdrop?.classList.remove('hidden');
+      sidebarToggle?.setAttribute('aria-expanded', 'true');
+    }
+
     document.getElementById('btn-onboarding-wizard')?.addEventListener('click', openWizard);
-    document.getElementById('btn-header-login')?.addEventListener('click', openWizard);
+    sidebarToggle?.addEventListener('click', openSidebar);
+    document.getElementById('btn-sidebar-close')?.addEventListener('click', closeSidebar);
+    sidebarBackdrop?.addEventListener('click', closeSidebar);
+    document.getElementById('btn-sidebar-guide')?.addEventListener('click', () => {
+      closeSidebar();
+      openWizard();
+    });
+    document.getElementById('btn-sidebar-login')?.addEventListener('click', () => {
+      closeSidebar();
+      openWizard();
+    });
+    document.getElementById('btn-sidebar-add-item')?.addEventListener('click', () => {
+      closeSidebar();
+      openAddItem();
+    });
     document.getElementById('btn-close-wizard')?.addEventListener('click', closeWizard);
 
     document.getElementById('btn-wizard-back-1')?.addEventListener('click', () => setWizardStep(1));
@@ -1139,6 +1174,7 @@ import Layout from '../layouts/Layout.astro';
     });
 
     document.getElementById('btn-logout')?.addEventListener('click', () => {
+      closeSidebar();
       localStorage.removeItem('stuff8_session');
       localStorage.removeItem('stuff8_wizard_completed');
       currentSession = null;
@@ -1774,7 +1810,7 @@ import Layout from '../layouts/Layout.astro';
                 <h3 class="text-slate-900 font-bold text-sm">${hasSelectedCategory ? `Belum ada barang di ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'Belum ada barang'}</h3>
                 <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Tambahkan barang untuk mulai mengatur inventarismu.</p>
               </div>
-              <button onclick="document.getElementById('btn-add-item').click()" class="min-h-9 px-3 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-colors">
+              <button onclick="window.openAddItem()" class="min-h-9 px-3 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-colors">
                 Tambah barang
               </button>
             </div>
@@ -1932,6 +1968,7 @@ import Layout from '../layouts/Layout.astro';
 
     // Attach Global Functions
     (window as any).openWizard = openWizard;
+    (window as any).openAddItem = openAddItem;
 
     (window as any).toggleSellable = async (id: string) => {
       const item = items.find(i => i.id === id);
