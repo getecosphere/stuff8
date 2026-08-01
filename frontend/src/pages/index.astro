@@ -576,10 +576,10 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <input type="number" id="input-purchase-price" required min="0" step="1" aria-label="Harga beli dalam rupiah" placeholder="Harga Beli (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="input-purchase-price" required inputmode="numeric" aria-label="Harga beli dalam rupiah" placeholder="Harga Beli (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
           <div>
-            <input type="number" id="input-estimated-value" min="0" step="1" aria-label="Perkiraan nilai dalam rupiah" placeholder="Perkiraan Nilai (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="input-estimated-value" inputmode="numeric" aria-label="Perkiraan nilai dalam rupiah" placeholder="Perkiraan Nilai (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
           <div class="sm:col-span-2">
             <input type="text" id="input-storage-location" aria-label="Lokasi simpan privat" placeholder="Lokasi Simpan (Privat)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
@@ -595,7 +595,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div id="asking-price-container" class="hidden">
-          <input type="number" id="input-asking-price" min="0" step="1" aria-label="Harga buka dalam rupiah" placeholder="Harga Buka (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-900/50 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+          <input type="text" id="input-asking-price" inputmode="numeric" aria-label="Harga buka dalam rupiah" placeholder="Harga Buka (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-900/50 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
         </div>
 
         <div class="flex justify-end gap-3 pt-3 border-t border-slate-200">
@@ -865,6 +865,17 @@ import Layout from '../layouts/Layout.astro';
     const inputSellable = document.getElementById('input-sellable') as HTMLInputElement;
     const askingPriceContainer = document.getElementById('asking-price-container');
 
+    function parseRupiah(value: string) {
+      const digits = value.replace(/\D/g, '');
+      const amount = digits ? Number(digits) : null;
+      return amount !== null && Number.isSafeInteger(amount) ? amount : null;
+    }
+
+    function formatRupiahInput(input: HTMLInputElement) {
+      const amount = parseRupiah(input.value);
+      input.value = amount === null ? '' : `Rp ${amount.toLocaleString('id-ID')}`;
+    }
+
     function escapeHtml(value: string) {
       return value.replace(/[&<>'"]/g, char => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'
@@ -1115,6 +1126,11 @@ import Layout from '../layouts/Layout.astro';
       askingPriceContainer?.classList.toggle('hidden', !inputSellable.checked);
     });
 
+    ['input-purchase-price', 'input-estimated-value', 'input-asking-price'].forEach(id => {
+      const input = document.getElementById(id) as HTMLInputElement | null;
+      input?.addEventListener('input', () => formatRupiahInput(input));
+    });
+
     document.getElementById('form-item')?.addEventListener('submit', async event => {
       event.preventDefault();
       if (!currentSession?.user) {
@@ -1127,19 +1143,19 @@ import Layout from '../layouts/Layout.astro';
       const category = getSelectableInventoryCategories().find(value => value === categoryInput || categoryLabel(value) === categoryInput);
       const condition = (document.getElementById('input-condition') as HTMLSelectElement).value;
       const description = (document.getElementById('input-description') as HTMLTextAreaElement).value.trim();
-      const purchasePrice = Number((document.getElementById('input-purchase-price') as HTMLInputElement).value);
+      const purchasePrice = parseRupiah((document.getElementById('input-purchase-price') as HTMLInputElement).value);
       const estimatedValueInput = (document.getElementById('input-estimated-value') as HTMLInputElement).value;
-      const estimatedValue = estimatedValueInput ? Number(estimatedValueInput) : null;
+      const estimatedValue = estimatedValueInput ? parseRupiah(estimatedValueInput) : null;
       const storageLocation = (document.getElementById('input-storage-location') as HTMLInputElement).value.trim();
       const isSellable = inputSellable.checked;
       const askingPriceInput = (document.getElementById('input-asking-price') as HTMLInputElement).value;
-      const askingPrice = isSellable && askingPriceInput ? Number(askingPriceInput) : null;
+      const askingPrice = isSellable && askingPriceInput ? parseRupiah(askingPriceInput) : null;
 
       if (!category) {
         alert('Pilih kategori dari daftar, atau buat kategori baru.');
         return;
       }
-      if (!Number.isFinite(purchasePrice) || purchasePrice < 0 || (estimatedValue !== null && (!Number.isFinite(estimatedValue) || estimatedValue < 0)) || (askingPrice !== null && (!Number.isFinite(askingPrice) || askingPrice < 0))) {
+      if (purchasePrice === null || purchasePrice < 0 || (estimatedValue !== null && estimatedValue < 0) || (askingPrice !== null && askingPrice < 0)) {
         alert('Masukkan nilai harga yang valid.');
         return;
       }
