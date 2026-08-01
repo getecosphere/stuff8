@@ -911,7 +911,7 @@ import Layout from '../layouts/Layout.astro';
         ...DEFAULT_INVENTORY_CATEGORIES,
         ...customInventoryCategories,
         ...items.map(item => item.category).filter(Boolean)
-      ]));
+      ])).sort((a, b) => categoryLabel(a).localeCompare(categoryLabel(b), 'id'));
     }
 
     function getVisibleInventoryCategories() {
