@@ -586,12 +586,17 @@ import Layout from '../layouts/Layout.astro';
           <textarea id="input-description" rows="2" placeholder="Tulis detail kelengkapan, garansi, atau catatan fisik..." class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none"></textarea>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Perkiraan Nilai (Rp)</label>
-            <input type="number" id="input-estimated-value" placeholder="18000000" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Beli (Rp)</label>
+            <input type="number" id="input-purchase-price" required min="0" step="1" placeholder="15000000" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <p class="mt-1 text-xs text-slate-500">Harga saat Anda memperoleh barang ini.</p>
           </div>
           <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Perkiraan Nilai (Rp)</label>
+            <input type="number" id="input-estimated-value" min="0" step="1" placeholder="18000000" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+          </div>
+          <div class="sm:col-span-2">
             <label class="block text-xs font-semibold text-slate-700 mb-1">Lokasi Simpan (Privat)</label>
             <input type="text" id="input-storage-location" placeholder="Lemari Kaca Rak 2" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
@@ -1109,6 +1114,80 @@ import Layout from '../layouts/Layout.astro';
       askingPriceContainer?.classList.toggle('hidden', !inputSellable.checked);
     });
 
+    document.getElementById('form-item')?.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!currentSession?.user) {
+        openWizard();
+        return;
+      }
+
+      const title = (document.getElementById('input-title') as HTMLInputElement).value.trim();
+      const category = (document.getElementById('input-category') as HTMLSelectElement).value;
+      const condition = (document.getElementById('input-condition') as HTMLSelectElement).value;
+      const description = (document.getElementById('input-description') as HTMLTextAreaElement).value.trim();
+      const purchasePrice = Number((document.getElementById('input-purchase-price') as HTMLInputElement).value);
+      const estimatedValueInput = (document.getElementById('input-estimated-value') as HTMLInputElement).value;
+      const estimatedValue = estimatedValueInput ? Number(estimatedValueInput) : null;
+      const storageLocation = (document.getElementById('input-storage-location') as HTMLInputElement).value.trim();
+      const isSellable = inputSellable.checked;
+      const askingPriceInput = (document.getElementById('input-asking-price') as HTMLInputElement).value;
+      const askingPrice = isSellable && askingPriceInput ? Number(askingPriceInput) : null;
+
+      if (!Number.isFinite(purchasePrice) || purchasePrice < 0 || (estimatedValue !== null && (!Number.isFinite(estimatedValue) || estimatedValue < 0)) || (askingPrice !== null && (!Number.isFinite(askingPrice) || askingPrice < 0))) {
+        alert('Masukkan nilai harga yang valid.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${INVENTORY_API}/items`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            owner_id: currentSession.user.id,
+            title,
+            category,
+            condition,
+            description,
+            purchase_price: purchasePrice,
+            estimated_value: estimatedValue,
+            asking_price: askingPrice,
+            storage_location: storageLocation || null,
+            sellable: isSellable,
+            status: isSellable ? 'sellable' : 'collection'
+          })
+        });
+        if (!response.ok) throw new Error('Failed to create inventory item');
+
+        const newItem = await response.json();
+        if (isSellable) {
+          await fetch(`${MARKETPLACE_API}/sync-item`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              item_id: newItem.id,
+              seller_id: newItem.owner_id,
+              title: newItem.title,
+              description: newItem.description,
+              category: newItem.category,
+              condition: newItem.condition,
+              photos: newItem.photos || [],
+              asking_price: askingPrice ?? purchasePrice,
+              general_location: storageLocation || 'Area Lokal',
+              sellable: true
+            })
+          });
+        }
+
+        (event.currentTarget as HTMLFormElement).reset();
+        askingPriceContainer?.classList.add('hidden');
+        modalItem?.classList.add('hidden');
+        await loadData();
+      } catch (error) {
+        console.error('Failed to create inventory item:', error);
+        alert('Barang belum dapat disimpan. Coba lagi.');
+      }
+    });
+
     // Wizard Controls
     function setWizardStep(step: 1 | 2) {
       if (wizardStepIndicator) wizardStepIndicator.textContent = `Langkah ${step} dari 2`;
@@ -1590,7 +1669,7 @@ import Layout from '../layouts/Layout.astro';
         from_owner_name: sellerName,
         to_owner_id: 'seller_id',
         to_owner_name: sellerName,
-        price: item?.asking_price || item?.value || 0,
+        price: item?.purchase_price || item?.asking_price || item?.value || 0,
         transferred_at: new Date(Date.now() - 86400000 * 2).toISOString(),
         notes: 'Terdaftar pertama kali di Katalog Inventory & Marketplace'
       }];
@@ -2703,6 +2782,10 @@ import Layout from '../layouts/Layout.astro';
         item.buyer_id = buyerId;
         item.buyer_name = buyerName;
         item.final_price = finalPrice;
+        item.owner_id = buyerId;
+        item.purchase_price = finalPrice;
+        item.sellable = false;
+        item.status = 'Collection';
       }
       const mktItem = marketplaceListings.find(m => m.item_id === itemId || m.id === itemId);
       if (mktItem) {
@@ -2719,7 +2802,7 @@ import Layout from '../layouts/Layout.astro';
         if (demoItems[key]) {
           initialPrice = demoItems[key].value || 0;
         } else if (item) {
-          initialPrice = item.asking_price || item.estimated_value || item.value || 0;
+          initialPrice = item.purchase_price || item.asking_price || item.estimated_value || item.value || 0;
         }
         
         // Add initial ownership record first
@@ -2749,26 +2832,6 @@ import Layout from '../layouts/Layout.astro';
         notes: 'Terjual via Penawaran Bidding & Transaksi COD'
       });
 
-      // Add to inventory for new owner
-      const newInventoryItem = {
-        id: 'bought_' + Date.now(),
-        owner_id: buyerId,
-        title: item?.title || 'Barang Terbeli',
-        description: item?.description || item?.desc || 'Barang hasil pembeli via Bidding & COD',
-        category: item?.category || 'Koleksi',
-        condition: item?.condition || 'Mulus',
-        photos: item?.photos || (item?.img ? [item.img] : []),
-        storage_location: 'Gudang Pembeli',
-        purchase_price: finalPrice,
-        estimated_value: finalPrice,
-        asking_price: finalPrice,
-        sellable: false,
-        status: 'Collection',
-        is_sold: true,
-        owner_history: ownershipHistoryStore[itemId]
-      };
-      items.push(newInventoryItem);
-
       // Backend API calls
       try {
         await fetch(`${BIDDING_API}/bids/${bidId}/sold`, { method: 'POST' });
@@ -2793,8 +2856,9 @@ import Layout from '../layouts/Layout.astro';
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             new_owner_id: buyerId,
+            purchase_price: finalPrice,
             sellable: false,
-            status: 'Sold'
+            status: 'collection'
           })
         });
       } catch (e) {}
@@ -2803,7 +2867,7 @@ import Layout from '../layouts/Layout.astro';
       document.getElementById('modal-chat')?.classList.add('hidden');
       activeChatBidId = null;
 
-      render();
+      await loadData();
     };
 
     (window as any).openChatModal = async (bidId: string) => {
