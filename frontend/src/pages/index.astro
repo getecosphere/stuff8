@@ -869,6 +869,7 @@ import Layout from '../layouts/Layout.astro';
     let deleteConfirmationArmed = false;
     let customInventoryCategories: string[] = [];
     let categoryPreferenceOwnerId: string | null = null;
+    let inventoryViewPreferenceOwnerId: string | null = null;
 
     const DEFAULT_INVENTORY_CATEGORIES = ['Electronics', 'Cameras', 'Bicycles', 'Books', 'Musical Instruments', 'Furniture'];
     const CREATE_CATEGORY_LABEL = '+ Buat kategori baru';
@@ -940,6 +941,19 @@ import Layout from '../layouts/Layout.astro';
 
     function categoryPreferenceKey() {
       return `stuff8_inventory_categories_${currentSession?.user?.id || 'guest'}`;
+    }
+
+    function inventoryViewPreferenceKey() {
+      return `stuff8_inventory_view_${currentSession?.user?.id || 'guest'}`;
+    }
+
+    function loadInventoryViewPreference() {
+      const ownerId = currentSession?.user?.id || null;
+      if (ownerId === inventoryViewPreferenceOwnerId) return;
+
+      inventoryViewPreferenceOwnerId = ownerId;
+      const savedView = localStorage.getItem(inventoryViewPreferenceKey());
+      inventoryView = savedView === 'list' || savedView === 'thumbnail' || savedView === 'card' ? savedView : 'card';
     }
 
     function loadCategoryPreferences() {
@@ -1192,6 +1206,7 @@ import Layout from '../layouts/Layout.astro';
     document.querySelectorAll<HTMLButtonElement>('[data-inventory-view]').forEach(button => {
       button.addEventListener('click', () => {
         inventoryView = button.dataset.inventoryView as typeof inventoryView;
+        localStorage.setItem(inventoryViewPreferenceKey(), inventoryView);
         inventoryViewMenu?.removeAttribute('open');
         render();
       });
@@ -1734,6 +1749,7 @@ import Layout from '../layouts/Layout.astro';
     async function loadData() {
       try {
         loadCategoryPreferences();
+        loadInventoryViewPreference();
         const ownerId = currentSession && currentSession.user ? currentSession.user.id : null;
         const inventoryParams = new URLSearchParams({
           page: inventoryPage.toString(),
