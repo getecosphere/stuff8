@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Stuff8 — Catat Barang & Pasar Jual Beli">
+  <div id="app-notice" class="fixed inset-x-4 bottom-5 z-[100] hidden rounded-xl border border-navy-900/10 bg-navy-900 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg sm:left-1/2 sm:right-auto sm:w-auto sm:max-w-md sm:-translate-x-1/2" role="status" aria-live="polite"></div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
     
     <!-- ================================================================= -->
@@ -598,6 +599,7 @@ import Layout from '../layouts/Layout.astro';
           <input type="text" id="input-asking-price" inputmode="numeric" aria-label="Harga buka dalam rupiah" placeholder="Harga Buka (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-900/50 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
         </div>
 
+        <p id="item-form-error" class="hidden rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700" role="alert"></p>
         <div class="flex justify-end gap-3 pt-3 border-t border-slate-200">
           <button type="button" id="btn-cancel-modal" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold">Batal</button>
           <button type="submit" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-sm font-bold shadow-xs">Simpan Barang</button>
@@ -861,6 +863,9 @@ import Layout from '../layouts/Layout.astro';
     const modalWizard = document.getElementById('modal-wizard');
     const categoryNameInput = document.getElementById('input-category-name') as HTMLInputElement | null;
     const categoryFormError = document.getElementById('category-form-error');
+    const itemFormError = document.getElementById('item-form-error');
+    const appNotice = document.getElementById('app-notice');
+    let noticeTimeout: number | undefined;
 
     const inputSellable = document.getElementById('input-sellable') as HTMLInputElement;
     const askingPriceContainer = document.getElementById('asking-price-container');
@@ -880,6 +885,14 @@ import Layout from '../layouts/Layout.astro';
       return value.replace(/[&<>'"]/g, char => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'
       }[char] || char));
+    }
+
+    function showNotice(message: string) {
+      if (!appNotice) return;
+      appNotice.textContent = message;
+      appNotice.classList.remove('hidden');
+      if (noticeTimeout) window.clearTimeout(noticeTimeout);
+      noticeTimeout = window.setTimeout(() => appNotice.classList.add('hidden'), 4000);
     }
 
     function categoryLabel(category: string) {
@@ -977,6 +990,12 @@ import Layout from '../layouts/Layout.astro';
       if (!categoryFormError) return;
       categoryFormError.textContent = message;
       categoryFormError.classList.remove('hidden');
+    }
+
+    function showItemFormError(message: string) {
+      if (!itemFormError) return;
+      itemFormError.textContent = message;
+      itemFormError.classList.remove('hidden');
     }
 
     function openCategoryModal() {
@@ -1133,6 +1152,7 @@ import Layout from '../layouts/Layout.astro';
 
     document.getElementById('form-item')?.addEventListener('submit', async event => {
       event.preventDefault();
+      itemFormError?.classList.add('hidden');
       if (!currentSession?.user) {
         openWizard();
         return;
@@ -1152,11 +1172,11 @@ import Layout from '../layouts/Layout.astro';
       const askingPrice = isSellable && askingPriceInput ? parseRupiah(askingPriceInput) : null;
 
       if (!category) {
-        alert('Pilih kategori dari daftar, atau buat kategori baru.');
+        showItemFormError('Pilih kategori dari daftar, atau buat kategori baru.');
         return;
       }
       if (purchasePrice === null || purchasePrice < 0 || (estimatedValue !== null && estimatedValue < 0) || (askingPrice !== null && askingPrice < 0)) {
-        alert('Masukkan nilai harga yang valid.');
+        showItemFormError('Masukkan nilai harga yang valid.');
         return;
       }
 
@@ -1178,7 +1198,10 @@ import Layout from '../layouts/Layout.astro';
             status: isSellable ? 'sellable' : 'collection'
           })
         });
-        if (!response.ok) throw new Error('Failed to create inventory item');
+        if (!response.ok) {
+          const detail = await response.text();
+          throw new Error(detail || `Layanan inventaris merespons HTTP ${response.status}.`);
+        }
 
         const newItem = await response.json();
         if (isSellable) {
@@ -1206,7 +1229,8 @@ import Layout from '../layouts/Layout.astro';
         await loadData();
       } catch (error) {
         console.error('Failed to create inventory item:', error);
-        alert('Barang belum dapat disimpan. Coba lagi.');
+        const detail = error instanceof Error ? error.message : 'Terjadi kesalahan yang tidak diketahui.';
+        showItemFormError(`Barang belum dapat disimpan. ${detail}`);
       }
     });
 
@@ -3040,7 +3064,7 @@ import Layout from '../layouts/Layout.astro';
       // Ensure single offer per user
       const alreadySubmitted = demoBids[itemId].some(b => b.buyer_name === buyerName);
       if (alreadySubmitted) {
-        alert(`Pengguna "${buyerName}" sudah pernah memberikan penawaran untuk barang ini.`);
+        showNotice(`Pengguna "${buyerName}" sudah pernah memberikan penawaran untuk barang ini.`);
         return;
       }
 
