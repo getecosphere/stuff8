@@ -933,7 +933,7 @@ import Layout from '../layouts/Layout.astro';
         ).join('')}`;
         const selectedCategory = selectedInventoryCategory !== 'all' && categories.includes(selectedInventoryCategory)
           ? selectedInventoryCategory
-          : (currentCategory || categories[0]);
+          : currentCategory;
         itemCategoryInput.value = selectedCategory ? categoryLabel(selectedCategory) : '';
       }
 
