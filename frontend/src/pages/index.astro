@@ -324,17 +324,17 @@ import Layout from '../layouts/Layout.astro';
         <div id="inventory-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori inventaris">
           <!-- Dynamic category tabs rendered here -->
         </div>
-        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <label class="relative block sm:max-w-sm sm:flex-1">
+        <div class="flex items-center gap-2">
+          <label class="relative min-w-0 flex-1">
             <span class="sr-only">Cari barang inventaris</span>
             <svg class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m16 16 4 4"/></svg>
             <input id="inventory-search" type="search" autocomplete="off" placeholder="Cari barang" class="min-h-10 w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-navy-900 focus:ring-2 focus:ring-navy-900/10" />
           </label>
-          <div class="flex items-center gap-1 self-end rounded-lg border border-slate-200 bg-white p-1 sm:self-auto" role="group" aria-label="Mode tampilan inventaris">
-            <button type="button" data-inventory-view="list" aria-label="Tampilan daftar" title="Tampilan daftar" class="inventory-view-button rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
-            <button type="button" data-inventory-view="thumbnail" aria-label="Tampilan thumbnail" title="Tampilan thumbnail" class="inventory-view-button rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1" stroke-width="2"/></svg></button>
-            <button type="button" data-inventory-view="card" aria-label="Tampilan kartu" title="Tampilan kartu" class="inventory-view-button rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg></button>
-          </div>
+          <select id="inventory-view" aria-label="Mode tampilan inventaris" class="min-h-10 shrink-0 rounded-lg border border-slate-200 bg-white px-2 text-xs font-semibold text-slate-700 outline-none focus:border-navy-900 focus:ring-2 focus:ring-navy-900/10">
+            <option value="list">Daftar</option>
+            <option value="thumbnail">Thumbnail</option>
+            <option value="card" selected>Kartu</option>
+          </select>
         </div>
       </section>
 
@@ -879,6 +879,7 @@ import Layout from '../layouts/Layout.astro';
     const categoryTabs = document.getElementById('inventory-category-tabs');
     const categorySection = document.getElementById('inventory-category-section');
     const inventorySearchInput = document.getElementById('inventory-search') as HTMLInputElement | null;
+    const inventoryViewSelect = document.getElementById('inventory-view') as HTMLSelectElement | null;
     const inventoryPagination = document.getElementById('inventory-pagination');
 
     const modalItem = document.getElementById('modal-item');
@@ -1182,11 +1183,9 @@ import Layout from '../layouts/Layout.astro';
       if (inventorySearchTimeout) window.clearTimeout(inventorySearchTimeout);
       inventorySearchTimeout = window.setTimeout(() => loadData(), 250);
     });
-    document.querySelectorAll<HTMLButtonElement>('[data-inventory-view]').forEach(button => {
-      button.addEventListener('click', () => {
-        inventoryView = button.dataset.inventoryView as typeof inventoryView;
-        render();
-      });
+    inventoryViewSelect?.addEventListener('change', () => {
+      inventoryView = inventoryViewSelect.value as typeof inventoryView;
+      render();
     });
     document.getElementById('input-category')?.addEventListener('input', event => {
       const input = event.currentTarget as HTMLInputElement;
@@ -2144,13 +2143,7 @@ import Layout from '../layouts/Layout.astro';
         }
       }
 
-      document.querySelectorAll<HTMLButtonElement>('[data-inventory-view]').forEach(button => {
-        const active = button.dataset.inventoryView === inventoryView;
-        button.classList.toggle('bg-navy-900', active);
-        button.classList.toggle('text-white', active);
-        button.classList.toggle('text-slate-500', !active);
-        button.setAttribute('aria-pressed', String(active));
-      });
+      if (inventoryViewSelect) inventoryViewSelect.value = inventoryView;
       if (inventoryPagination) {
         const showPagination = inventoryMeta.total_pages > 1;
         inventoryPagination.classList.toggle('hidden', !showPagination);
