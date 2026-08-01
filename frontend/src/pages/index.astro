@@ -579,7 +579,7 @@ import Layout from '../layouts/Layout.astro';
             <input type="text" id="input-purchase-price" required inputmode="numeric" aria-label="Harga beli dalam rupiah" placeholder="Harga Beli (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
           <div>
-            <input type="text" id="input-estimated-value" inputmode="numeric" aria-label="Perkiraan nilai dalam rupiah" placeholder="Perkiraan Nilai (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="input-estimated-value" inputmode="numeric" aria-label="Nilai jual dalam rupiah" placeholder="Nilai Jual (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
           <div class="sm:col-span-2">
             <input type="text" id="input-storage-location" aria-label="Lokasi simpan privat" placeholder="Lokasi Simpan (Privat)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
@@ -1946,7 +1946,7 @@ import Layout from '../layouts/Layout.astro';
                     <span>Lokasi Simpan:</span> <span class="font-medium text-slate-800">${item.storage_location || '-'}</span>
                   </div>
                   <div class="flex justify-between text-slate-500">
-                    <span>Perkiraan Nilai:</span> <span class="font-medium text-slate-800">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span>
+                    <span>Nilai Jual:</span> <span class="font-medium text-slate-800">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span>
                   </div>
                   ${item.sellable ? `<div class="flex justify-between text-navy-900 font-bold text-sm">
                     <span>Harga Buka:</span> <span>Rp ${(item.asking_price || 0).toLocaleString('id-ID')}</span>
