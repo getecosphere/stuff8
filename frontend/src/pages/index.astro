@@ -557,7 +557,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="grid grid-cols-2 gap-4">
           <div>
             <select id="input-category" required aria-label="Kategori" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none">
-              <option value="" disabled selected>Kategori</option>
+              <option value="__create_category__">+ Buat kategori baru</option>
               <option value="Electronics">Elektronik</option>
               <option value="Cameras">Kamera</option>
               <option value="Bicycles">Sepeda</option>
@@ -565,9 +565,6 @@ import Layout from '../layouts/Layout.astro';
               <option value="Musical Instruments">Alat Musik</option>
               <option value="Furniture">Furnitur</option>
             </select>
-            <button id="btn-add-category" type="button" class="mt-2 text-xs font-bold text-navy-900 underline-offset-2 hover:text-navy-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">
-              + Buat kategori baru
-            </button>
           </div>
           <div>
             <select id="input-condition" required aria-label="Kondisi" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none">
@@ -852,6 +849,7 @@ import Layout from '../layouts/Layout.astro';
     let categoryPreferenceOwnerId: string | null = null;
 
     const DEFAULT_INVENTORY_CATEGORIES = ['Electronics', 'Cameras', 'Bicycles', 'Books', 'Musical Instruments', 'Furniture'];
+    const CREATE_CATEGORY_VALUE = '__create_category__';
 
     // DOM Views
     const signedOutLanding = document.getElementById('signed-out-landing');
@@ -927,9 +925,12 @@ import Layout from '../layouts/Layout.astro';
         if (!select) return;
 
         const currentValue = select.value;
-        select.innerHTML = categories.map(category =>
+        const categoryOptions = categories.map(category =>
           `<option value="${escapeHtml(category)}">${escapeHtml(categoryLabel(category))}</option>`
         ).join('');
+        select.innerHTML = id === 'input-category'
+          ? `<option value="${CREATE_CATEGORY_VALUE}">+ Buat kategori baru</option>${categoryOptions}`
+          : categoryOptions;
         select.value = selectedInventoryCategory !== 'all' && categories.includes(selectedInventoryCategory)
           ? selectedInventoryCategory
           : (categories.includes(currentValue) ? currentValue : categories[0]);
@@ -1073,7 +1074,14 @@ import Layout from '../layouts/Layout.astro';
       selectedInventoryCategory = button.dataset.category || 'all';
       render();
     });
-    document.getElementById('btn-add-category')?.addEventListener('click', openCategoryModal);
+    document.getElementById('input-category')?.addEventListener('change', event => {
+      const select = event.currentTarget as HTMLSelectElement;
+      if (select.value !== CREATE_CATEGORY_VALUE) return;
+
+      const categories = getSelectableInventoryCategories();
+      select.value = categories[0] || '';
+      openCategoryModal();
+    });
     document.getElementById('btn-close-category-modal')?.addEventListener('click', closeCategoryModal);
     document.getElementById('btn-cancel-category-modal')?.addEventListener('click', closeCategoryModal);
     document.getElementById('form-category')?.addEventListener('submit', event => {
