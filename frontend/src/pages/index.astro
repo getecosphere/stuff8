@@ -1940,7 +1940,7 @@ import Layout from '../layouts/Layout.astro';
           } : { total: 0, total_value: 0, page: 1, limit: inventoryMeta.limit, total_pages: 1, category_counts: [] };
         }
         inventoryPage = inventoryMeta.page;
-        marketplaceListings = resMarketplace;
+        marketplaceListings = Array.isArray(resMarketplace) ? resMarketplace : (resMarketplace?.listings || []);
         bids = resBids;
 
         render();
