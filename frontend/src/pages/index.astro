@@ -1668,15 +1668,30 @@ import Layout from '../layouts/Layout.astro';
           fetch(`${BIDDING_API}/bids`).then(r => r.ok ? r.json() : [])
         ]);
 
-        items = resItems?.items || [];
-        inventoryMeta = resItems ? {
-          total: resItems.total,
-          total_value: resItems.total_value,
-          page: resItems.page,
-          limit: resItems.limit,
-          total_pages: resItems.total_pages,
-          category_counts: resItems.category_counts || []
-        } : { total: 0, total_value: 0, page: 1, limit: inventoryMeta.limit, total_pages: 1, category_counts: [] };
+        if (Array.isArray(resItems)) {
+          // Compatibility with an inventory service that has not restarted yet.
+          items = resItems;
+          const categoryMap = new Map<string, number>();
+          items.forEach(item => categoryMap.set(item.category, (categoryMap.get(item.category) || 0) + 1));
+          inventoryMeta = {
+            total: items.length,
+            total_value: items.reduce((total, item) => total + (item.estimated_value || 0), 0),
+            page: 1,
+            limit: inventoryMeta.limit,
+            total_pages: 1,
+            category_counts: Array.from(categoryMap, ([category, count]) => ({ category, count }))
+          };
+        } else {
+          items = resItems?.items || [];
+          inventoryMeta = resItems ? {
+            total: resItems.total,
+            total_value: resItems.total_value,
+            page: resItems.page,
+            limit: resItems.limit,
+            total_pages: resItems.total_pages,
+            category_counts: resItems.category_counts || []
+          } : { total: 0, total_value: 0, page: 1, limit: inventoryMeta.limit, total_pages: 1, category_counts: [] };
+        }
         inventoryPage = inventoryMeta.page;
         marketplaceListings = resMarketplace;
         bids = resBids;
