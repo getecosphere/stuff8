@@ -556,15 +556,8 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <select id="input-category" required aria-label="Kategori" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none">
-              <option value="__create_category__">+ Buat kategori baru</option>
-              <option value="Electronics">Elektronik</option>
-              <option value="Cameras">Kamera</option>
-              <option value="Bicycles">Sepeda</option>
-              <option value="Books">Buku</option>
-              <option value="Musical Instruments">Alat Musik</option>
-              <option value="Furniture">Furnitur</option>
-            </select>
+            <input id="input-category" type="text" required list="inventory-category-options" autocomplete="off" aria-label="Kategori" placeholder="Cari atau pilih kategori" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <datalist id="inventory-category-options"></datalist>
           </div>
           <div>
             <select id="input-condition" required aria-label="Kondisi" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none">
@@ -849,7 +842,7 @@ import Layout from '../layouts/Layout.astro';
     let categoryPreferenceOwnerId: string | null = null;
 
     const DEFAULT_INVENTORY_CATEGORIES = ['Electronics', 'Cameras', 'Bicycles', 'Books', 'Musical Instruments', 'Furniture'];
-    const CREATE_CATEGORY_VALUE = '__create_category__';
+    const CREATE_CATEGORY_LABEL = '+ Buat kategori baru';
 
     // DOM Views
     const signedOutLanding = document.getElementById('signed-out-landing');
@@ -920,21 +913,29 @@ import Layout from '../layouts/Layout.astro';
 
     function syncCategorySelects() {
       const categories = getSelectableInventoryCategories();
-      ['input-category', 'w-item-category'].forEach(id => {
-        const select = document.getElementById(id) as HTMLSelectElement | null;
-        if (!select) return;
+      const itemCategoryInput = document.getElementById('input-category') as HTMLInputElement | null;
+      const categoryOptions = document.getElementById('inventory-category-options');
+      if (itemCategoryInput && categoryOptions) {
+        const currentCategory = categories.find(category => categoryLabel(category) === itemCategoryInput.value || category === itemCategoryInput.value);
+        categoryOptions.innerHTML = `<option value="${CREATE_CATEGORY_LABEL}"></option>${categories.map(category =>
+          `<option value="${escapeHtml(categoryLabel(category))}"></option>`
+        ).join('')}`;
+        const selectedCategory = selectedInventoryCategory !== 'all' && categories.includes(selectedInventoryCategory)
+          ? selectedInventoryCategory
+          : (currentCategory || categories[0]);
+        itemCategoryInput.value = selectedCategory ? categoryLabel(selectedCategory) : '';
+      }
 
-        const currentValue = select.value;
-        const categoryOptions = categories.map(category =>
+      const wizardCategorySelect = document.getElementById('w-item-category') as HTMLSelectElement | null;
+      if (wizardCategorySelect) {
+        const currentValue = wizardCategorySelect.value;
+        wizardCategorySelect.innerHTML = categories.map(category =>
           `<option value="${escapeHtml(category)}">${escapeHtml(categoryLabel(category))}</option>`
         ).join('');
-        select.innerHTML = id === 'input-category'
-          ? `<option value="${CREATE_CATEGORY_VALUE}">+ Buat kategori baru</option>${categoryOptions}`
-          : categoryOptions;
-        select.value = selectedInventoryCategory !== 'all' && categories.includes(selectedInventoryCategory)
+        wizardCategorySelect.value = selectedInventoryCategory !== 'all' && categories.includes(selectedInventoryCategory)
           ? selectedInventoryCategory
           : (categories.includes(currentValue) ? currentValue : categories[0]);
-      });
+      }
     }
 
     function renderCategoryTabs() {
@@ -1074,12 +1075,11 @@ import Layout from '../layouts/Layout.astro';
       selectedInventoryCategory = button.dataset.category || 'all';
       render();
     });
-    document.getElementById('input-category')?.addEventListener('change', event => {
-      const select = event.currentTarget as HTMLSelectElement;
-      if (select.value !== CREATE_CATEGORY_VALUE) return;
+    document.getElementById('input-category')?.addEventListener('input', event => {
+      const input = event.currentTarget as HTMLInputElement;
+      if (input.value !== CREATE_CATEGORY_LABEL) return;
 
-      const categories = getSelectableInventoryCategories();
-      select.value = categories[0] || '';
+      input.value = '';
       openCategoryModal();
     });
     document.getElementById('btn-close-category-modal')?.addEventListener('click', closeCategoryModal);
@@ -1101,8 +1101,8 @@ import Layout from '../layouts/Layout.astro';
       customInventoryCategories.push(category);
       localStorage.setItem(categoryPreferenceKey(), JSON.stringify(customInventoryCategories));
       syncCategorySelects();
-      const itemCategorySelect = document.getElementById('input-category') as HTMLSelectElement | null;
-      if (itemCategorySelect) itemCategorySelect.value = category;
+      const itemCategoryInput = document.getElementById('input-category') as HTMLInputElement | null;
+      if (itemCategoryInput) itemCategoryInput.value = categoryLabel(category);
       closeCategoryModal();
     });
     document.getElementById('btn-close-modal')?.addEventListener('click', () => modalItem?.classList.add('hidden'));
@@ -1123,7 +1123,8 @@ import Layout from '../layouts/Layout.astro';
       }
 
       const title = (document.getElementById('input-title') as HTMLInputElement).value.trim();
-      const category = (document.getElementById('input-category') as HTMLSelectElement).value;
+      const categoryInput = (document.getElementById('input-category') as HTMLInputElement).value.trim();
+      const category = getSelectableInventoryCategories().find(value => value === categoryInput || categoryLabel(value) === categoryInput);
       const condition = (document.getElementById('input-condition') as HTMLSelectElement).value;
       const description = (document.getElementById('input-description') as HTMLTextAreaElement).value.trim();
       const purchasePrice = Number((document.getElementById('input-purchase-price') as HTMLInputElement).value);
@@ -1134,6 +1135,10 @@ import Layout from '../layouts/Layout.astro';
       const askingPriceInput = (document.getElementById('input-asking-price') as HTMLInputElement).value;
       const askingPrice = isSellable && askingPriceInput ? Number(askingPriceInput) : null;
 
+      if (!category) {
+        alert('Pilih kategori dari daftar, atau buat kategori baru.');
+        return;
+      }
       if (!Number.isFinite(purchasePrice) || purchasePrice < 0 || (estimatedValue !== null && (!Number.isFinite(estimatedValue) || estimatedValue < 0)) || (askingPrice !== null && (!Number.isFinite(askingPrice) || askingPrice < 0))) {
         alert('Masukkan nilai harga yang valid.');
         return;
