@@ -352,7 +352,7 @@ import Layout from '../layouts/Layout.astro';
           <span class="text-slate-800 font-semibold">Panduan Pengguna Stuff8</span>
         </div>
         <div class="flex items-center gap-1.5 text-slate-500">
-          <span id="wizard-step-indicator" class="text-navy-900 font-mono text-[11px]">Langkah 1 dari 3</span>
+          <span id="wizard-step-indicator" class="text-navy-900 font-mono text-[11px]">Langkah 1 dari 2</span>
           <button id="btn-close-wizard" class="ml-3 text-slate-400 hover:text-slate-700 text-base font-bold">×</button>
         </div>
       </div>
@@ -469,7 +469,7 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="flex justify-between items-center pt-2">
           <button type="button" id="btn-wizard-back-1" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">← Kembali</button>
-          <button type="button" id="btn-wizard-next-2" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Lanjut: Tambah Barang Pertama →</button>
+          <button type="button" id="btn-wizard-next-2" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Selesai →</button>
         </div>
       </div>
 
@@ -1100,11 +1100,11 @@ import Layout from '../layouts/Layout.astro';
     });
 
     // Wizard Controls
-    function setWizardStep(step: 1 | 2 | 3) {
-      if (wizardStepIndicator) wizardStepIndicator.textContent = `Langkah ${step} dari 3`;
+    function setWizardStep(step: 1 | 2) {
+      if (wizardStepIndicator) wizardStepIndicator.textContent = `Langkah ${step} dari 2`;
       step1?.classList.toggle('hidden', step !== 1);
       step2?.classList.toggle('hidden', step !== 2);
-      step3?.classList.toggle('hidden', step !== 3);
+      step3?.classList.add('hidden');
     }
 
     function openWizard() {
@@ -1121,8 +1121,7 @@ import Layout from '../layouts/Layout.astro';
     document.getElementById('btn-close-wizard')?.addEventListener('click', closeWizard);
 
     document.getElementById('btn-wizard-back-1')?.addEventListener('click', () => setWizardStep(1));
-    document.getElementById('btn-wizard-next-2')?.addEventListener('click', () => setWizardStep(3));
-    document.getElementById('btn-wizard-back-2')?.addEventListener('click', () => setWizardStep(2));
+    document.getElementById('btn-wizard-next-2')?.addEventListener('click', closeWizard);
 
     // Auth Mode Toggles
     tabAuthSignin?.addEventListener('click', () => {
