@@ -313,8 +313,14 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <!-- Inventory-first category picker -->
-      <section id="inventory-category-section" class="space-y-2" aria-labelledby="inventory-category-title">
-        <h1 id="inventory-category-title" class="text-sm font-bold text-slate-900">Kategori</h1>
+      <section id="inventory-category-section" class="space-y-3" aria-label="Ringkasan dan filter inventaris">
+        <div class="flex items-end justify-between gap-3 border-b border-slate-200 pb-3">
+          <div class="min-w-0">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Total Nilai Inventaris</p>
+            <p id="inventory-total-value" class="mt-0.5 truncate text-xl font-extrabold tracking-tight text-navy-900">Rp 0</p>
+          </div>
+          <p id="inventory-total-count" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">0 barang</p>
+        </div>
         <div id="inventory-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori inventaris">
           <!-- Dynamic category tabs rendered here -->
         </div>
@@ -1777,6 +1783,8 @@ import Layout from '../layouts/Layout.astro';
       const statTotalValue = document.getElementById('stat-total-value');
       const statSellableCount = document.getElementById('stat-sellable-count');
       const statBidsCount = document.getElementById('stat-bids-count');
+      const inventoryTotalValue = document.getElementById('inventory-total-value');
+      const inventoryTotalCount = document.getElementById('inventory-total-count');
 
       if (invCount) invCount.textContent = items.length.toString();
       if (mktCount) mktCount.textContent = marketplaceListings.length.toString();
@@ -1785,6 +1793,8 @@ import Layout from '../layouts/Layout.astro';
       if (statTotalItems) statTotalItems.textContent = items.length.toString();
       const totalVal = items.reduce((acc, curr) => acc + (curr.estimated_value || 0), 0);
       if (statTotalValue) statTotalValue.textContent = `Rp ${totalVal.toLocaleString('id-ID')}`;
+      if (inventoryTotalValue) inventoryTotalValue.textContent = `Rp ${totalVal.toLocaleString('id-ID')}`;
+      if (inventoryTotalCount) inventoryTotalCount.textContent = `${items.length} barang`;
       if (statSellableCount) statSellableCount.textContent = marketplaceListings.length.toString();
       if (statBidsCount) statBidsCount.textContent = bids.length.toString();
 
