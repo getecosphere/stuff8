@@ -1411,7 +1411,7 @@ import Layout from '../layouts/Layout.astro';
             category,
             condition,
             description,
-            photos: ['/fujifilm-camera.jpg'],
+            photos: [],
             storage_location: location,
             estimated_value: estVal,
             asking_price: isSellable ? estVal : null,
@@ -1845,7 +1845,7 @@ import Layout from '../layouts/Layout.astro';
           return `
             <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs relative">
               <div class="h-48 bg-slate-100 relative overflow-hidden">
-                <img src="${(item.photos && item.photos[0]) || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'}" alt="${item.title}" class="w-full h-full object-cover ${isSold ? 'grayscale opacity-75' : ''}" />
+                ${item.photos?.[0] ? `<img src="${item.photos[0]}" alt="${item.title}" class="w-full h-full object-cover ${isSold ? 'grayscale opacity-75' : ''}" />` : ''}
                 
                 ${topBiddersHtml}
 
@@ -1953,7 +1953,7 @@ import Layout from '../layouts/Layout.astro';
           gridInventory.innerHTML = visibleItems.map(item => `
             <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs">
               <div class="h-36 sm:h-48 bg-slate-100 relative overflow-hidden flex items-center justify-center">
-                <img src="${(item.photos && item.photos[0]) || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'}" alt="${item.title}" class="w-full h-full object-cover" />
+                ${item.photos?.[0] ? `<img src="${item.photos[0]}" alt="${item.title}" class="w-full h-full object-cover" />` : ''}
                 <span class="absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-semibold ${item.sellable ? 'bg-navy-900 text-white shadow-xs' : 'bg-slate-200 text-slate-700'}">
                   ${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}
                 </span>
@@ -2011,7 +2011,7 @@ import Layout from '../layouts/Layout.astro';
             return `
               <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs">
                 <div class="h-48 bg-slate-100 relative overflow-hidden">
-                  <img src="${(item.photos && item.photos[0]) || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'}" alt="${item.title}" class="w-full h-full object-cover ${isSold ? 'grayscale opacity-75' : ''}" />
+                  ${item.photos?.[0] ? `<img src="${item.photos[0]}" alt="${item.title}" class="w-full h-full object-cover ${isSold ? 'grayscale opacity-75' : ''}" />` : ''}
                   <div class="absolute top-3 right-3 flex flex-col gap-1 items-end">
                     ${isSold ? `
                       <span class="px-2.5 py-1 rounded-md text-xs font-black bg-rose-600 text-white shadow-md">
