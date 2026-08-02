@@ -162,7 +162,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       verificationStatus.textContent = 'Mengirim email verifikasi…';
       try {
         const response = await fetch(`${authApi}/auth/resend-verification`, { method: 'POST', headers: { Authorization: `Bearer ${session.token}` } });
-        verificationStatus.textContent = response.ok ? 'Email verifikasi baru telah dikirim. Tautan berlaku 24 jam.' : 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
+        verificationStatus.textContent = response.ok ? 'Permintaan email verifikasi diterima oleh Brevo. Periksa inbox dan folder spam; tautan berlaku 24 jam.' : 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
       } catch { verificationStatus.textContent = 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.'; }
     });
 
