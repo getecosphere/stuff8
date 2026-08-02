@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Penawaran & Chat — Stuff8" marketplace={true}>
+  <div class="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 lg:px-8">
+    <div class="mb-4">
+      <p class="text-xs font-bold uppercase tracking-wider text-brand-700">Marketplace</p>
+      <h1 class="mt-1 text-xl font-extrabold tracking-tight text-navy-900">Penawaran &amp; Chat</h1>
+      <p class="mt-1 text-sm text-slate-600">Semua negosiasi produkmu tersimpan di sini.</p>
+    </div>
+    <div id="chat-app" class="grid min-h-[32rem] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs md:grid-cols-[20rem_1fr]">
+      <aside class="border-b border-slate-200 bg-slate-50 p-3 md:border-b-0 md:border-r"><div id="conversation-list" class="space-y-2"><p class="p-3 text-sm text-slate-500">Memuat percakapan…</p></div></aside>
+      <section id="conversation-panel" class="flex min-h-[28rem] flex-col"><div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-slate-900">Pilih percakapan</h2><p class="mt-1 text-sm text-slate-500">Offer dan pesan produk akan muncul di sini.</p></div></section>
+    </div>
+  </div>
+
+  <script>
+    const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || 'http://127.0.0.1:26377/api'}/chat`;
+    const STORAGE = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:26372/api';
+    const listRoot = document.getElementById('conversation-list')!;
+    const panel = document.getElementById('conversation-panel')!;
+    const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&gt;', '>': '&lt;', '"': '&quot;', "'": '&#039;' }[char] || char));
+    const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
+    const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
+    const user = () => session()?.user;
+    const attachmentUrl = (key: string) => `${STORAGE}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}`;
+    let conversations: any[] = [];
+    let activeConversation: any;
+    let websocket: WebSocket | undefined;
+
+    function signedOut() {
+      listRoot.innerHTML = '';
+      panel.innerHTML = `<div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-slate-900">Masuk untuk melihat chat</h2><p class="mt-1 text-sm text-slate-500">Offer dan negosiasi hanya tersedia untuk akun aktif.</p><a href="/?auth=signup&return_to=/chat/" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Daftar atau masuk</a></div>`;
+    }
+
+    function renderList() {
+      if (!conversations.length) { listRoot.innerHTML = `<div class="rounded-xl border border-dashed border-slate-200 bg-white p-4 text-center"><p class="text-sm font-bold text-slate-800">Belum ada offer</p><p class="mt-1 text-xs text-slate-500">Saat kamu mengirim atau menerima offer, chat produk muncul di sini.</p></div>`; return; }
+      listRoot.innerHTML = conversations.map(conversation => `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="w-full rounded-xl border p-3 text-left transition ${activeConversation?.conversation_id === conversation.conversation_id ? 'border-navy-900 bg-white shadow-xs' : 'border-transparent hover:border-slate-200 hover:bg-white'}"><p class="truncate text-sm font-bold text-slate-900">${escapeHtml(conversation.context?.title || 'Produk marketplace')}</p><p class="mt-1 text-xs text-slate-500">${new Date(conversation.updated_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })}</p></button>`).join('');
+      document.querySelectorAll<HTMLButtonElement>('[data-conversation]').forEach(button => button.addEventListener('click', () => openConversation(conversations.find(conversation => conversation.conversation_id === button.dataset.conversation))));
+    }
+
+    const renderMessage = (message: any) => {
+      const mine = message.sender_id === user()?.id;
+      const files = (message.attachments || []).map((file: any) => `<a class="mt-1 block text-xs underline" target="_blank" href="${attachmentUrl(file.key)}">📎 ${escapeHtml(file.filename)}</a>`).join('');
+      return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="max-w-[85%] rounded-xl px-3 py-2 text-sm ${mine ? 'bg-navy-900 text-white' : 'bg-slate-100 text-slate-800'}">${message.offer_amount ? `<p class="mb-1 text-xs font-bold">Offer: ${money(message.offer_amount)}</p>` : ''}${message.body ? `<p>${escapeHtml(message.body)}</p>` : ''}${message.sticker_id ? `<p class="text-lg" aria-label="Stiker">💬 <span class="text-xs font-bold">${escapeHtml(message.sticker_id.replaceAll('-', ' '))}</span></p>` : ''}${files}</div></div>`;
+    };
+
+    async function openConversation(conversation: any) {
+      if (!conversation || !user()?.id) return;
+      activeConversation = conversation;
+      renderList();
+      const title = escapeHtml(conversation.context?.title || 'Produk marketplace');
+      const itemLink = `/marketplace/detail?id=${encodeURIComponent(conversation.context?.reference_id || '')}`;
+      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><div><h2 class="text-sm font-bold text-navy-900">${title}</h2><p class="text-xs text-slate-500">Negosiasi tersimpan otomatis</p></div><a href="${itemLink}" class="text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 space-y-2 overflow-y-auto bg-slate-50 p-4"></div><div id="stickers" class="flex gap-1 overflow-x-auto border-t border-slate-100 bg-white px-3 pt-2"></div><form id="message-form" class="flex gap-2 bg-white p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" class="hidden" /><button id="message-file-button" type="button" class="rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen">＋</button><button class="rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form>`;
+      const messagesResponse = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/messages?participant_id=${encodeURIComponent(user().id)}`);
+      const messages = messagesResponse.ok ? await messagesResponse.json() : [];
+      const messagesRoot = document.getElementById('messages')!;
+      messagesRoot.innerHTML = messages.map(renderMessage).join('');
+      messagesRoot.scrollTop = messagesRoot.scrollHeight;
+      const stickerPayload = await fetch(`${CHAT}/stickers`).then(response => response.ok ? response.json() : { packs: [] });
+      document.getElementById('stickers')!.innerHTML = stickerPayload.packs.flatMap((pack: any) => pack.stickers.slice(0, 8)).map((sticker: any) => `<button type="button" data-sticker="${escapeHtml(sticker.id)}" class="shrink-0 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs">${escapeHtml(sticker.label)}</button>`).join('');
+      document.querySelectorAll<HTMLButtonElement>('[data-sticker]').forEach(button => button.addEventListener('click', () => sendMessage({ sticker_id: button.dataset.sticker })));
+      (document.getElementById('message-form') as HTMLFormElement).onsubmit = event => { event.preventDefault(); const input = document.getElementById('message-input') as HTMLInputElement; if (input.value.trim()) { sendMessage({ body: input.value }); input.value = ''; } };
+      document.getElementById('message-file-button')?.addEventListener('click', () => (document.getElementById('message-file') as HTMLInputElement).click());
+      (document.getElementById('message-file') as HTMLInputElement).onchange = async event => { const file = (event.target as HTMLInputElement).files?.[0]; if (!file) return; const form = new FormData(); form.append('owner_id', user().id); form.append('file', file); const upload = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/attachments`, { method: 'POST', body: form }); if (upload.ok) await sendMessage({ attachments: [await upload.json()] }); };
+      websocket?.close();
+      websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?user_id=${encodeURIComponent(user().id)}`);
+      websocket.onmessage = event => { const message = JSON.parse(event.data); const root = document.getElementById('messages'); if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', `<div id="message-${message.message_id}">${renderMessage(message)}</div>`); root.scrollTop = root.scrollHeight; } };
+    }
+
+    async function sendMessage(payload: any) {
+      if (!activeConversation || !user()?.id) return;
+      const response = await fetch(`${CHAT}/conversations/${activeConversation.conversation_id}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sender_id: user().id, ...payload }) });
+      if (!response.ok) throw new Error('Pesan belum dapat dikirim.');
+    }
+
+    async function load() {
+      if (!user()?.id) { signedOut(); return; }
+      const response = await fetch(`${CHAT}/conversations?participant_id=${encodeURIComponent(user().id)}`);
+      if (!response.ok) throw new Error('Chat belum tersedia.');
+      conversations = (await response.json()).filter((conversation: any) => conversation.context?.domain === 'marketplace');
+      renderList();
+      const requested = new URLSearchParams(location.search).get('conversation');
+      if (conversations.length) await openConversation(conversations.find(conversation => conversation.conversation_id === requested) || conversations[0]);
+    }
+    load().catch(error => { panel.innerHTML = `<div class="m-auto p-6 text-center text-sm text-rose-700">${escapeHtml(error.message)}</div>`; });
+  </script>
+</Layout>
