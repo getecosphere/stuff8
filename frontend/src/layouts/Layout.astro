@@ -10,6 +10,11 @@ const {
 } = Astro.props;
 const isInventory = Astro.url.pathname === '/';
 const isMarketplace = Astro.url.pathname.startsWith('/marketplace');
+// The public origin is deliberately taken from stuff8_bootstrap/ecompose.yml
+// (`expose.hostname`), not from a browser-local URL or a hand-managed .env.
+const siteUrl = 'https://stuff8.arunikaswarna.my.id';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const socialImageUrl = new URL('/images/stuff8-social-preview.png', siteUrl).toString();
 ---
 
 <!doctype html>
@@ -19,13 +24,28 @@ const isMarketplace = Astro.url.pathname.startsWith('/marketplace');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    
-    <!-- SEO Meta Tags -->
     <title>Stuff8</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="canonical" href={canonicalUrl} />
     <meta property="og:title" content="Stuff8" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Stuff8" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:secure_url" content={socialImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1734" />
+    <meta property="og:image:height" content="910" />
+    <meta property="og:image:alt" content="Koleksi barang pribadi yang tertata rapi dengan Stuff8" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Stuff8" />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content="Koleksi barang pribadi yang tertata rapi dengan Stuff8" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
