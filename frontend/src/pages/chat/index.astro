@@ -13,7 +13,7 @@ import Layout from '../../layouts/Layout.astro';
     </div>
   </div>
 
-  <style>
+  <style is:global>
     .typing-visual { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.25rem; width: 3.25rem; }
     .typing-visual img { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: contain; }
     .typing-dots { position: relative; z-index: 1; display: inline-flex; gap: 0.18rem; padding-top: 0.08rem; }
@@ -56,7 +56,7 @@ import Layout from '../../layouts/Layout.astro';
         return profile;
       } catch { return { id }; }
     }
-    const avatar = (profile: any, className = 'size-8') => `<img src="${escapeHtml(profile?.avatarUrl || '/images/avatar-fallback.webp')}" alt="" class="${className} shrink-0 rounded-full object-cover" />`;
+    const avatar = (profile: any, className = 'size-8') => `<img src="${escapeHtml(profile?.avatarUrl || '/images/avatar-fallback.webp')}" onerror="this.onerror=null;this.src='/images/avatar-fallback.webp'" alt="" class="${className} shrink-0 rounded-full object-cover" />`;
 
     function signedOut() {
       listRoot.innerHTML = '';
