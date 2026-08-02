@@ -3,11 +3,11 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout>
-  <div class="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 lg:px-8">
+  <div class="mx-auto flex min-h-[calc(100dvh-10rem)] w-full max-w-6xl flex-col px-4 py-5 sm:px-6 lg:px-8">
     <div class="mb-4">
       <h1 class="page-heading">Nego sampai deal</h1>
     </div>
-    <div id="chat-app" class="grid min-h-[32rem] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs md:grid-cols-[20rem_1fr]">
+    <div id="chat-app" class="grid min-h-[32rem] flex-1 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs md:grid-cols-[20rem_1fr]">
       <aside class="border-b border-slate-200 bg-slate-50 p-3 md:border-b-0 md:border-r"><div id="conversation-list" class="space-y-2"><p class="p-3 text-sm text-slate-500">Memuat percakapan…</p></div></aside>
       <section id="conversation-panel" class="flex min-h-[28rem] flex-col"><div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-slate-900">Pilih percakapan</h2><p class="mt-1 text-sm text-slate-500">Offer dan pesan produk akan muncul di sini.</p></div></section>
     </div>
@@ -18,6 +18,7 @@ import Layout from '../../layouts/Layout.astro';
     const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const listRoot = document.getElementById('conversation-list')!;
     const panel = document.getElementById('conversation-panel')!;
+    const chatApp = document.getElementById('chat-app')!;
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&gt;', '>': '&lt;', '"': '&quot;', "'": '&#039;' }[char] || char));
     const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
@@ -31,6 +32,11 @@ import Layout from '../../layouts/Layout.astro';
     function signedOut() {
       listRoot.innerHTML = '';
       panel.innerHTML = `<div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-slate-900">Masuk untuk melihat chat</h2><p class="mt-1 text-sm text-slate-500">Offer dan negosiasi hanya tersedia untuk akun aktif.</p><a href="/auth/signup/?return_to=/chat/" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Daftar atau masuk</a></div>`;
+    }
+
+    function renderEmptyInbox() {
+      chatApp.className = 'flex min-h-[32rem] flex-1 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-xs';
+      chatApp.innerHTML = `<div class="flex max-w-sm flex-col items-center"><img src="/images/empty-marketplace.webp" alt="Belum ada offer marketplace" class="mb-4 size-36 object-contain sm:size-40" /><h2 class="text-base font-bold text-slate-900">Belum ada offer</h2><p class="mt-1 text-sm leading-6 text-slate-500">Saat kamu mengirim atau menerima offer, chat produk muncul di sini.</p></div>`;
     }
 
     function renderList() {
@@ -79,6 +85,7 @@ import Layout from '../../layouts/Layout.astro';
       const response = await fetch(`${CHAT}/conversations?participant_id=${encodeURIComponent(user().id)}`, { headers: chatHeaders() });
       if (!response.ok) throw new Error('Chat belum tersedia.');
       conversations = (await response.json()).filter((conversation: any) => conversation.context?.domain === 'marketplace');
+      if (!conversations.length) { renderEmptyInbox(); return; }
       renderList();
       const requested = new URLSearchParams(location.search).get('conversation');
       if (conversations.length) await openConversation(conversations.find(conversation => conversation.conversation_id === requested) || conversations[0]);

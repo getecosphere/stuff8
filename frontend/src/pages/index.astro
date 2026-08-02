@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout>
   <div id="app-notice" class="fixed inset-x-4 bottom-5 z-[100] hidden rounded-xl border border-navy-900/10 bg-navy-900 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg sm:left-1/2 sm:right-auto sm:w-auto sm:max-w-md sm:-translate-x-1/2" role="status" aria-live="polite"></div>
-  <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
     
     <!-- ================================================================= -->
     <!-- 1. LANDING PAGE HALAMAN UTAMA                                    -->
@@ -286,7 +286,7 @@ import Layout from '../layouts/Layout.astro';
     <!-- ================================================================= -->
     <!-- 2. DASHBOARD PENGGUNA TERDAPAT KETIKA LOGIN                       -->
     <!-- ================================================================= -->
-    <div id="signed-in-dashboard" class="space-y-4 hidden transition-all duration-300">
+    <div id="signed-in-dashboard" class="hidden min-h-[calc(100dvh-10rem)] flex flex-col gap-4 transition-all duration-300">
       
       <!-- Kept in the DOM for existing data updates; inventory management takes priority on mobile. -->
       <div class="hidden grid-cols-2 md:grid-cols-4 gap-4">
@@ -350,7 +350,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- Section 1: Private Inventory View -->
-      <section id="inventory-section" class="space-y-3">
+      <section id="inventory-section" class="flex min-h-0 flex-1 flex-col gap-3">
         <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <!-- Dynamic Inventory Items Rendered Here -->
         </div>
@@ -2326,14 +2326,16 @@ import Layout from '../layouts/Layout.astro';
             : 'grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3';
 
         if (visibleItems.length === 0) {
+          gridInventory.className = 'flex flex-1';
           const hasSelectedCategory = selectedInventoryCategory !== 'all';
           gridInventory.innerHTML = `
-            <div class="col-span-full p-6 rounded-xl bg-white border border-slate-200 text-center space-y-3 shadow-xs">
+            <div class="flex min-h-80 flex-1 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xs">
+              <img src="/images/no-item-image.webp" alt="Inventaris masih kosong" class="mb-4 size-36 object-contain sm:size-40" />
               <div class="space-y-1">
                 <h3 class="text-slate-900 font-bold text-sm">${hasSelectedCategory ? `Belum ada barang di ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'Belum ada barang'}</h3>
                 <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Tambahkan barang untuk mulai mengatur inventarismu.</p>
               </div>
-              <button onclick="window.openAddItem()" class="min-h-9 px-3 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-colors">
+              <button onclick="window.openAddItem()" class="mt-3 min-h-9 px-3 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-colors">
                 Tambah barang
               </button>
             </div>
