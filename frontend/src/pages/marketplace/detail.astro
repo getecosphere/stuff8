@@ -8,8 +8,8 @@ import Layout from '../../layouts/Layout.astro';
     <article id="product-detail" class="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">Memuat barang…</article>
   </div>
   <script>
-    const API = 'http://127.0.0.1:26374/api/marketplace';
-    const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || 'http://127.0.0.1:26372/api';
+    const API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
+    const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const root = document.getElementById('product-detail')!;
     const id = new URLSearchParams(location.search).get('id');
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
@@ -58,7 +58,7 @@ import Layout from '../../layouts/Layout.astro';
       document.getElementById('offer-cancel')?.addEventListener('click', closeOffer);
       if (offerForm) offerForm.onsubmit = event => { event.preventDefault(); const amount = offerValue(); if (amount > 0) { closeOffer(); startChat(item, amount); } };
     }
-    const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || 'http://127.0.0.1:26377/api'}/chat`;
+    const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || '/api'}/chat`;
     let activeConversation: any;
     let websocket: WebSocket | undefined;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };

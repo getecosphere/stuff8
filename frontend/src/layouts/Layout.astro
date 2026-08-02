@@ -128,7 +128,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
   </body>
   <script>
     const readStuff8Session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
-    const authApi = import.meta.env.PUBLIC_AUTH_URL || 'http://127.0.0.1:26373/api';
+    const authApi = import.meta.env.PUBLIC_AUTH_URL || '/auth-api';
     const headerUser = readStuff8Session()?.user;
     const headerGreeting = document.getElementById('header-greeting');
     if (headerUser && headerGreeting) {

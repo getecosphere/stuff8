@@ -18,7 +18,7 @@ import Layout from '../../layouts/Layout.astro';
     </div>
   </section>
   <script>
-    const authApi = import.meta.env.PUBLIC_AUTH_URL || 'http://127.0.0.1:26373/api';
+    const authApi = import.meta.env.PUBLIC_AUTH_URL || '/auth-api';
     const returnTo = new URLSearchParams(location.search).get('return_to'); const safeReturnTo = returnTo?.startsWith('/') ? returnTo : '/';
     document.getElementById('signin-link')?.setAttribute('href', `/auth/signin/?return_to=${encodeURIComponent(safeReturnTo)}`);
     document.querySelectorAll<HTMLButtonElement>('[data-password-toggle]').forEach(button => { const input = document.getElementById(button.dataset.passwordToggle || '') as HTMLInputElement | null; button.addEventListener('click', () => { if (!input) return; const reveal = input.type === 'password'; input.type = reveal ? 'text' : 'password'; button.querySelector('[data-password-eye="hidden"]')?.classList.toggle('hidden', reveal); button.querySelector('[data-password-eye="visible"]')?.classList.toggle('hidden', !reveal); button.setAttribute('aria-label', reveal ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'); }); });
