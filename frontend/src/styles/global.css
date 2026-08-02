@@ -8,3 +8,8 @@
   }
 }
 
+@layer components {
+  .page-heading {
+    @apply text-xl font-extrabold leading-7 tracking-tight text-navy-900;
+  }
+}
