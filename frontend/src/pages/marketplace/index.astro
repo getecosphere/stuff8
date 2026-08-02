@@ -41,7 +41,18 @@ import Layout from '../../layouts/Layout.astro';
     let page = 1;
     let search = '';
     let category = '';
-    let view = localStorage.getItem('stuff8_marketplace_view') || 'card';
+    const marketplaceViewPreferenceKey = () => {
+      try {
+        const session = JSON.parse(localStorage.getItem('stuff8_session') || 'null');
+        return `stuff8_marketplace_view_${session?.user?.id || 'guest'}`;
+      } catch {
+        return 'stuff8_marketplace_view_guest';
+      }
+    };
+    const savedMarketplaceView = localStorage.getItem(marketplaceViewPreferenceKey());
+    let view = savedMarketplaceView === 'list' || savedMarketplaceView === 'thumbnail' || savedMarketplaceView === 'card'
+      ? savedMarketplaceView
+      : 'card';
     let meta: any = { listings: [], page: 1, limit: 12, total: 0, total_pages: 1 };
     let categories: Array<{ category: string; count: number }> = [];
     let searchTimer: number | undefined;
@@ -128,7 +139,7 @@ import Layout from '../../layouts/Layout.astro';
       page = 1;
       load().catch(console.error);
     });
-    document.querySelectorAll<HTMLButtonElement>('[data-marketplace-view]').forEach(button => button.addEventListener('click', () => { view = button.dataset.marketplaceView || 'card'; localStorage.setItem('stuff8_marketplace_view', view); viewMenu.removeAttribute('open'); render(); }));
+    document.querySelectorAll<HTMLButtonElement>('[data-marketplace-view]').forEach(button => button.addEventListener('click', () => { view = button.dataset.marketplaceView || 'card'; localStorage.setItem(marketplaceViewPreferenceKey(), view); viewMenu.removeAttribute('open'); render(); }));
     load().catch(() => {
       grid.className = 'flex flex-1';
       grid.innerHTML = emptyMarketplace('Marketplace belum tersedia', 'Coba muat kembali beberapa saat lagi.');
