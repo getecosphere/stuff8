@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Stuff8 — Catat Barang & Pasar Jual Beli">
+<Layout>
   <div id="app-notice" class="fixed inset-x-4 bottom-5 z-[100] hidden rounded-xl border border-navy-900/10 bg-navy-900 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg sm:left-1/2 sm:right-auto sm:w-auto sm:max-w-md sm:-translate-x-1/2" role="status" aria-live="polite"></div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
     
@@ -317,9 +317,9 @@ import Layout from '../layouts/Layout.astro';
       <section id="inventory-category-section" class="space-y-3" aria-label="Ringkasan dan filter inventaris">
         <div class="flex items-end justify-between gap-3">
           <div class="min-w-0">
-            <p id="inventory-total-value" class="truncate text-xl font-extrabold tracking-tight text-navy-900">Rp 0</p>
+            <p id="inventory-total-value" class="truncate text-xl font-extrabold tracking-tight text-navy-900">Belum ada nilai inventaris</p>
           </div>
-          <p id="inventory-total-count" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">0 barang</p>
+          <p id="inventory-total-count" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">Belum ada barang</p>
         </div>
         <div id="inventory-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori inventaris">
           <!-- Dynamic category tabs rendered here -->
@@ -1046,7 +1046,8 @@ import Layout from '../layouts/Layout.astro';
 
       const renderTab = (category: string, label: string, count: number) => {
         const active = selectedInventoryCategory === category;
-        return `<button type="button" role="tab" aria-selected="${active}" data-category="${escapeHtml(category)}" class="shrink-0 min-h-9 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900 ${active ? 'border-navy-900 bg-navy-900 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'}">${escapeHtml(label)} <span class="ml-1 ${active ? 'text-slate-300' : 'text-slate-400'}">${count}</span></button>`;
+        const countLabel = count > 0 ? `<span class="ml-1 ${active ? 'text-slate-300' : 'text-slate-400'}">${count}</span>` : '';
+        return `<button type="button" role="tab" aria-selected="${active}" data-category="${escapeHtml(category)}" class="shrink-0 min-h-9 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900 ${active ? 'border-navy-900 bg-navy-900 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'}">${escapeHtml(label)}${countLabel}</button>`;
       };
 
       categoryTabs.innerHTML = [
@@ -2239,12 +2240,13 @@ import Layout from '../layouts/Layout.astro';
       if (mktCount) mktCount.textContent = marketplaceListings.length.toString();
       if (bidCount) bidCount.textContent = bids.length.toString();
 
-      if (statTotalItems) statTotalItems.textContent = inventoryMeta.total.toString();
+      const hasInventory = inventoryMeta.total > 0;
+      if (statTotalItems) statTotalItems.textContent = hasInventory ? inventoryMeta.total.toString() : 'Belum ada';
       const totalVal = inventoryMeta.total_value;
-      if (statTotalValue) statTotalValue.textContent = `Rp ${totalVal.toLocaleString('id-ID')}`;
-      if (inventoryTotalValue) inventoryTotalValue.textContent = `Rp ${totalVal.toLocaleString('id-ID')}`;
-      if (inventoryTotalCount) inventoryTotalCount.textContent = `${inventoryMeta.total} barang`;
-      if (statSellableCount) statSellableCount.textContent = marketplaceListings.length.toString();
+      if (statTotalValue) statTotalValue.textContent = hasInventory ? `Rp ${totalVal.toLocaleString('id-ID')}` : 'Belum ada';
+      if (inventoryTotalValue) inventoryTotalValue.textContent = hasInventory ? `Rp ${totalVal.toLocaleString('id-ID')}` : 'Belum ada nilai inventaris';
+      if (inventoryTotalCount) inventoryTotalCount.textContent = hasInventory ? `${inventoryMeta.total} barang` : 'Belum ada barang';
+      if (statSellableCount) statSellableCount.textContent = marketplaceListings.length > 0 ? marketplaceListings.length.toString() : 'Belum ada';
       if (statBidsCount) statBidsCount.textContent = bids.length.toString();
 
       renderCategoryTabs();
