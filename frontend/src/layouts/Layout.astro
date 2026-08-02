@@ -62,8 +62,6 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
           <img src="/logo.png" alt="Stuff8 Logo" class="h-7 sm:h-8 w-auto object-contain group-hover:opacity-90 transition-opacity" />
           <span class="sr-only">Stuff8 - Manajemen Barang & Pasar Jual Beli</span>
         </a>
-        <p id="header-greeting" class="absolute left-1/2 hidden -translate-x-1/2 whitespace-nowrap text-sm font-semibold text-slate-600 xl:block" aria-live="polite"></p>
-
         <div class="flex items-center gap-2">
           <nav class="inline-flex min-h-10 items-center rounded-lg border border-slate-200 bg-white p-1 text-xs font-bold shadow-xs" aria-label="Navigasi utama">
             <a href="/" aria-current={isInventory ? 'page' : undefined} class:list={['inline-flex min-h-8 items-center rounded-md px-2.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isInventory ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
@@ -129,16 +127,6 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
   <script>
     const readStuff8Session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const authApi = import.meta.env.PUBLIC_AUTH_URL || '/auth-api';
-    const headerUser = readStuff8Session()?.user;
-    const headerGreeting = document.getElementById('header-greeting');
-    if (headerUser && headerGreeting) {
-      const hour = new Date().getHours();
-      const salutation = hour >= 5 && hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
-      const name = headerUser.name || headerUser.username || 'Pengguna';
-      headerGreeting.textContent = `${salutation}, ${name}`;
-      headerGreeting.classList.replace('hidden', 'xl:block');
-    }
-
     const verificationBanner = document.getElementById('email-verification-banner');
     const verificationStatus = document.getElementById('email-verification-status');
     const showVerificationBanner = (show: boolean) => verificationBanner?.classList.toggle('hidden', !show);
