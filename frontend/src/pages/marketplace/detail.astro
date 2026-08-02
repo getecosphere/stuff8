@@ -56,14 +56,48 @@ import Layout from '../../layouts/Layout.astro';
       document.getElementById('offer-reset')?.addEventListener('click', () => setOfferValue(Number(item.asking_price || 0)));
       document.getElementById('offer-close')?.addEventListener('click', closeOffer);
       document.getElementById('offer-cancel')?.addEventListener('click', closeOffer);
-      if (offerForm) offerForm.onsubmit = event => { event.preventDefault(); const amount = offerValue(); if (amount > 0) { closeOffer(); startChat(item, amount); } };
+      if (offerForm) offerForm.onsubmit = async event => {
+        event.preventDefault();
+        const amount = offerValue();
+        if (!amount) return;
+        const note = document.getElementById('negotiation-note')!;
+        try {
+          await createBid(item, amount);
+          closeOffer();
+          await startChat(item, amount);
+        } catch (error: any) {
+          note.textContent = error?.message || 'Penawaran belum dapat disimpan. Coba lagi.';
+          note.classList.remove('hidden');
+        }
+      };
     }
     const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || '/api'}/chat`;
+    const BIDDING = import.meta.env.PUBLIC_BIDDING_URL || '/api/bidding';
     let activeConversation: any;
     let websocket: WebSocket | undefined;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const sender = () => session()?.user;
     const chatHeaders = () => ({ 'Authorization': `Bearer ${session()?.token}` });
+    async function createBid(item: any, amount: number) {
+      const user = sender();
+      const response = await fetch(`${BIDDING}/bids`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          item_id: item.id,
+          buyer_id: user.id,
+          buyer_name: user.name || user.username || 'Pengguna Stuff8',
+          contact_info: user.email || user.username || user.id,
+          amount,
+          note: `Offer untuk ${item.title}`
+        })
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || body.message || 'Penawaran belum dapat disimpan.');
+      }
+      return response.json();
+    }
     const renderMessage = (message: any) => {
       const mine = message.sender_id === sender()?.id;
       const attachments = (message.attachments || []).map((file: any) => `<a class="block text-xs underline" target="_blank" href="${STORAGE}/storage/content/${file.key.split('/').map(encodeURIComponent).join('/')}">📎 ${escapeHtml(file.filename)}</a>`).join('');
@@ -73,7 +107,8 @@ import Layout from '../../layouts/Layout.astro';
       const user = sender();
       if (!user?.id) { document.getElementById('negotiation-note')?.classList.remove('hidden'); return; }
       const response = await fetch(`${CHAT}/conversations?participant_id=${encodeURIComponent(user.id)}`, { headers: chatHeaders() });
-      const existing = response.ok ? await response.json() : [];
+      if (!response.ok) throw new Error('Inbox belum dapat dimuat. Coba lagi.');
+      const existing = await response.json();
       const productConversations = existing.filter((conversation: any) => conversation.context?.domain === 'marketplace' && conversation.context?.reference_id === item.id);
       activeConversation = productConversations.find((conversation: any) => conversation.participant_ids.includes(item.seller_id));
       if (user.id === item.seller_id && !activeConversation) { const note = document.getElementById('negotiation-note')!; note.textContent = 'Belum ada offer yang masuk untuk barang ini. Saat pembeli mengirim offer, chat akan muncul di sini.'; note.classList.remove('hidden'); return; }
@@ -97,7 +132,12 @@ import Layout from '../../layouts/Layout.astro';
       websocket?.close(); websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${activeConversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
       websocket.onmessage = event => { const message = JSON.parse(event.data); if (!document.getElementById(`message-${message.message_id}`)) { messagesRoot.insertAdjacentHTML('beforeend', `<div id="message-${message.message_id}">${renderMessage(message)}</div>`); messagesRoot.scrollTop = messagesRoot.scrollHeight; } };
     }
-    async function sendChat(payload: any) { if (!activeConversation || !sender()?.id) return; await fetch(`${CHAT}/conversations/${activeConversation.conversation_id}/messages`, { method: 'POST', headers: { ...chatHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ sender_id: sender().id, ...payload }) }); }
+    async function sendChat(payload: any) {
+      if (!activeConversation || !sender()?.id) return;
+      const response = await fetch(`${CHAT}/conversations/${activeConversation.conversation_id}/messages`, { method: 'POST', headers: { ...chatHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ sender_id: sender().id, ...payload }) });
+      if (!response.ok) throw new Error('Pesan offer belum dapat disimpan.');
+      return response.json();
+    }
     load().catch(error => { root.innerHTML = `<p class="text-rose-700">${escapeHtml(error.message)}</p>`; });
   </script>
 </Layout>
