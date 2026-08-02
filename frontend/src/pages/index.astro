@@ -1174,7 +1174,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     // Hero Section Event Handlers
-    document.getElementById('btn-hero-start')?.addEventListener('click', () => openWizard());
+    document.getElementById('btn-hero-start')?.addEventListener('click', () => openAuth());
     document.getElementById('btn-hero-browse-mkt')?.addEventListener('click', () => {
       document.getElementById('public-marketplace-visitor-grid')?.scrollIntoView({ behavior: 'smooth' });
     });
@@ -1290,7 +1290,7 @@ import Layout from '../layouts/Layout.astro';
 
     function openAddItem() {
       if (!currentSession || !currentSession.user) {
-        openWizard();
+        openAuth();
       } else {
         editingItemId = null;
         deleteConfirmationArmed = false;
@@ -1441,7 +1441,7 @@ import Layout from '../layouts/Layout.astro';
       const form = event.currentTarget as HTMLFormElement;
       itemFormError?.classList.add('hidden');
       if (!currentSession?.user) {
-        openWizard();
+        openAuth();
         return;
       }
 
@@ -1537,9 +1537,13 @@ import Layout from '../layouts/Layout.astro';
       step3?.classList.add('hidden');
     }
 
-    function openWizard() {
-      setWizardStep(currentSession && currentSession.user ? 2 : 1);
+    function openGuide() {
+      setWizardStep(2);
       modalWizard?.classList.remove('hidden');
+    }
+
+    function openAuth(mode: 'signin' | 'signup' = 'signup') {
+      location.assign(`/auth/${mode}/`);
     }
 
     function closeWizard() {
@@ -1562,17 +1566,17 @@ import Layout from '../layouts/Layout.astro';
       sidebarToggle?.setAttribute('aria-expanded', 'true');
     }
 
-    document.getElementById('btn-onboarding-wizard')?.addEventListener('click', openWizard);
+    document.getElementById('btn-onboarding-wizard')?.addEventListener('click', openGuide);
     sidebarToggle?.addEventListener('click', openSidebar);
     document.getElementById('btn-sidebar-close')?.addEventListener('click', closeSidebar);
     sidebarBackdrop?.addEventListener('click', closeSidebar);
     document.getElementById('btn-sidebar-guide')?.addEventListener('click', () => {
       closeSidebar();
-      openWizard();
+      openGuide();
     });
     document.getElementById('btn-sidebar-login')?.addEventListener('click', () => {
       closeSidebar();
-      openWizard();
+      openAuth();
     });
     document.getElementById('btn-sidebar-add-item')?.addEventListener('click', () => {
       closeSidebar();
@@ -1912,7 +1916,7 @@ import Layout from '../layouts/Layout.astro';
       document.getElementById(`calc-range-${key}`)?.addEventListener('input', updateCalculator);
     });
 
-    document.getElementById('btn-calc-cta')?.addEventListener('click', openWizard);
+    document.getElementById('btn-calc-cta')?.addEventListener('click', () => openAuth());
 
     // =================================================================
     // DATA LOADING & RENDERING
@@ -2470,7 +2474,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     // Attach Global Functions
-    (window as any).openWizard = openWizard;
+    (window as any).openWizard = openAuth;
     (window as any).openAddItem = openAddItem;
     (window as any).openItemEditor = openItemEditor;
     (window as any).inventoryPhotoPrevious = () => {
@@ -3485,10 +3489,7 @@ import Layout from '../layouts/Layout.astro';
     // Initial Startup Flow
     initUserSession();
     const authIntent = new URLSearchParams(location.search).get('auth');
-    if (!currentSession?.user && authIntent) {
-      openWizard();
-      if (authIntent === 'signup') tabAuthSignup?.click();
-    }
+    if (!currentSession?.user && authIntent) location.replace(`/auth/${authIntent === 'signin' ? 'signin' : 'signup'}/`);
     if (currentSession?.user && new URLSearchParams(location.search).get('add-item') === '1') openAddItem();
     renderDemoSandbox();
     updateCalculator();
