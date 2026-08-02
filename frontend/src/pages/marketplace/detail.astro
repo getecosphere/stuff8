@@ -25,7 +25,7 @@ import Layout from '../../layouts/Layout.astro';
       document.querySelectorAll<HTMLButtonElement>('[data-photo]').forEach(button => button.addEventListener('click', () => { (document.getElementById('product-photo') as HTMLImageElement).src = photoUrl(photos[Number(button.dataset.photo)]); }));
       document.getElementById('start-negotiation')?.addEventListener('click', () => startChat(item));
     }
-    const CHAT = 'http://127.0.0.1:26377/api/chat';
+    const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || 'http://127.0.0.1:26377/api'}/chat`;
     let activeConversation: any;
     let websocket: WebSocket | undefined;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
