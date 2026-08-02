@@ -68,7 +68,8 @@ const {
 
       <nav class="mt-5 space-y-2" aria-label="Aksi akun">
         <button id="btn-sidebar-add-item" type="button" class="hidden w-full items-center justify-between rounded-xl bg-navy-900 px-4 py-3 text-left text-sm font-bold text-white shadow-xs transition-colors hover:bg-navy-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Tambah Barang</span><span aria-hidden="true">+</span></button>
-        <a href="/chat/" class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Penawaran &amp; Chat</span><span aria-hidden="true">→</span></a>
+        <a id="btn-sidebar-profile" href="/profile/" class="hidden w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Profil &amp; Keamanan</span><span aria-hidden="true">→</span></a>
+        <a id="btn-sidebar-chat" href="/chat/" class="hidden w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Penawaran &amp; Chat</span><span aria-hidden="true">→</span></a>
         <button id="btn-sidebar-guide" type="button" class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Panduan Stuff8</span><span aria-hidden="true">→</span></button>
         <button id="btn-sidebar-login" type="button" class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Masuk / Daftar</span><span aria-hidden="true">→</span></button>
       </nav>
@@ -86,4 +87,36 @@ const {
       </div>
     </footer>
   </body>
+  <script>
+    // The home page owns its richer inventory controls. Every other page still
+    // receives a fully working, role-aware hamburger from this shared layout.
+    if (location.pathname !== '/') {
+      const readSession = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
+      const session = readSession();
+      const user = session?.user;
+      const toggle = document.getElementById('btn-sidebar-toggle');
+      const close = document.getElementById('btn-sidebar-close');
+      const sidebar = document.getElementById('app-sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const closeSidebar = () => { sidebar?.classList.add('translate-x-full'); backdrop?.classList.add('hidden'); toggle?.setAttribute('aria-expanded', 'false'); };
+      const openSidebar = () => { sidebar?.classList.remove('translate-x-full'); backdrop?.classList.remove('hidden'); toggle?.setAttribute('aria-expanded', 'true'); };
+      toggle?.addEventListener('click', openSidebar);
+      close?.addEventListener('click', closeSidebar);
+      backdrop?.addEventListener('click', closeSidebar);
+      if (user) {
+        document.getElementById('sidebar-user-summary')?.classList.replace('hidden', 'flex');
+        document.getElementById('sidebar-user-avatar')!.textContent = (user.name || user.username || 'U').charAt(0).toUpperCase();
+        document.getElementById('sidebar-user-name')!.textContent = user.name || user.username;
+        document.getElementById('btn-sidebar-add-item')?.classList.replace('hidden', 'flex');
+        document.getElementById('btn-sidebar-profile')?.classList.replace('hidden', 'flex');
+        document.getElementById('btn-sidebar-chat')?.classList.replace('hidden', 'flex');
+        document.getElementById('btn-sidebar-login')?.classList.add('hidden');
+        document.getElementById('btn-logout')?.classList.remove('hidden');
+      }
+      document.getElementById('btn-sidebar-add-item')?.addEventListener('click', () => location.assign('/?add-item=1'));
+      document.getElementById('btn-sidebar-login')?.addEventListener('click', () => location.assign('/?auth=signup'));
+      document.getElementById('btn-sidebar-guide')?.addEventListener('click', () => location.assign('/?guide=1'));
+      document.getElementById('btn-logout')?.addEventListener('click', () => { localStorage.removeItem('stuff8_session'); location.assign('/'); });
+    }
+  </script>
 </html>
