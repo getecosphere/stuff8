@@ -9,7 +9,7 @@ import Layout from '../layouts/Layout.astro';
     <!-- ================================================================= -->
     <!-- 1. LANDING PAGE HALAMAN UTAMA                                    -->
     <!-- ================================================================= -->
-    <div id="signed-out-landing" class="space-y-12 py-4 transition-all duration-300">
+    <div id="signed-out-landing" class="hidden space-y-12 py-4 transition-all duration-300">
       
       <!-- HERO SECTION -->
       <section class="relative rounded-2xl bg-white border border-slate-200 p-8 sm:p-12 md:p-14 text-center space-y-6 shadow-xs">
@@ -1127,8 +1127,18 @@ import Layout from '../layouts/Layout.astro';
           currentSession = null;
         }
       }
+      const isInventoryRoute = location.pathname === '/inventory' || location.pathname === '/inventory/';
+      if (currentSession?.user && !isInventoryRoute) {
+        location.replace('/inventory/');
+        return true;
+      }
+      if (!currentSession?.user && isInventoryRoute) {
+        location.replace('/auth/signin/?return_to=/inventory/');
+        return true;
+      }
       updateAuthUIState();
       refreshSidebarProfile();
+      return false;
     }
 
     async function refreshSidebarProfile() {
@@ -3538,12 +3548,14 @@ import Layout from '../layouts/Layout.astro';
     });
 
     // Initial Startup Flow
-    initUserSession();
-    const authIntent = new URLSearchParams(location.search).get('auth');
-    if (!currentSession?.user && authIntent) location.replace(`/auth/${authIntent === 'signin' ? 'signin' : 'signup'}/`);
-    if (currentSession?.user && new URLSearchParams(location.search).get('add-item') === '1') openAddItem();
-    renderDemoSandbox();
-    updateCalculator();
-    loadData();
+    const isRedirectingForRoute = initUserSession();
+    if (!isRedirectingForRoute) {
+      const authIntent = new URLSearchParams(location.search).get('auth');
+      if (!currentSession?.user && authIntent) location.replace(`/auth/${authIntent === 'signin' ? 'signin' : 'signup'}/`);
+      if (currentSession?.user && new URLSearchParams(location.search).get('add-item') === '1') openAddItem();
+      renderDemoSandbox();
+      updateCalculator();
+      loadData();
+    }
   </script>
 </Layout>

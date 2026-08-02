@@ -22,7 +22,7 @@ import Layout from '../../layouts/Layout.astro';
     const authApi = import.meta.env.PUBLIC_AUTH_URL || '/auth-api';
     const authEndpoint = `${authApi.replace(/\/$/, '')}/auth`;
     const returnTo = new URLSearchParams(location.search).get('return_to');
-    const safeReturnTo = returnTo?.startsWith('/') ? returnTo : '/';
+    const safeReturnTo = returnTo?.startsWith('/') ? returnTo : '/inventory/';
     document.getElementById('signup-link')?.setAttribute('href', `/auth/signup/?return_to=${encodeURIComponent(safeReturnTo)}`);
     document.querySelectorAll<HTMLButtonElement>('[data-password-toggle]').forEach(button => {
       const input = document.getElementById(button.dataset.passwordToggle || '') as HTMLInputElement | null;
