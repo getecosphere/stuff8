@@ -1614,6 +1614,8 @@ import Layout from '../layouts/Layout.astro';
           localStorage.setItem('stuff8_session', JSON.stringify(data));
           updateAuthUIState();
           closeWizard();
+          const returnTo = new URLSearchParams(location.search).get('return_to');
+          if (returnTo?.startsWith('/marketplace/')) { location.assign(returnTo); return; }
           await loadData();
         } else {
           if (authSigninError) {
@@ -1650,6 +1652,8 @@ import Layout from '../layouts/Layout.astro';
           currentSession = data;
           localStorage.setItem('stuff8_session', JSON.stringify(data));
           updateAuthUIState();
+          const returnTo = new URLSearchParams(location.search).get('return_to');
+          if (returnTo?.startsWith('/marketplace/')) { location.assign(returnTo); return; }
           setWizardStep(2);
         } else {
           if (authSignupError) {
@@ -3464,6 +3468,11 @@ import Layout from '../layouts/Layout.astro';
 
     // Initial Startup Flow
     initUserSession();
+    const authIntent = new URLSearchParams(location.search).get('auth');
+    if (!currentSession?.user && authIntent) {
+      openWizard();
+      if (authIntent === 'signup') tabAuthSignup?.click();
+    }
     renderDemoSandbox();
     updateCalculator();
     loadData();
