@@ -58,6 +58,12 @@ import Layout from '../../layouts/Layout.astro';
     }
     const avatar = (profile: any, className = 'size-8') => `<img src="${escapeHtml(profile?.avatarUrl || '/images/avatar-fallback.webp')}" onerror="this.onerror=null;this.src='/images/avatar-fallback.webp'" alt="" class="${className} shrink-0 rounded-full object-cover" />`;
     let uploadSequence = 0;
+    let filePickerOpen = false;
+    // The browser does not dispatch `change` when the picker is cancelled.
+    // Release the guard when focus returns so the attachment button remains usable.
+    window.addEventListener('focus', () => {
+      if (filePickerOpen) window.setTimeout(() => { filePickerOpen = false; }, 0);
+    });
 
     function attachmentMarkup(file: any) {
       const url = attachmentUrl(file.key);
@@ -158,8 +164,16 @@ import Layout from '../../layouts/Layout.astro';
       if (focusComposer) requestAnimationFrame(() => messageInput.focus());
       (document.getElementById('message-form') as HTMLFormElement).onsubmit = event => { event.preventDefault(); if (messageInput.value.trim()) { sendMessage({ body: messageInput.value }); messageInput.value = ''; websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })); } };
       messageInput.addEventListener('input', () => { websocket?.send(JSON.stringify({ type: 'typing', is_typing: true })); window.clearTimeout(typingTimeout); typingTimeout = window.setTimeout(() => websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })), 1200); });
-      document.getElementById('message-file-button')?.addEventListener('click', () => (document.getElementById('message-file') as HTMLInputElement).click());
-      (document.getElementById('message-file') as HTMLInputElement).onchange = async event => { const input = event.target as HTMLInputElement; const file = input.files?.[0]; if (!file) return; try { const uploaded: any = await uploadAttachment(file); await sendMessage({ attachments: [uploaded.attachment] }); uploaded.remove(); } catch (error: any) { if (error?.name !== 'AbortError') console.error(error); } finally { input.value = ''; } };
+      const fileInput = document.getElementById('message-file') as HTMLInputElement;
+      const fileButton = document.getElementById('message-file-button') as HTMLButtonElement;
+      fileButton.onclick = event => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (filePickerOpen) return;
+        filePickerOpen = true;
+        fileInput.click();
+      };
+      fileInput.onchange = async event => { filePickerOpen = false; const input = event.target as HTMLInputElement; const file = input.files?.[0]; if (!file) return; try { const uploaded: any = await uploadAttachment(file); await sendMessage({ attachments: [uploaded.attachment] }); uploaded.remove(); } catch (error: any) { if (error?.name !== 'AbortError') console.error(error); } finally { input.value = ''; } };
       websocket?.close();
       websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
       websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profile.name || profile.username || 'Pengguna'} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } };
