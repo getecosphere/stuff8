@@ -13,6 +13,16 @@ import Layout from '../../layouts/Layout.astro';
     </div>
   </div>
 
+  <style>
+    .typing-visual { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.25rem; width: 3.25rem; }
+    .typing-visual img { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: contain; }
+    .typing-dots { position: relative; z-index: 1; display: inline-flex; gap: 0.18rem; padding-top: 0.08rem; }
+    .typing-dots i { display: block; width: 0.25rem; height: 0.25rem; border-radius: 9999px; background: #0f172a; animation: stuff8-typing 1s ease-in-out infinite; }
+    .typing-dots i:nth-child(2) { animation-delay: 0.14s; }
+    .typing-dots i:nth-child(3) { animation-delay: 0.28s; }
+    @keyframes stuff8-typing { 0%, 60%, 100% { transform: translateY(0); opacity: .35; } 30% { transform: translateY(-0.22rem); opacity: 1; } }
+  </style>
+
   <script>
     const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || '/api'}/chat`;
     const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
@@ -37,6 +47,7 @@ import Layout from '../../layouts/Layout.astro';
       return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
     };
     async function profileFor(id: string) {
+      if (id === user()?.id) return user();
       if (profiles.has(id)) return profiles.get(id);
       try {
         const response = await fetch(`${PROFILE}/users/${encodeURIComponent(id)}`, { headers: chatHeaders() });
@@ -76,12 +87,12 @@ import Layout from '../../layouts/Layout.astro';
       renderList();
       const title = escapeHtml(conversation.context?.title || 'Produk marketplace');
       const itemLink = `/marketplace/detail?id=${encodeURIComponent(conversation.context?.reference_id || '')}`;
-      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><div><h2 class="text-sm font-bold text-navy-900">${title}</h2><p class="text-xs text-slate-500">Negosiasi tersimpan otomatis</p></div><a href="${itemLink}" class="text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden px-4 pb-1 text-xs italic text-slate-500" aria-live="polite"></p><div id="stickers" class="flex min-w-0 gap-1 overflow-x-auto border-t border-slate-100 bg-white px-3 pt-2"></div><form id="message-form" class="flex min-w-0 gap-2 bg-white p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form>`;
+      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><div><h2 class="text-sm font-bold text-navy-900">${title}</h2><p class="text-xs text-slate-500">Negosiasi tersimpan otomatis</p></div><a href="${itemLink}" class="text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden h-10 items-center px-4" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><div id="stickers" class="flex min-w-0 gap-1 overflow-x-auto px-3 pt-2"></div><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
       const messagesResponse = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/messages?participant_id=${encodeURIComponent(user().id)}`, { headers: chatHeaders() });
       const messages = messagesResponse.ok ? await messagesResponse.json() : [];
       const messagesRoot = document.getElementById('messages')!;
       messagesRoot.innerHTML = (await Promise.all(messages.map(renderMessage))).join('');
-      messagesRoot.scrollTop = messagesRoot.scrollHeight;
+      requestAnimationFrame(() => { messagesRoot.scrollTop = messagesRoot.scrollHeight; });
       const stickerPayload = await fetch(`${CHAT}/stickers`).then(response => response.ok ? response.json() : { packs: [] });
       document.getElementById('stickers')!.innerHTML = stickerPayload.packs.flatMap((pack: any) => pack.stickers.slice(0, 8)).map((sticker: any) => `<button type="button" data-sticker="${escapeHtml(sticker.id)}" class="shrink-0 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs">${escapeHtml(sticker.label)}</button>`).join('');
       document.querySelectorAll<HTMLButtonElement>('[data-sticker]').forEach(button => button.addEventListener('click', () => sendMessage({ sticker_id: button.dataset.sticker })));
@@ -92,7 +103,7 @@ import Layout from '../../layouts/Layout.astro';
       (document.getElementById('message-file') as HTMLInputElement).onchange = async event => { const file = (event.target as HTMLInputElement).files?.[0]; if (!file) return; const form = new FormData(); form.append('owner_id', user().id); form.append('file', file); const upload = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/attachments`, { method: 'POST', body: form }); if (upload.ok) await sendMessage({ attachments: [await upload.json()] }); };
       websocket?.close();
       websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
-      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.textContent = `${profile.name || profile.username || 'Pengguna'} sedang mengetik…`; indicator.classList.toggle('hidden', !payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } };
+      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profile.name || profile.username || 'Pengguna'} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } };
     }
 
     async function sendMessage(payload: any) {
