@@ -57,6 +57,58 @@ import Layout from '../../layouts/Layout.astro';
       } catch { return { id }; }
     }
     const avatar = (profile: any, className = 'size-8') => `<img src="${escapeHtml(profile?.avatarUrl || '/images/avatar-fallback.webp')}" onerror="this.onerror=null;this.src='/images/avatar-fallback.webp'" alt="" class="${className} shrink-0 rounded-full object-cover" />`;
+    let uploadSequence = 0;
+
+    function attachmentMarkup(file: any) {
+      const url = attachmentUrl(file.key);
+      const filename = escapeHtml(file.filename || 'Lampiran');
+      if (String(file.content_type || '').startsWith('image/')) {
+        return `<a class="mt-2 block overflow-hidden rounded-xl border border-white/20 bg-white/10" target="_blank" rel="noopener" href="${url}" title="Buka gambar ${filename}"><img src="${url}" alt="${filename}" class="max-h-52 w-full object-cover" /><span class="block truncate px-2 py-1.5 text-xs font-semibold">${filename}</span></a>`;
+      }
+      return `<a class="mt-2 flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold underline" target="_blank" rel="noopener" href="${url}" title="Buka atau unduh ${filename}"><span aria-hidden="true">📎</span><span class="truncate">${filename}</span></a>`;
+    }
+
+    function uploadAttachment(file: File): Promise<any> {
+      if (!activeConversation || !user()?.id) return Promise.reject(new Error('Percakapan belum siap.'));
+      const uploadId = `chat-upload-${++uploadSequence}`;
+      const root = document.getElementById('messages');
+      root?.insertAdjacentHTML('beforeend', `<div id="${uploadId}" class="flex justify-end"><div class="w-full max-w-sm rounded-2xl rounded-br-sm border border-slate-200 bg-white p-3 shadow-xs"><div class="flex items-start gap-3"><div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-lg" aria-hidden="true">${file.type.startsWith('image/') ? '🖼️' : '📄'}</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-bold text-slate-900">${escapeHtml(file.name)}</p><p data-upload-status class="mt-0.5 text-xs text-slate-500">Menyiapkan upload…</p></div><button type="button" data-upload-cancel class="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-slate-500 hover:bg-rose-50 hover:text-rose-700" aria-label="Batalkan upload">×</button></div><div class="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-100"><span data-upload-progress class="block h-full w-0 rounded-full bg-brand-600 transition-[width] duration-150"></span></div></div></div>`);
+      root && (root.scrollTop = root.scrollHeight);
+      return new Promise((resolve, reject) => {
+        const card = document.getElementById(uploadId);
+        const status = card?.querySelector<HTMLElement>('[data-upload-status]');
+        const progress = card?.querySelector<HTMLElement>('[data-upload-progress]');
+        const xhr = new XMLHttpRequest();
+        const remove = () => card?.remove();
+        const fail = (message: string) => { if (status) status.textContent = message; if (progress) progress.className = 'block h-full w-full rounded-full bg-rose-500'; };
+        xhr.open('POST', `${CHAT}/conversations/${encodeURIComponent(activeConversation.conversation_id)}/attachments`);
+        const token = session()?.token;
+        if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        xhr.upload.onprogress = event => {
+          if (!event.lengthComputable) return;
+          const percent = Math.min(95, Math.round((event.loaded / event.total) * 95));
+          if (progress) progress.style.width = `${percent}%`;
+          if (status) status.textContent = `Mengunggah ke Storage… ${percent}%`;
+        };
+        xhr.upload.onload = () => { if (status) status.textContent = 'Storage sedang menyiapkan file…'; };
+        xhr.onerror = () => { fail('Upload gagal. Coba lagi.'); reject(new Error('Upload gagal.')); };
+        xhr.onabort = () => { remove(); reject(new DOMException('Upload dibatalkan.', 'AbortError')); };
+        xhr.onload = () => {
+          if (xhr.status < 200 || xhr.status >= 300) { fail('Upload ditolak. Coba lagi.'); reject(new Error('Upload ditolak.')); return; }
+          try {
+            const attachment = JSON.parse(xhr.responseText);
+            if (progress) progress.style.width = '100%';
+            if (status) status.textContent = 'Upload selesai. Mengirim ke percakapan…';
+            resolve({ attachment, remove });
+          } catch { fail('Respons Storage tidak valid.'); reject(new Error('Respons Storage tidak valid.')); }
+        };
+        card?.querySelector<HTMLButtonElement>('[data-upload-cancel]')?.addEventListener('click', () => xhr.abort());
+        const form = new FormData();
+        form.append('owner_id', user().id);
+        form.append('file', file);
+        xhr.send(form);
+      });
+    }
 
     function signedOut() {
       listRoot.innerHTML = '';
@@ -77,7 +129,7 @@ import Layout from '../../layouts/Layout.astro';
     async function renderMessage(message: any) {
       const mine = message.sender_id === user()?.id;
       const profile = await profileFor(message.sender_id);
-      const files = (message.attachments || []).map((file: any) => `<a class="mt-1 block text-xs underline" target="_blank" href="${attachmentUrl(file.key)}">📎 ${escapeHtml(file.filename)}</a>`).join('');
+      const files = (message.attachments || []).map(attachmentMarkup).join('');
       return `<div id="message-${message.message_id}" class="flex items-end gap-2 ${mine ? 'justify-end' : 'justify-start'}">${mine ? '' : avatar(profile)}<div class="max-w-[78%]"><p class="mb-1 text-[11px] font-semibold text-slate-500 ${mine ? 'text-right' : ''}">${escapeHtml(profile.name || profile.username || 'Pengguna Stuff8')}</p><div class="rounded-2xl px-3 py-2 text-sm ${mine ? 'rounded-br-sm bg-navy-900 text-white' : 'rounded-bl-sm bg-slate-100 text-slate-800'}">${message.offer_amount ? `<p class="mb-1 text-xs font-bold">Offer: ${money(message.offer_amount)}</p>` : ''}${message.body ? `<p>${escapeHtml(message.body)}</p>` : ''}${message.sticker_id ? `<p class="text-lg" aria-label="Stiker">💬 <span class="text-xs font-bold">${escapeHtml(message.sticker_id.replaceAll('-', ' '))}</span></p>` : ''}${files}</div><p class="mt-1 text-[10px] text-slate-400 ${mine ? 'text-right' : ''}">${displayDate(message.created_at)}</p></div>${mine ? avatar(profile) : ''}</div>`;
     }
 
@@ -101,7 +153,7 @@ import Layout from '../../layouts/Layout.astro';
       (document.getElementById('message-form') as HTMLFormElement).onsubmit = event => { event.preventDefault(); if (messageInput.value.trim()) { sendMessage({ body: messageInput.value }); messageInput.value = ''; websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })); } };
       messageInput.addEventListener('input', () => { websocket?.send(JSON.stringify({ type: 'typing', is_typing: true })); window.clearTimeout(typingTimeout); typingTimeout = window.setTimeout(() => websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })), 1200); });
       document.getElementById('message-file-button')?.addEventListener('click', () => (document.getElementById('message-file') as HTMLInputElement).click());
-      (document.getElementById('message-file') as HTMLInputElement).onchange = async event => { const file = (event.target as HTMLInputElement).files?.[0]; if (!file) return; const form = new FormData(); form.append('owner_id', user().id); form.append('file', file); const upload = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/attachments`, { method: 'POST', body: form }); if (upload.ok) await sendMessage({ attachments: [await upload.json()] }); };
+      (document.getElementById('message-file') as HTMLInputElement).onchange = async event => { const input = event.target as HTMLInputElement; const file = input.files?.[0]; if (!file) return; try { const uploaded: any = await uploadAttachment(file); await sendMessage({ attachments: [uploaded.attachment] }); uploaded.remove(); } catch (error: any) { if (error?.name !== 'AbortError') console.error(error); } finally { input.value = ''; } };
       websocket?.close();
       websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
       websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profile.name || profile.username || 'Pengguna'} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } };
