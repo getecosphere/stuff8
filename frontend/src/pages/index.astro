@@ -1483,6 +1483,7 @@ import Layout from '../layouts/Layout.astro';
             body: JSON.stringify({
               item_id: newItem.id,
               seller_id: newItem.owner_id,
+              seller_name: currentSession?.user?.name || currentSession?.user?.username || 'Pemilik Stuff8',
               title: newItem.title,
               description: newItem.description,
               category: newItem.category,
@@ -1707,7 +1708,8 @@ import Layout from '../layouts/Layout.astro';
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 item_id: newItem.id,
-                seller_id: currentSession.user.id,
+              seller_id: currentSession.user.id,
+              seller_name: currentSession.user.name || currentSession.user.username || 'Pemilik Stuff8',
                 title: newItem.title,
                 description: newItem.description,
                 category: newItem.category,
@@ -2504,6 +2506,7 @@ import Layout from '../layouts/Layout.astro';
           body: JSON.stringify({
             item_id: item.id,
             seller_id: item.owner_id || (currentSession && currentSession.user ? currentSession.user.id : 'user_guest'),
+            seller_name: currentSession?.user?.name || currentSession?.user?.username || 'Pemilik Stuff8',
             title: item.title,
             description: item.description,
             category: item.category,
