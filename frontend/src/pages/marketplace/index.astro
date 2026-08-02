@@ -87,18 +87,20 @@ import Layout from '../../layouts/Layout.astro';
       ].join('');
     }
 
+    const marketplaceViewIcons: Record<string, string> = {
+      list: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>',
+      thumbnail: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1" stroke-width="2"/></svg>',
+      card: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg>'
+    };
+    const renderViewTrigger = () => { viewTrigger.innerHTML = marketplaceViewIcons[view] || marketplaceViewIcons.card; };
+
     function render() {
       const listings = meta.listings || [];
       (document.getElementById('marketplace-total')!).textContent = meta.total > 0 ? `${meta.total} barang` : 'Belum ada barang';
       renderCategoryTabs();
       const classes: Record<string, string> = { list: 'space-y-3', thumbnail: 'grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4', card: 'grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3' };
       grid.className = listings.length ? (classes[view] || classes.card) : 'flex flex-1';
-      const icons: Record<string, string> = {
-        list: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>',
-        thumbnail: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1" stroke-width="2"/></svg>',
-        card: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg>'
-      };
-      viewTrigger.innerHTML = icons[view] || icons.card;
+      renderViewTrigger();
 
       grid.innerHTML = listings.length ? listings.map((item: any) => {
         const image = `<img src="${photoUrl(item.photos?.[0])}" alt="${escapeHtml(item.title)}" class="size-full object-cover" />`;
@@ -140,6 +142,7 @@ import Layout from '../../layouts/Layout.astro';
       load().catch(console.error);
     });
     document.querySelectorAll<HTMLButtonElement>('[data-marketplace-view]').forEach(button => button.addEventListener('click', () => { view = button.dataset.marketplaceView || 'card'; localStorage.setItem(marketplaceViewPreferenceKey(), view); viewMenu.removeAttribute('open'); render(); }));
+    renderViewTrigger();
     load().catch(() => {
       grid.className = 'flex flex-1';
       grid.innerHTML = emptyMarketplace('Marketplace belum tersedia', 'Coba muat kembali beberapa saat lagi.');
