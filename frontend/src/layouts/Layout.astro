@@ -11,6 +11,7 @@ const {
 const isInventory = Astro.url.pathname === '/inventory' || Astro.url.pathname === '/inventory/';
 const isMarketplace = Astro.url.pathname.startsWith('/marketplace');
 const isEmailVerification = Astro.url.pathname.startsWith('/auth/verify-email');
+const isChat = Astro.url.pathname.startsWith('/chat');
 // The public origin is deliberately taken from stuff8_bootstrap/ecompose.yml
 // (`expose.hostname`), not from a browser-local URL or a hand-managed .env.
 const siteUrl = 'https://stuff8.arunikaswarna.my.id';
@@ -56,7 +57,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       }
     </style>
   </head>
-  <body class="bg-slate-50 text-slate-900 flex flex-col min-h-screen">
+  <body class:list={['bg-slate-50 text-slate-900 flex flex-col min-h-screen', isChat && 'h-dvh overflow-hidden']}>
     <header class="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-xs">
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
         <a id="stuff8-logo-link" href="/" class="flex items-center gap-3 group">
@@ -111,7 +112,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       <button id="btn-logout" type="button" class="mt-auto hidden w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">Keluar</button>
     </aside>
 
-    <main class="flex-1">
+    <main class="min-h-0 flex-1">
       {!isEmailVerification && <div id="email-verification-banner" class="hidden border-b border-amber-200 bg-amber-50">
         <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p><strong>Email belum diverifikasi.</strong> Inventaris pribadi tetap dapat digunakan, tetapi Marketplace dan negosiasi baru aktif setelah verifikasi. Tautan berlaku 24 jam.</p>
@@ -122,11 +123,11 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       <slot />
     </main>
 
-    <footer class="border-t border-slate-200 bg-white py-8">
+    {!isChat && <footer class="border-t border-slate-200 bg-white py-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
         <p>© 2026 Stuff8</p>
       </div>
-    </footer>
+    </footer>}
   </body>
   <script>
     const readStuff8Session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
