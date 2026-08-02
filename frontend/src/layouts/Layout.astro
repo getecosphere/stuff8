@@ -65,14 +65,17 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
         </a>
         <div class="flex items-center gap-2">
           <nav class="inline-flex min-h-10 items-center rounded-lg border border-slate-200 bg-white p-1 text-xs font-bold shadow-xs" aria-label="Navigasi utama">
-            <a href="/" aria-current={isInventory ? 'page' : undefined} class:list={['inline-flex min-h-8 items-center rounded-md px-2.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isInventory ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
-              <span>Inventaris</span>
+            <a href="/" title="Inventaris" aria-label="Inventaris" aria-current={isInventory ? 'page' : undefined} class:list={['inline-flex size-8 items-center justify-center rounded-md transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isInventory ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
+              <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M8 9l8-4" /></svg>
+              <span class="sr-only">Inventaris</span>
             </a>
-            <a href="/marketplace/" aria-current={isMarketplace ? 'page' : undefined} class:list={['inline-flex min-h-8 items-center rounded-md px-2.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isMarketplace ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
-              <span class="sm:hidden">Pasar</span><span class="hidden sm:inline">Marketplace</span>
+            <a href="/marketplace/" title="Marketplace" aria-label="Marketplace" aria-current={isMarketplace ? 'page' : undefined} class:list={['inline-flex size-8 items-center justify-center rounded-md transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isMarketplace ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
+              <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M5 10l1-5h12l1 5m-14 0v9h14v-9m-10 4h6" /></svg>
+              <span class="sr-only">Marketplace</span>
             </a>
-            <a href="/chat/" aria-current={Astro.url.pathname.startsWith('/chat') ? 'page' : undefined} class:list={['inline-flex min-h-8 items-center gap-1 rounded-md px-2.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', Astro.url.pathname.startsWith('/chat') ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
-              <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.278-3.833A7.72 7.72 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span>Inbox</span>
+            <a href="/chat/" title="Inbox" aria-label="Inbox" aria-current={Astro.url.pathname.startsWith('/chat') ? 'page' : undefined} class:list={['inline-flex size-8 items-center justify-center rounded-md transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', Astro.url.pathname.startsWith('/chat') ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
+              <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.278-3.833A7.72 7.72 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              <span class="sr-only">Inbox</span>
             </a>
           </nav>
           <button id="btn-sidebar-toggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="app-sidebar" class="inline-flex size-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">
@@ -89,10 +92,10 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
         <button id="btn-sidebar-close" type="button" aria-label="Tutup menu" class="inline-flex size-9 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">×</button>
       </div>
 
-      <div id="sidebar-user-summary" class="mt-5 hidden items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
-        <div class="flex size-9 items-center justify-center rounded-full bg-navy-900 text-sm font-bold text-white"><span id="sidebar-user-avatar">?</span></div>
+      <a id="sidebar-user-summary" href="/profile/" class="mt-5 hidden items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">
+        <div id="sidebar-user-avatar-wrap" class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-navy-900 text-sm font-bold text-white"><span id="sidebar-user-avatar">?</span></div>
         <div class="min-w-0"><p id="sidebar-user-name" class="truncate text-sm font-bold text-slate-900">Pengguna Stuff8</p><p class="text-xs text-slate-500">Inventaris pribadi</p></div>
-      </div>
+      </a>
 
       <nav class="mt-5 space-y-2" aria-label="Navigasi dan aksi akun">
         <a href="/" aria-current={isInventory ? 'page' : undefined} class:list={['flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isInventory ? 'bg-navy-900 text-white' : 'text-slate-700 hover:bg-slate-100']}><span>Inventaris</span><span aria-hidden="true">→</span></a>
@@ -128,6 +131,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
   <script>
     const readStuff8Session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const authApi = import.meta.env.PUBLIC_AUTH_URL || '/auth-api';
+    const profileApi = import.meta.env.PUBLIC_PROFILE_URL || '/api';
     const verificationBanner = document.getElementById('email-verification-banner');
     const verificationStatus = document.getElementById('email-verification-status');
     const showVerificationBanner = (show: boolean) => verificationBanner?.classList.toggle('hidden', !show);
@@ -144,6 +148,39 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       } catch { showVerificationBanner(session.user.emailVerified === false); }
     };
     refreshVerificationState();
+    const setSidebarAvatar = (avatarUrl?: string, name?: string) => {
+      const avatarWrap = document.getElementById('sidebar-user-avatar-wrap');
+      if (!avatarWrap) return;
+      avatarWrap.replaceChildren();
+      if (avatarUrl) {
+        const image = document.createElement('img');
+        image.src = avatarUrl;
+        image.alt = '';
+        image.className = 'size-full object-cover';
+        image.addEventListener('error', () => setSidebarAvatar(undefined, name), { once: true });
+        avatarWrap.append(image);
+        return;
+      }
+      const initial = document.createElement('span');
+      initial.id = 'sidebar-user-avatar';
+      initial.textContent = (name || 'U').charAt(0).toUpperCase();
+      avatarWrap.append(initial);
+    };
+    const refreshSidebarProfile = async (session: any) => {
+      if (!session?.token || !session?.user?.id) return;
+      try {
+        const response = await fetch(`${profileApi}/users/${encodeURIComponent(session.user.id)}`, { headers: { Authorization: `Bearer ${session.token}` } });
+        if (!response.ok) return;
+        const profile = await response.json();
+        const name = profile.name || session.user.name || session.user.username;
+        const avatarUrl = profile.avatarUrl || session.user.avatarUrl;
+        session.user = { ...session.user, ...(name ? { name } : {}), ...(avatarUrl ? { avatarUrl } : {}) };
+        localStorage.setItem('stuff8_session', JSON.stringify(session));
+        setSidebarAvatar(avatarUrl, name || session.user.username);
+        const sidebarName = document.getElementById('sidebar-user-name');
+        if (sidebarName && name) sidebarName.textContent = name;
+      } catch { /* The local session still provides a usable fallback. */ }
+    };
     document.getElementById('resend-verification')?.addEventListener('click', async () => {
       const session = readStuff8Session();
       if (!session?.token || !verificationStatus) return;
@@ -171,8 +208,9 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       backdrop?.addEventListener('click', closeSidebar);
       if (user) {
         document.getElementById('sidebar-user-summary')?.classList.replace('hidden', 'flex');
-        document.getElementById('sidebar-user-avatar')!.textContent = (user.name || user.username || 'U').charAt(0).toUpperCase();
+        setSidebarAvatar(user.avatarUrl, user.name || user.username);
         document.getElementById('sidebar-user-name')!.textContent = user.name || user.username;
+        refreshSidebarProfile(session);
         document.getElementById('btn-sidebar-add-item')?.classList.replace('hidden', 'flex');
         document.getElementById('btn-sidebar-profile')?.classList.replace('hidden', 'flex');
         document.getElementById('btn-sidebar-login')?.classList.add('hidden');

@@ -877,6 +877,7 @@ import Layout from '../layouts/Layout.astro';
   <script>
     const AUTH_API = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;
     const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
+    const PROFILE_API = import.meta.env.PUBLIC_PROFILE_URL || '/api';
     const INVENTORY_API = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const MARKETPLACE_API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
     const BIDDING_API = import.meta.env.PUBLIC_BIDDING_URL || '/api/bidding';
@@ -1127,6 +1128,29 @@ import Layout from '../layouts/Layout.astro';
         }
       }
       updateAuthUIState();
+      refreshSidebarProfile();
+    }
+
+    async function refreshSidebarProfile() {
+      if (!currentSession?.token || !currentSession.user?.id) return;
+      try {
+        const response = await fetch(`${PROFILE_API}/users/${encodeURIComponent(currentSession.user.id)}`, {
+          headers: { Authorization: `Bearer ${currentSession.token}` },
+        });
+        if (!response.ok) return;
+        const profile = await response.json();
+        const avatarUrl = profile.avatarUrl || currentSession.user.avatarUrl;
+        const name = profile.name || currentSession.user.name;
+        currentSession.user = {
+          ...currentSession.user,
+          ...(avatarUrl ? { avatarUrl } : {}),
+          ...(name ? { name } : {}),
+        };
+        localStorage.setItem('stuff8_session', JSON.stringify(currentSession));
+        updateAuthUIState();
+      } catch {
+        // The sidebar keeps the initials from the authenticated session.
+      }
     }
 
     function updateAuthUIState() {
@@ -1136,7 +1160,7 @@ import Layout from '../layouts/Layout.astro';
       const sidebarProfile = document.getElementById('btn-sidebar-profile');
       const sidebarChat = document.getElementById('btn-sidebar-chat');
       const sidebarLogout = document.getElementById('btn-logout');
-      const initialEl = document.getElementById('sidebar-user-avatar');
+      const avatarWrap = document.getElementById('sidebar-user-avatar-wrap');
       const nameEl = document.getElementById('sidebar-user-name');
 
       const isAuthenticated = !!(currentSession && currentSession.user);
@@ -1152,7 +1176,26 @@ import Layout from '../layouts/Layout.astro';
         sidebarChat?.classList.remove('hidden');
         sidebarChat?.classList.add('flex');
         sidebarLogout?.classList.remove('hidden');
-        if (initialEl) initialEl.textContent = (currentSession!.user.name || currentSession!.user.username || 'U').charAt(0).toUpperCase();
+        if (avatarWrap) {
+          avatarWrap.replaceChildren();
+          if (currentSession!.user.avatarUrl) {
+            const image = document.createElement('img');
+            image.src = currentSession!.user.avatarUrl;
+            image.alt = '';
+            image.className = 'size-full object-cover';
+            image.addEventListener('error', () => {
+              delete currentSession!.user.avatarUrl;
+              localStorage.setItem('stuff8_session', JSON.stringify(currentSession));
+              updateAuthUIState();
+            }, { once: true });
+            avatarWrap.append(image);
+          } else {
+            const initial = document.createElement('span');
+            initial.id = 'sidebar-user-avatar';
+            initial.textContent = (currentSession!.user.name || currentSession!.user.username || 'U').charAt(0).toUpperCase();
+            avatarWrap.append(initial);
+          }
+        }
         if (nameEl) nameEl.textContent = currentSession!.user.name || currentSession!.user.username;
 
         signedOutLanding?.classList.add('hidden');
