@@ -110,6 +110,13 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
     </aside>
 
     <main class="flex-1">
+      <div id="email-verification-banner" class="hidden border-b border-amber-200 bg-amber-50">
+        <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+          <p><strong>Email belum diverifikasi.</strong> Inventaris pribadi tetap dapat digunakan, tetapi Marketplace dan negosiasi baru aktif setelah verifikasi. Tautan berlaku 24 jam.</p>
+          <button id="resend-verification" type="button" class="shrink-0 font-bold text-amber-900 underline decoration-amber-400 underline-offset-4 hover:text-navy-900">Kirim ulang email</button>
+        </div>
+        <p id="email-verification-status" class="mx-auto hidden max-w-7xl px-4 pb-3 text-xs sm:px-6 lg:px-8" aria-live="polite"></p>
+      </div>
       <slot />
     </main>
 
@@ -121,6 +128,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
   </body>
   <script>
     const readStuff8Session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
+    const authApi = import.meta.env.PUBLIC_AUTH_URL || 'http://127.0.0.1:26373/api';
     const headerUser = readStuff8Session()?.user;
     const headerGreeting = document.getElementById('header-greeting');
     if (headerUser && headerGreeting) {
@@ -130,6 +138,33 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       headerGreeting.textContent = `${salutation}, ${name}`;
       headerGreeting.classList.replace('hidden', 'xl:block');
     }
+
+    const verificationBanner = document.getElementById('email-verification-banner');
+    const verificationStatus = document.getElementById('email-verification-status');
+    const showVerificationBanner = (show: boolean) => verificationBanner?.classList.toggle('hidden', !show);
+    const refreshVerificationState = async () => {
+      const session = readStuff8Session();
+      if (!session?.token || !session?.user) return;
+      try {
+        const response = await fetch(`${authApi}/auth/verification-status`, { headers: { Authorization: `Bearer ${session.token}` } });
+        if (!response.ok) return;
+        const status = await response.json();
+        session.user.emailVerified = Boolean(status.emailVerified);
+        localStorage.setItem('stuff8_session', JSON.stringify(session));
+        showVerificationBanner(!status.emailVerified);
+      } catch { showVerificationBanner(session.user.emailVerified === false); }
+    };
+    refreshVerificationState();
+    document.getElementById('resend-verification')?.addEventListener('click', async () => {
+      const session = readStuff8Session();
+      if (!session?.token || !verificationStatus) return;
+      verificationStatus.classList.remove('hidden');
+      verificationStatus.textContent = 'Mengirim email verifikasi…';
+      try {
+        const response = await fetch(`${authApi}/auth/resend-verification`, { method: 'POST', headers: { Authorization: `Bearer ${session.token}` } });
+        verificationStatus.textContent = response.ok ? 'Email verifikasi baru telah dikirim. Tautan berlaku 24 jam.' : 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
+      } catch { verificationStatus.textContent = 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.'; }
+    });
 
     // The home page owns its richer inventory controls. Every other page still
     // receives a fully working, role-aware hamburger from this shared layout.
