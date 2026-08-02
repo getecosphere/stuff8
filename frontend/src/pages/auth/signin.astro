@@ -20,6 +20,7 @@ import Layout from '../../layouts/Layout.astro';
   </section>
   <script>
     const authApi = import.meta.env.PUBLIC_AUTH_URL || '/auth-api';
+    const authEndpoint = `${authApi.replace(/\/$/, '')}/auth`;
     const returnTo = new URLSearchParams(location.search).get('return_to');
     const safeReturnTo = returnTo?.startsWith('/') ? returnTo : '/';
     document.getElementById('signup-link')?.setAttribute('href', `/auth/signup/?return_to=${encodeURIComponent(safeReturnTo)}`);
@@ -30,7 +31,7 @@ import Layout from '../../layouts/Layout.astro';
     document.getElementById('signin-form')?.addEventListener('submit', async event => {
       event.preventDefault(); const error = document.getElementById('signin-error')!; error.classList.add('hidden');
       const username = (document.getElementById('signin-username') as HTMLInputElement).value; const password = (document.getElementById('signin-password') as HTMLInputElement).value;
-      try { const response = await fetch(`${authApi}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) }); const data = await response.json(); if (!response.ok || !data.token) throw new Error(data.message || data.error || 'Username atau kata sandi salah.'); localStorage.setItem('stuff8_session', JSON.stringify(data)); location.assign(safeReturnTo); } catch (cause) { error.textContent = cause instanceof Error ? cause.message : 'Gagal masuk. Coba lagi.'; error.classList.remove('hidden'); }
+      try { const response = await fetch(`${authEndpoint}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) }); const raw = await response.text(); let data: Record<string, unknown> = {}; try { data = raw ? JSON.parse(raw) : {}; } catch { throw new Error('Layanan Auth mengembalikan respons yang tidak valid. Coba lagi.'); } if (!response.ok || !data.token) throw new Error(String(data.message || data.error || 'Username atau kata sandi salah.')); localStorage.setItem('stuff8_session', JSON.stringify(data)); location.assign(safeReturnTo); } catch (cause) { error.textContent = cause instanceof Error ? cause.message : 'Gagal masuk. Coba lagi.'; error.classList.remove('hidden'); }
     });
   </script>
 </Layout>
