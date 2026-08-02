@@ -1661,12 +1661,18 @@ import Layout from '../layouts/Layout.astro';
       const password = (document.getElementById('signup-password') as HTMLInputElement).value;
 
       try {
-        const queryParams = new URLSearchParams({ username, email, password, name });
-        const res = await fetch(`${AUTH_API}/register?${queryParams.toString()}`, {
-          method: 'POST'
+        const res = await fetch(`${AUTH_API}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password, name })
         });
-
-        const data = await res.json();
+        const raw = await res.text();
+        let data: Record<string, unknown> = {};
+        try {
+          data = raw ? JSON.parse(raw) : {};
+        } catch {
+          throw new Error('Layanan Auth mengembalikan respons yang tidak valid. Coba lagi.');
+        }
         if (res.ok && data.token) {
           currentSession = data;
           localStorage.setItem('stuff8_session', JSON.stringify(data));
