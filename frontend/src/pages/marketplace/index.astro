@@ -36,7 +36,7 @@ import Layout from '../../layouts/Layout.astro';
 
   <script>
     const API = 'http://127.0.0.1:26374/api/marketplace';
-    const STORAGE = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:26372/api';
+    const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || 'http://127.0.0.1:26372/api';
     let page = 1;
     let search = '';
     let view = localStorage.getItem('stuff8_marketplace_view') || 'card';

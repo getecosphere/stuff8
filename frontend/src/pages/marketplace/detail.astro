@@ -9,7 +9,7 @@ import Layout from '../../layouts/Layout.astro';
   </div>
   <script>
     const API = 'http://127.0.0.1:26374/api/marketplace';
-    const STORAGE = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:26372/api';
+    const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || 'http://127.0.0.1:26372/api';
     const root = document.getElementById('product-detail')!;
     const id = new URLSearchParams(location.search).get('id');
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));

@@ -17,7 +17,7 @@ import Layout from '../../layouts/Layout.astro';
 
   <script>
     const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || 'http://127.0.0.1:26377/api'}/chat`;
-    const STORAGE = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:26372/api';
+    const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || 'http://127.0.0.1:26372/api';
     const listRoot = document.getElementById('conversation-list')!;
     const panel = document.getElementById('conversation-panel')!;
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&gt;', '>': '&lt;', '"': '&quot;', "'": '&#039;' }[char] || char));

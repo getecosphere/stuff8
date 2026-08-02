@@ -870,7 +870,7 @@ import Layout from '../layouts/Layout.astro';
 
   <script>
     const AUTH_API = import.meta.env.PUBLIC_AUTH_URL ? `${import.meta.env.PUBLIC_AUTH_URL}/auth` : 'http://127.0.0.1:26376/api/auth';
-    const PHOTOS_API = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:26372/api';
+    const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || 'http://127.0.0.1:26372/api';
     const INVENTORY_API = 'http://127.0.0.1:26373/api/inventory';
     const MARKETPLACE_API = 'http://127.0.0.1:26374/api/marketplace';
     const BIDDING_API = 'http://127.0.0.1:26375/api/bidding';
