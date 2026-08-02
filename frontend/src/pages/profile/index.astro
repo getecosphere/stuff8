@@ -7,8 +7,8 @@ import Layout from '../../layouts/Layout.astro';
     <div id="profile-app" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">Memuat profil…</div>
   </div>
   <script>
-    const AUTH = import.meta.env.PUBLIC_AUTH_URL ? `${import.meta.env.PUBLIC_AUTH_URL}/auth` : 'http://127.0.0.1:26376/api/auth';
-    const PROFILE = import.meta.env.PUBLIC_PROFILE_URL || 'http://127.0.0.1:26378/api';
+    const AUTH = import.meta.env.PUBLIC_AUTH_URL ? `${import.meta.env.PUBLIC_AUTH_URL}/auth` : 'http://127.0.0.1:26378/api/auth';
+    const PROFILE = import.meta.env.PUBLIC_PROFILE_URL || 'http://127.0.0.1:26376/api';
     const root = document.getElementById('profile-app')!;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const user = () => session()?.user;
