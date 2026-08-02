@@ -30,7 +30,7 @@ import Layout from '../../layouts/Layout.astro';
 
     function signedOut() {
       listRoot.innerHTML = '';
-      panel.innerHTML = `<div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-slate-900">Masuk untuk melihat chat</h2><p class="mt-1 text-sm text-slate-500">Offer dan negosiasi hanya tersedia untuk akun aktif.</p><a href="/?auth=signup&return_to=/chat/" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Daftar atau masuk</a></div>`;
+      panel.innerHTML = `<div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-slate-900">Masuk untuk melihat chat</h2><p class="mt-1 text-sm text-slate-500">Offer dan negosiasi hanya tersedia untuk akun aktif.</p><a href="/auth/signup/?return_to=/chat/" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Daftar atau masuk</a></div>`;
     }
 
     function renderList() {
