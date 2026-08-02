@@ -4,10 +4,14 @@ import Layout from '../../layouts/Layout.astro';
 
 <Layout>
   <div class="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-    <section class="space-y-4" aria-label="Marketplace">
+    <section class="space-y-3" aria-label="Marketplace">
       <div class="flex items-end justify-between gap-3">
         <h1 class="page-heading">Temukan barang pilihan</h1>
         <p id="marketplace-total" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">0 barang</p>
+      </div>
+
+      <div id="marketplace-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori marketplace">
+        <!-- Dynamic category tabs rendered here -->
       </div>
 
       <div class="flex items-center gap-2">
@@ -36,22 +40,40 @@ import Layout from '../../layouts/Layout.astro';
     const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || 'http://127.0.0.1:26372/api';
     let page = 1;
     let search = '';
+    let category = '';
     let view = localStorage.getItem('stuff8_marketplace_view') || 'card';
     let meta: any = { listings: [], page: 1, limit: 12, total: 0, total_pages: 1 };
+    let categories: Array<{ category: string; count: number }> = [];
     let searchTimer: number | undefined;
     const grid = document.getElementById('marketplace-grid')!;
     const pagination = document.getElementById('marketplace-pagination')!;
     const searchInput = document.getElementById('marketplace-search') as HTMLInputElement;
     const viewTrigger = document.getElementById('marketplace-view-trigger')!;
     const viewMenu = document.getElementById('marketplace-view-menu') as HTMLDetailsElement;
+    const categoryTabs = document.getElementById('marketplace-category-tabs')!;
 
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
     const photoUrl = (key?: string) => key ? `${STORAGE}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}` : '/images/no-item-image.webp';
     const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
 
+    function renderCategoryTabs() {
+      if (category && !categories.some(entry => entry.category === category)) category = '';
+      const total = categories.reduce((sum, entry) => sum + entry.count, 0);
+      const renderTab = (value: string, label: string, count: number) => {
+        const active = category === value;
+        const countLabel = count > 0 ? `<span class="ml-1 ${active ? 'text-slate-300' : 'text-slate-400'}">${count}</span>` : '';
+        return `<button type="button" role="tab" aria-selected="${active}" data-marketplace-category="${escapeHtml(value)}" class="shrink-0 min-h-9 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900 ${active ? 'border-navy-900 bg-navy-900 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'}">${escapeHtml(label)}${countLabel}</button>`;
+      };
+      categoryTabs.innerHTML = [
+        renderTab('', 'Semua', total),
+        ...categories.map(entry => renderTab(entry.category, entry.category, entry.count))
+      ].join('');
+    }
+
     function render() {
       const listings = meta.listings || [];
-      (document.getElementById('marketplace-total')!).textContent = `${meta.total || 0} barang`;
+      (document.getElementById('marketplace-total')!).textContent = meta.total > 0 ? `${meta.total} barang` : 'Belum ada barang';
+      renderCategoryTabs();
       const classes: Record<string, string> = { list: 'space-y-3', thumbnail: 'grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4', card: 'grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3' };
       grid.className = classes[view] || classes.card;
       const icons: Record<string, string> = { list: '☷', thumbnail: '▦', card: '▤' };
@@ -73,15 +95,29 @@ import Layout from '../../layouts/Layout.astro';
     async function load() {
       const params = new URLSearchParams({ page: String(page), limit: '12' });
       if (search) params.set('q', search);
-      const response = await fetch(`${API}/listings?${params}`);
+      if (category) params.set('category', category);
+      const [response, categoriesResponse] = await Promise.all([
+        fetch(`${API}/listings?${params}`),
+        fetch(`${API}/categories`)
+      ]);
       if (!response.ok) throw new Error('Marketplace belum tersedia.');
       const payload = await response.json();
       meta = Array.isArray(payload) ? { listings: payload, page: 1, limit: 12, total: payload.length, total_pages: 1 } : payload;
+      categories = categoriesResponse.ok ? await categoriesResponse.json() : [];
       page = meta.page;
       render();
     }
     function changePage(next: number) { if (next >= 1 && next <= meta.total_pages && next !== page) { page = next; load().catch(console.error); } }
     searchInput.addEventListener('input', () => { search = searchInput.value.trim(); page = 1; window.clearTimeout(searchTimer); searchTimer = window.setTimeout(() => load().catch(console.error), 250); });
+    categoryTabs.addEventListener('click', event => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-marketplace-category]');
+      if (!button) return;
+      const nextCategory = button.dataset.marketplaceCategory || '';
+      if (nextCategory === category) return;
+      category = nextCategory;
+      page = 1;
+      load().catch(console.error);
+    });
     document.querySelectorAll<HTMLButtonElement>('[data-marketplace-view]').forEach(button => button.addEventListener('click', () => { view = button.dataset.marketplaceView || 'card'; localStorage.setItem('stuff8_marketplace_view', view); viewMenu.removeAttribute('open'); render(); }));
     load().catch(error => { grid.innerHTML = `<div class="col-span-full rounded-xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-700">${escapeHtml(error.message)}</div>`; });
   </script>
