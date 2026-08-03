@@ -2039,29 +2039,6 @@ import Layout from '../layouts/Layout.astro';
       }
     }
 
-    // The Marketplace endpoint counts only active, unsold listings. Poll its
-    // paginated metadata instead of counting a client page, then refresh again
-    // when the tab regains focus so the empty inventory invitation is current.
-    async function refreshMarketplaceAvailability() {
-      try {
-        const response = await fetch(`${MARKETPLACE_API}/listings?page=1&limit=1`, { cache: 'no-store' });
-        if (!response.ok) return;
-        const payload = await response.json();
-        const total = Array.isArray(payload) ? payload.length : Number(payload?.total);
-        if (!Number.isFinite(total)) return;
-
-        marketplaceListingTotal = total;
-        const counter = document.getElementById('empty-inventory-marketplace-count');
-        if (counter) {
-          counter.textContent = total === 1
-            ? '1 barang sedang tersedia di Marketplace.'
-            : `${total.toLocaleString('id-ID')} barang sedang tersedia di Marketplace.`;
-        }
-      } catch (error) {
-        console.debug('Marketplace availability could not be refreshed.', error);
-      }
-    }
-
     const INDONESIAN_NAMES = [
       'Budi Santoso',
       'Siti Rahma',
@@ -3598,13 +3575,6 @@ import Layout from '../layouts/Layout.astro';
       renderDemoSandbox();
       updateCalculator();
       loadData();
-      window.setInterval(() => {
-        if (document.visibilityState === 'visible') refreshMarketplaceAvailability();
-      }, 30000);
-      window.addEventListener('focus', refreshMarketplaceAvailability);
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') refreshMarketplaceAvailability();
-      });
     }
   </script>
 </Layout>
