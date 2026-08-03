@@ -358,7 +358,13 @@ import Layout from '../../layouts/Layout.astro';
           const finalPrice = parseMoney(priceInput.value);
           if (!finalPrice) { priceInput.focus(); return; }
           const response = await fetch(`${MARKETPLACE}/listings/${encodeURIComponent(listing.id)}/complete-sale`, { method: 'POST', headers: { ...chatHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ buyer_id: buyerId, buyer_name: profileName(buyer), final_price: finalPrice }) });
-          if (!response.ok) { const error = document.getElementById('chat-sale-error')!; error.textContent = 'Barang belum dapat ditandai terjual. Coba lagi.'; error.classList.remove('hidden'); return; }
+          if (!response.ok) {
+            const body = await response.text();
+            const error = document.getElementById('chat-sale-error')!;
+            error.textContent = body.trim() || 'Barang belum dapat ditandai terjual. Coba lagi.';
+            error.classList.remove('hidden');
+            return;
+          }
           closeSaleDialog();
           location.assign('/inventory/');
         };
