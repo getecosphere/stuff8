@@ -12,6 +12,12 @@ import Layout from '../../layouts/Layout.astro';
       <section id="conversation-panel" class="flex min-h-0 min-w-0 flex-col"><div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-slate-900">Pilih percakapan</h2><p class="mt-1 text-sm text-slate-500">Offer dan pesan produk akan muncul di sini.</p></div></section>
     </div>
   </div>
+  <div id="chat-media-viewer" class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/95 p-4" role="dialog" aria-modal="true" aria-label="Pratinjau gambar chat">
+    <button id="chat-media-close" type="button" class="absolute right-5 top-5 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl leading-none text-white hover:bg-white/25" aria-label="Tutup gambar">×</button>
+    <button id="chat-media-prev" type="button" class="absolute left-4 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:left-8" aria-label="Gambar sebelumnya">‹</button>
+    <figure class="flex max-h-full max-w-full flex-col items-center gap-3"><img id="chat-media-image" class="max-h-[82vh] max-w-full rounded-xl object-contain shadow-2xl" alt="" /><figcaption id="chat-media-caption" class="max-w-[90vw] truncate text-sm font-semibold text-white"></figcaption></figure>
+    <button id="chat-media-next" type="button" class="absolute right-4 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-8" aria-label="Gambar berikutnya">›</button>
+  </div>
 
   <style is:global>
     .typing-visual { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.25rem; width: 3.25rem; }
@@ -112,6 +118,8 @@ import Layout from '../../layouts/Layout.astro';
     let uploadSequence = 0;
     let filePickerOpen = false;
     const MAX_CHAT_ATTACHMENT_BYTES = 2 * 1024 * 1024;
+    let mediaGallery: { url: string; filename: string }[] = [];
+    let mediaIndex = 0;
     // The browser does not dispatch `change` when the picker is cancelled.
     // Release the guard when focus returns so the attachment button remains usable.
     window.addEventListener('focus', () => {
@@ -122,10 +130,46 @@ import Layout from '../../layouts/Layout.astro';
       const url = attachmentUrl(file.key);
       const filename = escapeHtml(file.filename || 'Lampiran');
       if (String(file.content_type || '').startsWith('image/')) {
-        return `<a class="mt-2 block overflow-hidden rounded-xl border border-white/20 bg-white/10" target="_blank" rel="noopener" href="${url}" title="Buka gambar ${filename}"><img src="${url}" alt="${filename}" class="max-h-52 w-full object-cover" /><span class="block truncate px-2 py-1.5 text-xs font-semibold">${filename}</span></a>`;
+        return `<button type="button" data-chat-image="${escapeHtml(url)}" data-chat-image-name="${filename}" class="mt-2 block w-full overflow-hidden rounded-xl border border-white/20 bg-white/10 text-left" title="Buka gambar ${filename}"><img src="${url}" alt="${filename}" class="mx-auto max-h-64 w-auto max-w-full object-contain" /><span class="block truncate px-2 py-1.5 text-xs font-semibold">${filename}</span></button>`;
       }
       return `<a class="mt-2 flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold underline" target="_blank" rel="noopener" href="${url}" title="Buka atau unduh ${filename}"><span aria-hidden="true">📎</span><span class="truncate">${filename}</span></a>`;
     }
+
+    function renderMediaViewer() {
+      const viewer = document.getElementById('chat-media-viewer')!;
+      const current = mediaGallery[mediaIndex];
+      if (!current) return;
+      (document.getElementById('chat-media-image') as HTMLImageElement).src = current.url;
+      (document.getElementById('chat-media-image') as HTMLImageElement).alt = current.filename;
+      document.getElementById('chat-media-caption')!.textContent = mediaGallery.length > 1 ? `${current.filename} · ${mediaIndex + 1}/${mediaGallery.length}` : current.filename;
+      document.getElementById('chat-media-prev')!.classList.toggle('hidden', mediaGallery.length < 2);
+      document.getElementById('chat-media-next')!.classList.toggle('hidden', mediaGallery.length < 2);
+      viewer.classList.remove('hidden'); viewer.classList.add('flex');
+    }
+
+    function openMediaGallery(url: string) {
+      const root = document.getElementById('messages');
+      mediaGallery = [...(root?.querySelectorAll<HTMLButtonElement>('[data-chat-image]') || [])].map(button => ({ url: button.dataset.chatImage || '', filename: button.dataset.chatImageName || 'Gambar' })).filter(item => item.url);
+      mediaIndex = Math.max(0, mediaGallery.findIndex(item => item.url === url));
+      renderMediaViewer();
+    }
+
+    function bindMediaGallery(root: ParentNode = document) {
+      root.querySelectorAll<HTMLButtonElement>('[data-chat-image]').forEach(button => {
+        button.onclick = () => openMediaGallery(button.dataset.chatImage || '');
+      });
+    }
+
+    function closeMediaGallery() {
+      const viewer = document.getElementById('chat-media-viewer')!;
+      viewer.classList.add('hidden'); viewer.classList.remove('flex');
+    }
+
+    document.getElementById('chat-media-close')?.addEventListener('click', closeMediaGallery);
+    document.getElementById('chat-media-prev')?.addEventListener('click', () => { mediaIndex = (mediaIndex - 1 + mediaGallery.length) % mediaGallery.length; renderMediaViewer(); });
+    document.getElementById('chat-media-next')?.addEventListener('click', () => { mediaIndex = (mediaIndex + 1) % mediaGallery.length; renderMediaViewer(); });
+    document.getElementById('chat-media-viewer')?.addEventListener('click', event => { if (event.target === event.currentTarget) closeMediaGallery(); });
+    document.addEventListener('keydown', event => { if (document.getElementById('chat-media-viewer')?.classList.contains('hidden')) return; if (event.key === 'Escape') closeMediaGallery(); if (event.key === 'ArrowLeft') document.getElementById('chat-media-prev')?.dispatchEvent(new MouseEvent('click')); if (event.key === 'ArrowRight') document.getElementById('chat-media-next')?.dispatchEvent(new MouseEvent('click')); });
 
     function showAttachmentError(file: File, message: string) {
       const id = `chat-upload-error-${++uploadSequence}`;
@@ -252,11 +296,12 @@ import Layout from '../../layouts/Layout.astro';
       const listing = await listingFor(conversation.context?.reference_id);
       const description = escapeHtml(listing?.description || 'Percakapan tentang barang ini.');
       const itemLink = `/marketplace/detail?id=${encodeURIComponent(conversation.context?.reference_id || '')}`;
-      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><a href="${itemLink}" class="ml-4 shrink-0 text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
+      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><a href="${itemLink}" class="ml-4 shrink-0 text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB per file">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
       const messagesResponse = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/messages?participant_id=${encodeURIComponent(user().id)}`, { headers: chatHeaders() });
       const messages = messagesResponse.ok ? await messagesResponse.json() : [];
       const messagesRoot = document.getElementById('messages')!;
       messagesRoot.innerHTML = (await Promise.all(messages.map(renderMessage))).join('');
+      bindMediaGallery(messagesRoot);
       requestAnimationFrame(() => { messagesRoot.scrollTop = messagesRoot.scrollHeight; });
       const messageInput = document.getElementById('message-input') as HTMLInputElement;
       if (focusComposer) requestAnimationFrame(() => messageInput.focus());
@@ -271,10 +316,29 @@ import Layout from '../../layouts/Layout.astro';
         filePickerOpen = true;
         fileInput.click();
       };
-      fileInput.onchange = async event => { filePickerOpen = false; const input = event.target as HTMLInputElement; const file = input.files?.[0]; if (!file) return; if (file.size > MAX_CHAT_ATTACHMENT_BYTES) { showAttachmentError(file, 'Ukuran lampiran maksimal 2 MB.'); input.value = ''; return; } try { const uploaded: any = await uploadAttachment(file); await sendMessage({ attachments: [uploaded.attachment] }); uploaded.remove(); } catch (error: any) { if (error?.name !== 'AbortError') console.error(error); } finally { input.value = ''; } };
+      fileInput.onchange = async event => {
+        filePickerOpen = false;
+        const input = event.target as HTMLInputElement;
+        const selected = [...(input.files || [])];
+        if (!selected.length) return;
+        const allowed = selected.filter(file => {
+          if (file.size <= MAX_CHAT_ATTACHMENT_BYTES) return true;
+          showAttachmentError(file, 'Ukuran lampiran maksimal 2 MB per file.');
+          return false;
+        });
+        try {
+          const outcomes = await Promise.allSettled(allowed.map(file => uploadAttachment(file)));
+          const completed = outcomes.filter((outcome): outcome is PromiseFulfilledResult<any> => outcome.status === 'fulfilled').map(outcome => outcome.value);
+          if (completed.length) {
+            await sendMessage({ attachments: completed.map(uploaded => uploaded.attachment) });
+            completed.forEach(uploaded => uploaded.remove());
+          }
+          outcomes.filter((outcome): outcome is PromiseRejectedResult => outcome.status === 'rejected' && outcome.reason?.name !== 'AbortError').forEach(outcome => console.error(outcome.reason));
+        } finally { input.value = ''; }
+      };
       websocket?.close();
       websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
-      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profileName(profile)} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } await renderList(); };
+      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profileName(profile)} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); bindMediaGallery(root); root.scrollTop = root.scrollHeight; } await renderList(); };
     }
 
     async function sendMessage(payload: any) {
@@ -285,6 +349,7 @@ import Layout from '../../layouts/Layout.astro';
       const root = document.getElementById('messages');
       if (root && !document.getElementById(`message-${message.message_id}`)) {
         root.insertAdjacentHTML('beforeend', await renderMessage(message));
+        bindMediaGallery(root);
         root.scrollTop = root.scrollHeight;
       }
     }
