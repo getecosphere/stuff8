@@ -27,6 +27,7 @@ import Layout from '../../layouts/Layout.astro';
     const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || '/api'}/chat`;
     const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const PROFILE = import.meta.env.PUBLIC_PROFILE_URL || '/api';
+    const AUTH = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;
     const MARKETPLACE = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
     const listRoot = document.getElementById('conversation-list')!;
     const panel = document.getElementById('conversation-panel')!;
@@ -49,14 +50,31 @@ import Layout from '../../layouts/Layout.astro';
       const date = toDate(value);
       return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
     };
+    const relativeTime = (value: any) => {
+      const date = toDate(value);
+      if (Number.isNaN(date.getTime())) return '';
+      const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+      if (seconds < 45) return 'Baru saja';
+      if (seconds < 3600) return `${Math.floor(seconds / 60)} menit yang lalu`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)} jam yang lalu`;
+      if (seconds < 604800) return `${Math.floor(seconds / 86400)} hari yang lalu`;
+      return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+    };
+    const profileName = (profile: any) => profile?.name || profile?.full_name || profile?.username || 'Pengguna Stuff8';
     async function profileFor(id: string) {
       if (id === user()?.id) return user();
       if (profiles.has(id)) return profiles.get(id);
       try {
         const response = await fetch(`${PROFILE}/users/${encodeURIComponent(id)}`, { headers: chatHeaders() });
         const profile = response.ok ? await response.json() : { id };
-        profiles.set(id, profile);
-        return profile;
+        // Auth owns identity data. This fallback keeps old conversations
+        // complete before a Profile row has been hydrated.
+        const needsIdentity = !profile?.name || !profile?.avatarUrl;
+        const identityResponse = needsIdentity ? await fetch(`${AUTH}/users/${encodeURIComponent(id)}`, { headers: chatHeaders() }) : undefined;
+        const identity = identityResponse?.ok ? await identityResponse.json() : undefined;
+        const resolved = { ...profile, ...identity, avatarUrl: identity?.avatarUrl || profile?.avatarUrl || profile?.avatar_url };
+        profiles.set(id, resolved);
+        return resolved;
       } catch { return { id }; }
     }
     async function listingOwnerFor(referenceId?: string) {
@@ -74,7 +92,7 @@ import Layout from '../../layouts/Layout.astro';
       }
     }
     const customerIdFor = (conversation: any) => conversation.participant_ids?.find((id: string) => id !== user()?.id) || '';
-    const avatar = (profile: any, className = 'size-8') => `<img src="${escapeHtml(profile?.avatarUrl || '/images/avatar-fallback.webp')}" onerror="this.onerror=null;this.src='/images/avatar-fallback.webp'" alt="" class="${className} shrink-0 rounded-full object-cover" />`;
+    const avatar = (profile: any, className = 'size-8') => `<img src="${escapeHtml(profile?.avatarUrl || profile?.avatar_url || '/images/avatar-fallback.webp')}" onerror="this.onerror=null;this.src='/images/avatar-fallback.webp'" alt="" class="${className} shrink-0 rounded-full object-cover" />`;
     let uploadSequence = 0;
     let filePickerOpen = false;
     const MAX_CHAT_ATTACHMENT_BYTES = 2 * 1024 * 1024;
@@ -183,13 +201,13 @@ import Layout from '../../layouts/Layout.astro';
           const title = escapeHtml(group[0].context?.title || 'Produk marketplace');
           const nodes = await Promise.all(group.map(async conversation => {
             const customer = await profileFor(customerIdFor(conversation));
-            const name = escapeHtml(customer.name || customer.username || 'Penawar Stuff8');
+            const name = escapeHtml(profileName(customer));
             const selected = activeConversation?.conversation_id === conversation.conversation_id;
-            return `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="ml-2 w-[calc(100%-0.5rem)] rounded-lg border px-3 py-2 text-left transition ${selected ? 'border-navy-900 bg-white shadow-xs' : 'border-slate-200 bg-white hover:border-slate-300'}"><span class="block truncate text-xs font-bold text-slate-800">${name}</span><span class="mt-0.5 block text-[11px] text-slate-500">${displayDate(conversation.updated_at)}</span></button>`;
+            return `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="ml-2 flex w-[calc(100%-0.5rem)] items-center gap-2 rounded-lg border px-3 py-2 text-left transition ${selected ? 'border-navy-900 bg-white shadow-xs' : 'border-slate-200 bg-white hover:border-slate-300'}">${avatar(customer, 'size-8')}<span class="min-w-0"><span class="block truncate text-xs font-bold text-slate-800">${name}</span><span class="mt-0.5 block text-[11px] text-slate-500">${relativeTime(conversation.updated_at)}</span></span></button>`;
           }));
           return `<div class="rounded-xl border border-slate-200 bg-white"><button type="button" data-product-tree="${escapeHtml(referenceId)}" aria-expanded="${isExpanded}" class="flex w-full items-center justify-between gap-3 p-3 text-left"><span class="min-w-0"><span class="block truncate text-sm font-bold text-slate-900">${title}</span><span class="mt-1 block text-xs text-slate-500">${group.length} penawar aktif</span></span><span class="text-lg text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}" aria-hidden="true">⌄</span></button><div data-product-nodes="${escapeHtml(referenceId)}" class="space-y-2 border-t border-slate-100 p-2 ${isExpanded ? '' : 'hidden'}">${nodes.join('')}</div></div>`;
         }));
-      const regularMarkup = regularConversations.sort((left, right) => updatedAt(right) - updatedAt(left)).map(conversation => `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="w-full rounded-xl border p-3 text-left transition ${activeConversation?.conversation_id === conversation.conversation_id ? 'border-navy-900 bg-white shadow-xs' : 'border-transparent hover:border-slate-200 hover:bg-white'}"><p class="truncate text-sm font-bold text-slate-900">${escapeHtml(conversation.context?.title || 'Produk marketplace')}</p><p class="mt-1 text-xs text-slate-500">${displayDate(conversation.updated_at)}</p></button>`).join('');
+      const regularMarkup = regularConversations.sort((left, right) => updatedAt(right) - updatedAt(left)).map(conversation => `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="w-full rounded-xl border p-3 text-left transition ${activeConversation?.conversation_id === conversation.conversation_id ? 'border-navy-900 bg-white shadow-xs' : 'border-transparent hover:border-slate-200 hover:bg-white'}"><p class="truncate text-sm font-bold text-slate-900">${escapeHtml(conversation.context?.title || 'Produk marketplace')}</p><p class="mt-1 text-xs text-slate-500">${relativeTime(conversation.updated_at)}</p></button>`).join('');
       listRoot.innerHTML = `${ownerMarkup.join('')}${regularMarkup}`;
       document.querySelectorAll<HTMLButtonElement>('[data-product-tree]').forEach(button => button.addEventListener('click', () => {
         const referenceId = button.dataset.productTree!;
@@ -203,7 +221,7 @@ import Layout from '../../layouts/Layout.astro';
       const mine = message.sender_id === user()?.id;
       const profile = await profileFor(message.sender_id);
       const files = (message.attachments || []).map(attachmentMarkup).join('');
-      return `<div id="message-${message.message_id}" class="flex items-end gap-2 ${mine ? 'justify-end' : 'justify-start'}">${mine ? '' : avatar(profile)}<div class="max-w-[78%]"><p class="mb-1 text-[11px] font-semibold text-slate-500 ${mine ? 'text-right' : ''}">${escapeHtml(profile.name || profile.username || 'Pengguna Stuff8')}</p><div class="rounded-2xl px-3 py-2 text-sm ${mine ? 'rounded-br-sm bg-navy-900 text-white' : 'rounded-bl-sm bg-slate-100 text-slate-800'}">${message.offer_amount ? `<p class="mb-1 text-xs font-bold">Offer: ${money(message.offer_amount)}</p>` : ''}${message.body ? `<p>${escapeHtml(message.body)}</p>` : ''}${message.sticker_id ? `<p class="text-lg" aria-label="Stiker">💬 <span class="text-xs font-bold">${escapeHtml(message.sticker_id.replaceAll('-', ' '))}</span></p>` : ''}${files}</div><p class="mt-1 text-[10px] text-slate-400 ${mine ? 'text-right' : ''}">${displayDate(message.created_at)}</p></div>${mine ? avatar(profile) : ''}</div>`;
+      return `<div id="message-${message.message_id}" class="flex items-end gap-2 ${mine ? 'justify-end' : 'justify-start'}">${mine ? '' : avatar(profile)}<div class="max-w-[78%]"><p class="mb-1 text-[11px] font-semibold text-slate-500 ${mine ? 'text-right' : ''}">${escapeHtml(profileName(profile))}</p><div class="rounded-2xl px-3 py-2 text-sm ${mine ? 'rounded-br-sm bg-navy-900 text-white' : 'rounded-bl-sm bg-slate-100 text-slate-800'}">${message.offer_amount ? `<p class="mb-1 text-xs font-bold">Offer: ${money(message.offer_amount)}</p>` : ''}${message.body ? `<p>${escapeHtml(message.body)}</p>` : ''}${message.sticker_id ? `<p class="text-lg" aria-label="Stiker">💬 <span class="text-xs font-bold">${escapeHtml(message.sticker_id.replaceAll('-', ' '))}</span></p>` : ''}${files}</div><p class="mt-1 text-[10px] text-slate-400 ${mine ? 'text-right' : ''}">${displayDate(message.created_at)}</p></div>${mine ? avatar(profile) : ''}</div>`;
     }
 
     async function openConversation(conversation: any, focusComposer = false) {
@@ -235,7 +253,7 @@ import Layout from '../../layouts/Layout.astro';
       fileInput.onchange = async event => { filePickerOpen = false; const input = event.target as HTMLInputElement; const file = input.files?.[0]; if (!file) return; if (file.size > MAX_CHAT_ATTACHMENT_BYTES) { showAttachmentError(file, 'Ukuran lampiran maksimal 2 MB.'); input.value = ''; return; } try { const uploaded: any = await uploadAttachment(file); await sendMessage({ attachments: [uploaded.attachment] }); uploaded.remove(); } catch (error: any) { if (error?.name !== 'AbortError') console.error(error); } finally { input.value = ''; } };
       websocket?.close();
       websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
-      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profile.name || profile.username || 'Pengguna'} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } await renderList(); };
+      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profileName(profile)} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } await renderList(); };
     }
 
     async function sendMessage(payload: any) {
