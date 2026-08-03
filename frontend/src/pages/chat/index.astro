@@ -27,6 +27,7 @@ import Layout from '../../layouts/Layout.astro';
     const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || '/api'}/chat`;
     const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const PROFILE = import.meta.env.PUBLIC_PROFILE_URL || '/api';
+    const MARKETPLACE = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
     const listRoot = document.getElementById('conversation-list')!;
     const panel = document.getElementById('conversation-panel')!;
     const chatApp = document.getElementById('chat-app')!;
@@ -41,6 +42,8 @@ import Layout from '../../layouts/Layout.astro';
     let websocket: WebSocket | undefined;
     let typingTimeout: number | undefined;
     const profiles = new Map<string, any>();
+    const listingOwners = new Map<string, string | undefined>();
+    const expandedProductTrees = new Set<string>();
     const toDate = (value: any) => new Date(typeof value === 'string' ? value : value?.$date || value?.date || 0);
     const displayDate = (value: any) => {
       const date = toDate(value);
@@ -56,6 +59,21 @@ import Layout from '../../layouts/Layout.astro';
         return profile;
       } catch { return { id }; }
     }
+    async function listingOwnerFor(referenceId?: string) {
+      if (!referenceId) return undefined;
+      if (listingOwners.has(referenceId)) return listingOwners.get(referenceId);
+      try {
+        const response = await fetch(`${MARKETPLACE}/listings/${encodeURIComponent(referenceId)}`);
+        const item = response.ok ? await response.json() : undefined;
+        const ownerId = item?.seller_id;
+        listingOwners.set(referenceId, ownerId);
+        return ownerId;
+      } catch {
+        listingOwners.set(referenceId, undefined);
+        return undefined;
+      }
+    }
+    const customerIdFor = (conversation: any) => conversation.participant_ids?.find((id: string) => id !== user()?.id) || '';
     const avatar = (profile: any, className = 'size-8') => `<img src="${escapeHtml(profile?.avatarUrl || '/images/avatar-fallback.webp')}" onerror="this.onerror=null;this.src='/images/avatar-fallback.webp'" alt="" class="${className} shrink-0 rounded-full object-cover" />`;
     let uploadSequence = 0;
     let filePickerOpen = false;
@@ -141,9 +159,43 @@ import Layout from '../../layouts/Layout.astro';
       chatApp.innerHTML = `<div class="flex max-w-sm flex-col items-center"><img src="/images/empty-inbox.webp" alt="Belum ada offer marketplace" class="mb-4 size-36 object-contain sm:size-40" /><h2 class="text-base font-bold text-slate-900">Belum ada offer</h2><p class="mt-1 text-sm leading-6 text-slate-500">Saat kamu mengirim atau menerima offer, chat produk muncul di sini.</p></div>`;
     }
 
-    function renderList() {
+    async function renderList() {
       if (!conversations.length) { listRoot.innerHTML = `<div class="rounded-xl border border-dashed border-slate-200 bg-white p-4 text-center"><p class="text-sm font-bold text-slate-800">Belum ada offer</p><p class="mt-1 text-xs text-slate-500">Saat kamu mengirim atau menerima offer, chat produk muncul di sini.</p></div>`; return; }
-      listRoot.innerHTML = conversations.map(conversation => `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="w-full rounded-xl border p-3 text-left transition ${activeConversation?.conversation_id === conversation.conversation_id ? 'border-navy-900 bg-white shadow-xs' : 'border-transparent hover:border-slate-200 hover:bg-white'}"><p class="truncate text-sm font-bold text-slate-900">${escapeHtml(conversation.context?.title || 'Produk marketplace')}</p><p class="mt-1 text-xs text-slate-500">${displayDate(conversation.updated_at)}</p></button>`).join('');
+      const updatedAt = (conversation: any) => toDate(conversation.updated_at).getTime() || 0;
+      const ownerGroups = new Map<string, any[]>();
+      const regularConversations: any[] = [];
+      for (const conversation of conversations) {
+        const referenceId = conversation.context?.reference_id || conversation.conversation_id;
+        const sellerId = conversation.context?.seller_id || await listingOwnerFor(conversation.context?.reference_id);
+        if (sellerId && sellerId === user()?.id) {
+          const group = ownerGroups.get(referenceId) || [];
+          group.push(conversation);
+          ownerGroups.set(referenceId, group);
+        } else {
+          regularConversations.push(conversation);
+        }
+      }
+      const ownerMarkup = await Promise.all([...ownerGroups.entries()]
+        .sort(([, left], [, right]) => Math.max(...right.map(updatedAt)) - Math.max(...left.map(updatedAt)))
+        .map(async ([referenceId, group]) => {
+          group.sort((left, right) => updatedAt(right) - updatedAt(left));
+          const isExpanded = expandedProductTrees.has(referenceId);
+          const title = escapeHtml(group[0].context?.title || 'Produk marketplace');
+          const nodes = await Promise.all(group.map(async conversation => {
+            const customer = await profileFor(customerIdFor(conversation));
+            const name = escapeHtml(customer.name || customer.username || 'Penawar Stuff8');
+            const selected = activeConversation?.conversation_id === conversation.conversation_id;
+            return `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="ml-2 w-[calc(100%-0.5rem)] rounded-lg border px-3 py-2 text-left transition ${selected ? 'border-navy-900 bg-white shadow-xs' : 'border-slate-200 bg-white hover:border-slate-300'}"><span class="block truncate text-xs font-bold text-slate-800">${name}</span><span class="mt-0.5 block text-[11px] text-slate-500">${displayDate(conversation.updated_at)}</span></button>`;
+          }));
+          return `<div class="rounded-xl border border-slate-200 bg-white"><button type="button" data-product-tree="${escapeHtml(referenceId)}" aria-expanded="${isExpanded}" class="flex w-full items-center justify-between gap-3 p-3 text-left"><span class="min-w-0"><span class="block truncate text-sm font-bold text-slate-900">${title}</span><span class="mt-1 block text-xs text-slate-500">${group.length} penawar aktif</span></span><span class="text-lg text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}" aria-hidden="true">⌄</span></button><div data-product-nodes="${escapeHtml(referenceId)}" class="space-y-2 border-t border-slate-100 p-2 ${isExpanded ? '' : 'hidden'}">${nodes.join('')}</div></div>`;
+        }));
+      const regularMarkup = regularConversations.sort((left, right) => updatedAt(right) - updatedAt(left)).map(conversation => `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="w-full rounded-xl border p-3 text-left transition ${activeConversation?.conversation_id === conversation.conversation_id ? 'border-navy-900 bg-white shadow-xs' : 'border-transparent hover:border-slate-200 hover:bg-white'}"><p class="truncate text-sm font-bold text-slate-900">${escapeHtml(conversation.context?.title || 'Produk marketplace')}</p><p class="mt-1 text-xs text-slate-500">${displayDate(conversation.updated_at)}</p></button>`).join('');
+      listRoot.innerHTML = `${ownerMarkup.join('')}${regularMarkup}`;
+      document.querySelectorAll<HTMLButtonElement>('[data-product-tree]').forEach(button => button.addEventListener('click', () => {
+        const referenceId = button.dataset.productTree!;
+        expandedProductTrees.has(referenceId) ? expandedProductTrees.delete(referenceId) : expandedProductTrees.add(referenceId);
+        renderList();
+      }));
       document.querySelectorAll<HTMLButtonElement>('[data-conversation]').forEach(button => button.addEventListener('click', () => openConversation(conversations.find(conversation => conversation.conversation_id === button.dataset.conversation))));
     }
 
@@ -157,7 +209,8 @@ import Layout from '../../layouts/Layout.astro';
     async function openConversation(conversation: any, focusComposer = false) {
       if (!conversation || !user()?.id) return;
       activeConversation = conversation;
-      renderList();
+      if (conversation.context?.reference_id) expandedProductTrees.add(conversation.context.reference_id);
+      await renderList();
       const title = escapeHtml(conversation.context?.title || 'Produk marketplace');
       const itemLink = `/marketplace/detail?id=${encodeURIComponent(conversation.context?.reference_id || '')}`;
       panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><div><h2 class="text-sm font-bold text-navy-900">${title}</h2><p class="text-xs text-slate-500">Negosiasi tersimpan otomatis</p></div><a href="${itemLink}" class="text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
@@ -182,7 +235,7 @@ import Layout from '../../layouts/Layout.astro';
       fileInput.onchange = async event => { filePickerOpen = false; const input = event.target as HTMLInputElement; const file = input.files?.[0]; if (!file) return; if (file.size > MAX_CHAT_ATTACHMENT_BYTES) { showAttachmentError(file, 'Ukuran lampiran maksimal 2 MB.'); input.value = ''; return; } try { const uploaded: any = await uploadAttachment(file); await sendMessage({ attachments: [uploaded.attachment] }); uploaded.remove(); } catch (error: any) { if (error?.name !== 'AbortError') console.error(error); } finally { input.value = ''; } };
       websocket?.close();
       websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
-      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profile.name || profile.username || 'Pengguna'} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } };
+      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profile.name || profile.username || 'Pengguna'} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); root.scrollTop = root.scrollHeight; } await renderList(); };
     }
 
     async function sendMessage(payload: any) {
@@ -204,7 +257,7 @@ import Layout from '../../layouts/Layout.astro';
       const seen = new Set<string>();
       conversations = (await response.json()).filter((conversation: any) => conversation.context?.domain === 'marketplace').filter((conversation: any) => { const key = `${conversation.context?.reference_id}:${[...conversation.participant_ids].sort().join(':')}`; if (seen.has(key)) return false; seen.add(key); return true; });
       if (!conversations.length) { renderEmptyInbox(); return; }
-      renderList();
+      await renderList();
       const requested = new URLSearchParams(location.search).get('conversation');
       const item = new URLSearchParams(location.search).get('item');
       if (conversations.length) await openConversation(conversations.find(conversation => conversation.conversation_id === requested) || conversations.find(conversation => conversation.context?.reference_id === item) || conversations[0], Boolean(requested || item));
