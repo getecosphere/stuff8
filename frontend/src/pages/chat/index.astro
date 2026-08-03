@@ -18,6 +18,13 @@ import Layout from '../../layouts/Layout.astro';
     <figure class="flex max-h-full max-w-full flex-col items-center gap-3"><img id="chat-media-image" class="max-h-[82vh] max-w-full rounded-xl object-contain shadow-2xl" alt="" /><figcaption id="chat-media-caption" class="max-w-[90vw] truncate text-sm font-semibold text-white"></figcaption></figure>
     <button id="chat-media-next" type="button" class="absolute right-4 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-8" aria-label="Gambar berikutnya">›</button>
   </div>
+  <div id="attachment-source-dialog" class="fixed inset-0 z-[90] hidden items-end justify-center bg-slate-950/35 p-4 sm:items-center" role="dialog" aria-modal="true" aria-label="Pilih sumber lampiran">
+    <div class="w-full max-w-sm rounded-2xl bg-white p-4 shadow-2xl">
+      <p class="mb-3 text-sm font-bold text-slate-900">Tambahkan lampiran</p>
+      <div class="grid grid-cols-2 gap-3"><button id="attachment-camera" type="button" class="rounded-xl bg-navy-900 px-4 py-3 text-sm font-bold text-white">Kamera</button><button id="attachment-gallery" type="button" class="rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-800">Galeri</button></div>
+      <button id="attachment-source-cancel" type="button" class="mt-3 w-full rounded-xl px-4 py-2 text-sm font-semibold text-slate-500">Batal</button>
+    </div>
+  </div>
 
   <style is:global>
     .typing-visual { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.25rem; width: 3.25rem; }
@@ -120,19 +127,27 @@ import Layout from '../../layouts/Layout.astro';
     const MAX_CHAT_ATTACHMENT_BYTES = 2 * 1024 * 1024;
     let mediaGallery: { url: string; filename: string }[] = [];
     let mediaIndex = 0;
+    let activeMessages: any[] = [];
     // The browser does not dispatch `change` when the picker is cancelled.
     // Release the guard when focus returns so the attachment button remains usable.
     window.addEventListener('focus', () => {
       if (filePickerOpen) window.setTimeout(() => { filePickerOpen = false; }, 0);
     });
 
-    function attachmentMarkup(file: any) {
+    function attachmentMarkup(file: any, extraImages = 0) {
       const url = attachmentUrl(file.key);
       const filename = escapeHtml(file.filename || 'Lampiran');
       if (String(file.content_type || '').startsWith('image/')) {
-        return `<button type="button" data-chat-image="${escapeHtml(url)}" data-chat-image-name="${filename}" class="mt-2 block w-full overflow-hidden rounded-xl border border-white/20 bg-white/10 text-left" title="Buka gambar ${filename}"><img src="${url}" alt="${filename}" class="mx-auto max-h-64 w-auto max-w-full object-contain" /><span class="block truncate px-2 py-1.5 text-xs font-semibold">${filename}</span></button>`;
+        return `<button type="button" data-chat-image="${escapeHtml(url)}" data-chat-image-name="${filename}" class="relative mt-2 block w-full overflow-hidden rounded-xl border border-white/20 bg-white/10 text-left" title="Buka gambar ${filename}"><img src="${url}" alt="${filename}" class="mx-auto max-h-64 w-auto max-w-full object-contain" />${extraImages ? `<span class="absolute inset-0 flex items-center justify-center bg-slate-950/55 text-2xl font-bold text-white">+${extraImages}</span>` : ''}<span class="block truncate px-2 py-1.5 text-xs font-semibold">${filename}</span></button>`;
       }
       return `<a class="mt-2 flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold underline" target="_blank" rel="noopener" href="${url}" title="Buka atau unduh ${filename}"><span aria-hidden="true">📎</span><span class="truncate">${filename}</span></a>`;
+    }
+
+    function attachmentsMarkup(files: any[]) {
+      const images = files.filter(file => String(file.content_type || '').startsWith('image/'));
+      const documents = files.filter(file => !String(file.content_type || '').startsWith('image/'));
+      const displayedImages = images.length > 4 ? [...images.slice(0, 3), images[3]] : images;
+      return displayedImages.map((file, index) => attachmentMarkup(file, images.length > 4 && index === 3 ? images.length - 3 : 0)).join('') + documents.map(file => attachmentMarkup(file)).join('');
     }
 
     function renderMediaViewer() {
@@ -142,14 +157,21 @@ import Layout from '../../layouts/Layout.astro';
       (document.getElementById('chat-media-image') as HTMLImageElement).src = current.url;
       (document.getElementById('chat-media-image') as HTMLImageElement).alt = current.filename;
       document.getElementById('chat-media-caption')!.textContent = mediaGallery.length > 1 ? `${current.filename} · ${mediaIndex + 1}/${mediaGallery.length}` : current.filename;
-      document.getElementById('chat-media-prev')!.classList.toggle('hidden', mediaGallery.length < 2);
-      document.getElementById('chat-media-next')!.classList.toggle('hidden', mediaGallery.length < 2);
+      const previous = document.getElementById('chat-media-prev') as HTMLButtonElement;
+      const next = document.getElementById('chat-media-next') as HTMLButtonElement;
+      previous.classList.toggle('hidden', mediaGallery.length < 2);
+      next.classList.toggle('hidden', mediaGallery.length < 2);
+      previous.disabled = mediaIndex === 0;
+      next.disabled = mediaIndex === mediaGallery.length - 1;
+      previous.classList.toggle('opacity-35', previous.disabled);
+      next.classList.toggle('opacity-35', next.disabled);
       viewer.classList.remove('hidden'); viewer.classList.add('flex');
     }
 
     function openMediaGallery(url: string) {
-      const root = document.getElementById('messages');
-      mediaGallery = [...(root?.querySelectorAll<HTMLButtonElement>('[data-chat-image]') || [])].map(button => ({ url: button.dataset.chatImage || '', filename: button.dataset.chatImageName || 'Gambar' })).filter(item => item.url);
+      mediaGallery = activeMessages.flatMap(message => (message.attachments || [])
+        .filter((file: any) => String(file.content_type || '').startsWith('image/'))
+        .map((file: any) => ({ url: attachmentUrl(file.key), filename: file.filename || 'Gambar' })));
       mediaIndex = Math.max(0, mediaGallery.findIndex(item => item.url === url));
       renderMediaViewer();
     }
@@ -166,8 +188,8 @@ import Layout from '../../layouts/Layout.astro';
     }
 
     document.getElementById('chat-media-close')?.addEventListener('click', closeMediaGallery);
-    document.getElementById('chat-media-prev')?.addEventListener('click', () => { mediaIndex = (mediaIndex - 1 + mediaGallery.length) % mediaGallery.length; renderMediaViewer(); });
-    document.getElementById('chat-media-next')?.addEventListener('click', () => { mediaIndex = (mediaIndex + 1) % mediaGallery.length; renderMediaViewer(); });
+    document.getElementById('chat-media-prev')?.addEventListener('click', () => { if (mediaIndex > 0) { mediaIndex -= 1; renderMediaViewer(); } });
+    document.getElementById('chat-media-next')?.addEventListener('click', () => { if (mediaIndex < mediaGallery.length - 1) { mediaIndex += 1; renderMediaViewer(); } });
     document.getElementById('chat-media-viewer')?.addEventListener('click', event => { if (event.target === event.currentTarget) closeMediaGallery(); });
     document.addEventListener('keydown', event => { if (document.getElementById('chat-media-viewer')?.classList.contains('hidden')) return; if (event.key === 'Escape') closeMediaGallery(); if (event.key === 'ArrowLeft') document.getElementById('chat-media-prev')?.dispatchEvent(new MouseEvent('click')); if (event.key === 'ArrowRight') document.getElementById('chat-media-next')?.dispatchEvent(new MouseEvent('click')); });
 
@@ -284,7 +306,7 @@ import Layout from '../../layouts/Layout.astro';
     async function renderMessage(message: any) {
       const mine = message.sender_id === user()?.id;
       const profile = await profileFor(message.sender_id);
-      const files = (message.attachments || []).map(attachmentMarkup).join('');
+      const files = attachmentsMarkup(message.attachments || []);
       return `<div id="message-${message.message_id}" class="flex items-end gap-2 ${mine ? 'justify-end' : 'justify-start'}">${mine ? '' : avatar(profile)}<div class="max-w-[78%]"><p class="mb-1 text-[11px] font-semibold text-slate-500 ${mine ? 'text-right' : ''}">${escapeHtml(profileName(profile))}</p><div class="rounded-2xl px-3 py-2 text-sm ${mine ? 'rounded-br-sm bg-navy-900 text-white' : 'rounded-bl-sm bg-slate-100 text-slate-800'}">${message.offer_amount ? `<p class="mb-1 text-xs font-bold">Offer: ${money(message.offer_amount)}</p>` : ''}${message.body ? `<p>${escapeHtml(message.body)}</p>` : ''}${message.sticker_id ? `<p class="text-lg" aria-label="Stiker">💬 <span class="text-xs font-bold">${escapeHtml(message.sticker_id.replaceAll('-', ' '))}</span></p>` : ''}${files}</div><p class="mt-1 text-[10px] text-slate-400 ${mine ? 'text-right' : ''}">${relativeTime(message.created_at)}</p></div>${mine ? avatar(profile) : ''}</div>`;
     }
 
@@ -296,9 +318,10 @@ import Layout from '../../layouts/Layout.astro';
       const listing = await listingFor(conversation.context?.reference_id);
       const description = escapeHtml(listing?.description || 'Percakapan tentang barang ini.');
       const itemLink = `/marketplace/detail?id=${encodeURIComponent(conversation.context?.reference_id || '')}`;
-      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><a href="${itemLink}" class="ml-4 shrink-0 text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB per file">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
+      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><a href="${itemLink}" class="ml-4 shrink-0 text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><input id="message-camera" type="file" multiple accept="image/jpeg,image/png,image/webp" capture="environment" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB per file">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
       const messagesResponse = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/messages?participant_id=${encodeURIComponent(user().id)}`, { headers: chatHeaders() });
       const messages = messagesResponse.ok ? await messagesResponse.json() : [];
+      activeMessages = messages;
       const messagesRoot = document.getElementById('messages')!;
       messagesRoot.innerHTML = (await Promise.all(messages.map(renderMessage))).join('');
       bindMediaGallery(messagesRoot);
@@ -308,17 +331,24 @@ import Layout from '../../layouts/Layout.astro';
       (document.getElementById('message-form') as HTMLFormElement).onsubmit = event => { event.preventDefault(); if (messageInput.value.trim()) { sendMessage({ body: messageInput.value }); messageInput.value = ''; websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })); } };
       messageInput.addEventListener('input', () => { websocket?.send(JSON.stringify({ type: 'typing', is_typing: true })); window.clearTimeout(typingTimeout); typingTimeout = window.setTimeout(() => websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })), 1200); });
       const fileInput = document.getElementById('message-file') as HTMLInputElement;
+      const cameraInput = document.getElementById('message-camera') as HTMLInputElement;
       const fileButton = document.getElementById('message-file-button') as HTMLButtonElement;
+      const sourceDialog = document.getElementById('attachment-source-dialog')!;
+      const closeSourceDialog = () => { sourceDialog.classList.add('hidden'); sourceDialog.classList.remove('flex'); };
+      const chooseInput = (input: HTMLInputElement) => { filePickerOpen = true; closeSourceDialog(); input.click(); };
       fileButton.onclick = event => {
         event.preventDefault();
         event.stopPropagation();
         if (filePickerOpen) return;
-        filePickerOpen = true;
-        fileInput.click();
+        if (window.matchMedia('(pointer: coarse)').matches) { sourceDialog.classList.remove('hidden'); sourceDialog.classList.add('flex'); }
+        else chooseInput(fileInput);
       };
-      fileInput.onchange = async event => {
+      document.getElementById('attachment-gallery')?.addEventListener('click', () => chooseInput(fileInput));
+      document.getElementById('attachment-camera')?.addEventListener('click', () => chooseInput(cameraInput));
+      document.getElementById('attachment-source-cancel')?.addEventListener('click', closeSourceDialog);
+      sourceDialog.onclick = event => { if (event.target === sourceDialog) closeSourceDialog(); };
+      const handleSelectedFiles = async (input: HTMLInputElement) => {
         filePickerOpen = false;
-        const input = event.target as HTMLInputElement;
         const selected = [...(input.files || [])];
         if (!selected.length) return;
         const allowed = selected.filter(file => {
@@ -336,9 +366,11 @@ import Layout from '../../layouts/Layout.astro';
           outcomes.filter((outcome): outcome is PromiseRejectedResult => outcome.status === 'rejected' && outcome.reason?.name !== 'AbortError').forEach(outcome => console.error(outcome.reason));
         } finally { input.value = ''; }
       };
+      fileInput.onchange = () => handleSelectedFiles(fileInput);
+      cameraInput.onchange = () => handleSelectedFiles(cameraInput);
       websocket?.close();
       websocket = new WebSocket(`${CHAT.replace(/^http/, 'ws')}/conversations/${conversation.conversation_id}/ws?token=${encodeURIComponent(session().token)}`);
-      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profileName(profile)} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { root.insertAdjacentHTML('beforeend', await renderMessage(message)); bindMediaGallery(root); root.scrollTop = root.scrollHeight; } await renderList(); };
+      websocket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profileName(profile)} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { activeMessages.push(message); root.insertAdjacentHTML('beforeend', await renderMessage(message)); bindMediaGallery(root); root.scrollTop = root.scrollHeight; } await renderList(); };
     }
 
     async function sendMessage(payload: any) {
@@ -348,6 +380,7 @@ import Layout from '../../layouts/Layout.astro';
       const message = await response.json();
       const root = document.getElementById('messages');
       if (root && !document.getElementById(`message-${message.message_id}`)) {
+        activeMessages.push(message);
         root.insertAdjacentHTML('beforeend', await renderMessage(message));
         bindMediaGallery(root);
         root.scrollTop = root.scrollHeight;
