@@ -25,6 +25,16 @@ import Layout from '../../layouts/Layout.astro';
       <button id="attachment-source-cancel" type="button" class="mt-3 w-full rounded-xl px-4 py-2 text-sm font-semibold text-slate-500">Batal</button>
     </div>
   </div>
+  <div id="chat-complete-sale-dialog" class="fixed inset-0 z-[95] hidden items-center justify-center bg-slate-950/45 p-4" role="dialog" aria-modal="true" aria-label="Tandai barang terjual">
+    <form id="chat-complete-sale-form" class="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl">
+      <div class="flex items-start justify-between gap-4"><div><h2 class="text-lg font-bold text-slate-900">Tandai barang terjual</h2><p id="chat-sale-buyer" class="mt-1 text-sm text-slate-500"></p></div><button id="chat-complete-sale-close" type="button" class="text-2xl leading-none text-slate-400" aria-label="Tutup">×</button></div>
+      <label class="mt-5 block text-sm font-bold text-slate-800" for="chat-sale-price">Harga jual akhir</label>
+      <input id="chat-sale-price" inputmode="numeric" class="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2.5 text-base font-semibold text-slate-900" />
+      <p class="mt-2 text-xs leading-5 text-slate-500">Barang berpindah ke inventaris pembeli. Semua penawar akan menerima kabar penutup melalui Inbox dan email.</p>
+      <p id="chat-sale-error" class="mt-3 hidden rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert"></p>
+      <div class="mt-5 flex justify-end gap-2"><button id="chat-complete-sale-cancel" type="button" class="rounded-xl px-4 py-2.5 text-sm font-bold text-slate-600">Batal</button><button class="rounded-xl bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Konfirmasi terjual</button></div>
+    </form>
+  </div>
 
   <style is:global>
     .typing-visual { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.25rem; width: 3.25rem; }
@@ -47,6 +57,7 @@ import Layout from '../../layouts/Layout.astro';
     const chatApp = document.getElementById('chat-app')!;
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&gt;', '>': '&lt;', '"': '&quot;', "'": '&#039;' }[char] || char));
     const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
+    const parseMoney = (value: string) => Number(value.replace(/[^0-9]/g, '')) || 0;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const user = () => session()?.user;
     const chatHeaders = () => ({ 'Authorization': `Bearer ${session()?.token}` });
@@ -318,7 +329,8 @@ import Layout from '../../layouts/Layout.astro';
       const listing = await listingFor(conversation.context?.reference_id);
       const description = escapeHtml(listing?.description || 'Percakapan tentang barang ini.');
       const itemLink = `/marketplace/detail?id=${encodeURIComponent(conversation.context?.reference_id || '')}`;
-      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><a href="${itemLink}" class="ml-4 shrink-0 text-xs font-bold text-navy-900 hover:underline">Lihat barang</a></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><input id="message-camera" type="file" multiple accept="image/jpeg,image/png,image/webp" capture="environment" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB per file">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
+      const canCompleteSale = listing?.seller_id === user()?.id && !listing?.is_sold;
+      panel.innerHTML = `<div class="flex items-center justify-between border-b border-slate-200 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><div class="ml-4 flex shrink-0 items-center gap-3"><a href="${itemLink}" class="text-xs font-bold text-navy-900 hover:underline">Lihat barang</a>${canCompleteSale ? '<button id="chat-complete-sale" type="button" class="rounded-lg bg-navy-900 px-3 py-2 text-xs font-bold text-white">Terjual</button>' : ''}</div></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-slate-50 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-slate-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><input id="message-camera" type="file" multiple accept="image/jpeg,image/png,image/webp" capture="environment" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-slate-200 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB per file">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
       const messagesResponse = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/messages?participant_id=${encodeURIComponent(user().id)}`, { headers: chatHeaders() });
       const messages = messagesResponse.ok ? await messagesResponse.json() : [];
       activeMessages = messages;
@@ -328,6 +340,29 @@ import Layout from '../../layouts/Layout.astro';
       requestAnimationFrame(() => { messagesRoot.scrollTop = messagesRoot.scrollHeight; });
       const messageInput = document.getElementById('message-input') as HTMLInputElement;
       if (focusComposer) requestAnimationFrame(() => messageInput.focus());
+      const completeSaleButton = document.getElementById('chat-complete-sale') as HTMLButtonElement | null;
+      if (completeSaleButton && listing) {
+        const buyerId = customerIdFor(conversation);
+        const buyer = await profileFor(buyerId);
+        const dialog = document.getElementById('chat-complete-sale-dialog')!;
+        const priceInput = document.getElementById('chat-sale-price') as HTMLInputElement;
+        const highestOffer = Math.max(Number(listing.asking_price || 0), ...messages.map((message: any) => Number(message.offer_amount || 0)));
+        priceInput.value = money(highestOffer);
+        document.getElementById('chat-sale-buyer')!.textContent = `Pembeli: ${profileName(buyer)}`;
+        const closeSaleDialog = () => { dialog.classList.add('hidden'); dialog.classList.remove('flex'); };
+        completeSaleButton.onclick = () => { dialog.classList.remove('hidden'); dialog.classList.add('flex'); priceInput.focus(); priceInput.select(); };
+        document.getElementById('chat-complete-sale-close')!.onclick = closeSaleDialog;
+        document.getElementById('chat-complete-sale-cancel')!.onclick = closeSaleDialog;
+        (document.getElementById('chat-complete-sale-form') as HTMLFormElement).onsubmit = async event => {
+          event.preventDefault();
+          const finalPrice = parseMoney(priceInput.value);
+          if (!finalPrice) { priceInput.focus(); return; }
+          const response = await fetch(`${MARKETPLACE}/listings/${encodeURIComponent(listing.id)}/complete-sale`, { method: 'POST', headers: { ...chatHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ buyer_id: buyerId, buyer_name: profileName(buyer), final_price: finalPrice }) });
+          if (!response.ok) { const error = document.getElementById('chat-sale-error')!; error.textContent = 'Barang belum dapat ditandai terjual. Coba lagi.'; error.classList.remove('hidden'); return; }
+          closeSaleDialog();
+          location.assign('/inventory/');
+        };
+      }
       (document.getElementById('message-form') as HTMLFormElement).onsubmit = event => { event.preventDefault(); if (messageInput.value.trim()) { sendMessage({ body: messageInput.value }); messageInput.value = ''; websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })); } };
       messageInput.addEventListener('input', () => { websocket?.send(JSON.stringify({ type: 'typing', is_typing: true })); window.clearTimeout(typingTimeout); typingTimeout = window.setTimeout(() => websocket?.send(JSON.stringify({ type: 'typing', is_typing: false })), 1200); });
       const fileInput = document.getElementById('message-file') as HTMLInputElement;
