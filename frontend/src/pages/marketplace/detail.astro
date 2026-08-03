@@ -34,8 +34,9 @@ import Layout from '../../layouts/Layout.astro';
       const existingBid = authenticated && !owner ? await getMyBid(item.id, sender()?.id) : undefined;
       const inboxAction = (label: string) => `<a href="/chat/?item=${encodeURIComponent(item.id)}" class="flex w-full items-center justify-between rounded-xl bg-navy-900 px-4 py-3 text-sm font-bold text-white shadow-xs hover:bg-navy-800"><span>${label}</span><span class="inline-flex size-7 items-center justify-center rounded-lg border border-white/20 text-lg leading-none" aria-hidden="true">→</span><span class="sr-only">Buka di Inbox</span></a>`;
       const bidSummary = highestBid ? `<div class="grid grid-cols-2 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs"><div><p class="text-slate-500">Penawaran tertinggi</p><p class="mt-1 font-extrabold text-navy-900">${money(highestBid.amount)}</p></div><div><p class="text-slate-500">Penawar aktif</p><p class="mt-1 font-extrabold text-navy-900">${bidderCount} orang</p></div></div>` : '';
+      const saleModal = owner && highestBid ? `<button id="mark-sold" class="w-full rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">Tandai terjual</button><div id="sale-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 p-4"><div class="w-full max-w-sm rounded-2xl bg-white p-5 shadow-xl"><h2 class="text-lg font-bold text-slate-900">Selesaikan penjualan</h2><p class="mt-1 text-sm text-slate-500">Barang akan pindah ke inventaris ${escapeHtml(highestBid.buyer_name || 'pembeli')} dan semua penawar diberi kabar.</p><label class="mt-4 block text-xs font-bold text-slate-700">Harga jual akhir</label><input id="sale-price" inputmode="numeric" value="${Number(highestBid.amount).toLocaleString('id-ID')}" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-base font-bold" /><div class="mt-5 flex justify-end gap-2"><button id="sale-cancel" class="rounded-lg px-4 py-2 text-sm font-semibold text-slate-600">Batal</button><button id="sale-confirm" class="rounded-lg bg-navy-900 px-4 py-2 text-sm font-bold text-white">Barang terjual</button></div></div></div>` : '';
       const negotiationAction = owner
-        ? inboxAction(highestBid ? 'Lihat offer & chat produk ini' : 'Buka Inbox produk ini')
+        ? `${inboxAction(highestBid ? 'Lihat offer & chat produk ini' : 'Buka Inbox produk ini')}${saleModal}`
         : existingBid
           ? inboxAction(`Sedang nego ${money(existingBid.amount)}`)
           : authenticated
@@ -69,6 +70,18 @@ import Layout from '../../layouts/Layout.astro';
       document.getElementById('offer-highest')?.addEventListener('click', () => setOfferValue(highestBidAmount));
       document.getElementById('offer-close')?.addEventListener('click', closeOffer);
       document.getElementById('offer-cancel')?.addEventListener('click', closeOffer);
+      document.getElementById('mark-sold')?.addEventListener('click', () => document.getElementById('sale-modal')?.classList.replace('hidden', 'flex'));
+      document.getElementById('sale-cancel')?.addEventListener('click', () => document.getElementById('sale-modal')?.classList.replace('flex', 'hidden'));
+      document.getElementById('sale-confirm')?.addEventListener('click', async () => {
+        const price = Number((document.getElementById('sale-price') as HTMLInputElement)?.value.replace(/\D/g, '') || 0);
+        if (!price || !highestBid) return;
+        const button = document.getElementById('sale-confirm') as HTMLButtonElement; button.disabled = true; button.textContent = 'Menyelesaikan…';
+        try {
+          const response = await fetch(`${API}/listings/${encodeURIComponent(item.id)}/complete-sale`, { method: 'POST', headers: { ...chatHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ buyer_id: highestBid.buyer_id, buyer_name: highestBid.buyer_name || 'Pembeli Stuff8', final_price: price }) });
+          if (!response.ok) { const body = await response.json().catch(() => ({})); throw new Error(body.error || 'Penjualan belum dapat diselesaikan.'); }
+          location.assign('/inventory/');
+        } catch (error: any) { button.disabled = false; button.textContent = 'Barang terjual'; const note = document.getElementById('negotiation-note')!; note.textContent = error?.message || 'Penjualan belum dapat diselesaikan.'; note.classList.remove('hidden'); }
+      });
       if (offerForm) offerForm.onsubmit = async event => {
         event.preventDefault();
         const amount = offerValue();
