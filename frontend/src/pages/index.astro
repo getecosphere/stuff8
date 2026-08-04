@@ -1131,7 +1131,8 @@ import Layout from '../layouts/Layout.astro';
         }
       }
       const isInventoryRoute = location.pathname === '/inventory' || location.pathname === '/inventory/';
-      if (currentSession?.user && !isInventoryRoute) {
+      const isRootRoute = location.pathname === '/';
+      if (currentSession?.user && isRootRoute) {
         location.replace('/inventory/');
         return true;
       }
