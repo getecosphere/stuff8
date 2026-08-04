@@ -98,7 +98,7 @@ import Layout from '../../../layouts/Layout.astro';
         }
       };
     }
-    const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || '/api'}/chat`;
+    const CHAT = import.meta.env.PUBLIC_CHAT_URL || '/api/chat';
     const BIDDING = import.meta.env.PUBLIC_BIDDING_URL || '/api/bidding';
     let activeConversation: any;
     let websocket: WebSocket | undefined;

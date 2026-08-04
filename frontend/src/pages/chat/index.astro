@@ -47,7 +47,7 @@ import Layout from '../../layouts/Layout.astro';
   </style>
 
   <script>
-    const CHAT = `${import.meta.env.PUBLIC_CHAT_URL || '/api'}/chat`;
+    const CHAT = import.meta.env.PUBLIC_CHAT_URL || '/api/chat';
     const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const PROFILE = import.meta.env.PUBLIC_PROFILE_URL || '/api';
     const AUTH = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;
