@@ -44,4 +44,54 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  /* Loading placeholder: warm shimmer for cards, images, and avatars */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: theme('colors.navy.100');
+    border-radius: 0.5rem;
+  }
+
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.65), transparent);
+    animation: stuff8-shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes stuff8-shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Toast snackbar: warm card, accent edge per variant */
+  .stuff8-toast {
+    animation: stuff8-toast-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .stuff8-toast-leave {
+    animation: stuff8-toast-out 180ms ease-in both;
+  }
+
+  @keyframes stuff8-toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes stuff8-toast-out {
+    to {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.97);
+    }
+  }
 }

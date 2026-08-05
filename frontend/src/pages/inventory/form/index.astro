@@ -547,11 +547,13 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
         }
 
         if (editingItemId) {
+          window.stuff8Toast?.('Perubahan barang sudah disimpan.', { variant: 'success', title: 'Inventaris diperbarui' });
           location.assign('/inventory/');
           return;
         }
         editingItemId = newItem.id;
         deleteConfirmationArmed = false;
+        window.stuff8Toast?.('Barang ditambahkan ke inventaris.', { variant: 'success', title: 'Barang tersimpan' });
         setItemPhotoStep(newItem);
       } catch (error) {
         console.error('Failed to create inventory item:', error);

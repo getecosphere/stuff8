@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-  <div id="app-notice" class="fixed inset-x-4 bottom-5 z-[100] hidden rounded-xl border border-navy-900/10 bg-navy-900 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg sm:left-1/2 sm:right-auto sm:w-auto sm:max-w-md sm:-translate-x-1/2" role="status" aria-live="polite"></div>
   <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
     
     <!-- ================================================================= -->
@@ -12,112 +11,118 @@ import Layout from '../layouts/Layout.astro';
     <div id="signed-out-landing" class="hidden space-y-12 py-4 transition-all duration-300">
       
       <!-- HERO SECTION -->
-      <section class="relative rounded-2xl bg-white border border-slate-200 p-8 sm:p-12 md:p-14 text-center space-y-6 shadow-xs">
-        
-        <div class="max-w-3xl mx-auto space-y-4">
-          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+      <section class="relative overflow-hidden rounded-3xl border border-navy-100 bg-gradient-to-br from-paper-50 via-paper-100 to-clay-50 p-8 text-center shadow-[0_1px_2px_rgba(15,30,25,0.04)] sm:p-12 md:p-14">
+        <div class="pointer-events-none absolute -left-20 -top-24 size-72 rounded-full bg-clay-200/30 blur-3xl" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -bottom-24 -right-16 size-72 rounded-full bg-navy-200/30 blur-3xl" aria-hidden="true"></div>
+
+        <div class="relative z-10 mx-auto max-w-3xl space-y-5">
+          <p class="mx-auto inline-flex items-center gap-2 rounded-full border border-navy-100 bg-white/80 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-clay-600">
+            <span class="size-1.5 rounded-full bg-clay-500" aria-hidden="true"></span>
+            Inventaris pribadi · Pasar jual-beli
+          </p>
+          <h1 class="font-display text-3xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl">
             Catat Semua Barangmu.<br class="hidden sm:inline" />
-            <span class="text-navy-900">
+            <span class="text-clay-600">
               Jual Kapan Saja Kamu Mau.
             </span>
           </h1>
-          <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Sering banget kita punya barang berharga tapi nggak sadar, ujung-ujungnya cuma numpuk dan bertahun-tahun nggak kepakai. Makanya di <strong class="text-slate-900">Stuff8</strong>, catat-catat aja dulu barangmu—biar kamu tau berapa total nilai asetmu. Nanti kalau ada barang yang rasa-rasanya mau dijual, tinggal tandai aja biar langsung bisa ditawar orang!
+          <p class="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
+            Sering banget kita punya barang berharga tapi nggak sadar, ujung-ujungnya cuma numpuk dan bertahun-tahun nggak kepakai. Makanya di <strong class="font-bold text-navy-900">Stuff8</strong>, catat-catat aja dulu barangmu—biar kamu tau berapa total nilai asetmu. Nanti kalau ada barang yang rasa-rasanya mau dijual, tinggal tandai aja biar langsung bisa ditawar orang!
           </p>
-        </div>
 
-        <!-- Action CTAs -->
-        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <button id="btn-hero-start" class="px-5 py-3 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm shadow-xs hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center gap-2">
-            <span>Mulai Catat Barang</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </button>
+          <!-- Action CTAs -->
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button id="btn-hero-start" class="inline-flex items-center gap-2 rounded-full bg-navy-900 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-800 hover:shadow-md active:scale-[0.99]">
+              <span>Mulai Catat Barang</span>
+              <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
 
-          <a href="#interactive-demo" class="px-5 py-3 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-sm transition-all flex items-center gap-2">
-            <span>Coba Demo Interaktif</span>
-          </a>
+            <a href="#interactive-demo" class="inline-flex items-center gap-2 rounded-full border border-navy-100 bg-white px-6 py-3 text-sm font-bold text-navy-900 shadow-sm transition-all hover:bg-paper-100">
+              <span>Coba Demo Interaktif</span>
+            </a>
 
-          <button id="btn-hero-browse-mkt" class="px-5 py-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-sm transition-all">
-            <span>Lihat Marketplace</span>
-          </button>
-        </div>
-
-        <!-- Quick Stats Banner -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 border-t border-slate-100 max-w-4xl mx-auto text-left">
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-            <div class="text-slate-500 text-xs font-semibold">Privasi Terjaga</div>
-            <div class="text-lg font-bold text-slate-900 mt-1">100% Privat</div>
-            <p class="text-[11px] text-slate-500 mt-0.5">Barangmu cuma kamu yang tau</p>
+            <button id="btn-hero-browse-mkt" class="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md active:scale-[0.99]">
+              <span>Lihat Marketplace</span>
+            </button>
           </div>
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-            <div class="text-slate-500 text-xs font-semibold">Pajang Barang</div>
-            <div class="text-lg font-bold text-navy-900 mt-1">1-Klik Tayang</div>
-            <p class="text-[11px] text-slate-500 mt-0.5">Langsung masuk marketplace</p>
-          </div>
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-            <div class="text-slate-500 text-xs font-semibold">Nego Santai</div>
-            <div class="text-lg font-bold text-brand-700 mt-1">Bisa Ditawar</div>
-            <p class="text-[11px] text-slate-500 mt-0.5">Cek penawaran tunai dari pembeli</p>
-          </div>
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-            <div class="text-slate-500 text-xs font-semibold">Bebas Biaya</div>
-            <div class="text-lg font-bold text-slate-900 mt-1">Tanpa Komisi</div>
-            <p class="text-[11px] text-slate-500 mt-0.5">100% hasil jual buat kamu</p>
+
+          <!-- Quick Stats Banner -->
+          <div class="grid grid-cols-2 gap-3 pt-8 text-left md:grid-cols-4">
+            <div class="card p-4">
+              <div class="text-xs font-semibold text-slate-500">Privasi Terjaga</div>
+              <div class="mt-1 text-lg font-extrabold text-navy-900">100% Privat</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">Barangmu cuma kamu yang tau</p>
+            </div>
+            <div class="card p-4">
+              <div class="text-xs font-semibold text-slate-500">Pajang Barang</div>
+              <div class="mt-1 text-lg font-extrabold text-clay-700">1-Klik Tayang</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">Langsung masuk marketplace</p>
+            </div>
+            <div class="card p-4">
+              <div class="text-xs font-semibold text-slate-500">Nego Santai</div>
+              <div class="mt-1 text-lg font-extrabold text-brand-700">Bisa Ditawar</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">Cek penawaran tunai dari pembeli</p>
+            </div>
+            <div class="card p-4">
+              <div class="text-xs font-semibold text-slate-500">Bebas Biaya</div>
+              <div class="mt-1 text-lg font-extrabold text-navy-900">Tanpa Komisi</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">100% hasil jual buat kamu</p>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- UNLOCKED ASSET VALUE CALCULATOR -->
-      <section class="rounded-2xl bg-white border border-slate-200 p-8 sm:p-12 space-y-8 shadow-xs">
-        <div class="max-w-2xl mx-auto text-center space-y-2">
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+      <section class="card space-y-8 p-8 sm:p-12">
+        <div class="mx-auto max-w-2xl text-center space-y-2">
+          <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
             Bayangkan Nilai Tumpukan Barangmu Saat Ini!
           </h2>
-          <p class="text-slate-600 text-xs sm:text-sm">
+          <p class="text-xs text-slate-600 sm:text-sm">
             Geser slider di bawah buat meraba berapa perkiraan aset barang yang selama ini cuma ngetem di gudang/lemari.
           </p>
         </div>
 
-        <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="space-y-4 rounded-2xl border border-navy-100 bg-paper-100 p-5">
             <div class="flex justify-between text-xs font-semibold">
-              <span class="text-slate-700">Elektronik & Gadget</span>
-              <span id="calc-val-electronics" class="text-navy-900 font-mono">2 barang (Rp 15.000.000)</span>
+              <span class="text-navy-900">Elektronik &amp; Gadget</span>
+              <span id="calc-val-electronics" class="num text-clay-700">2 barang (Rp 15.000.000)</span>
             </div>
-            <input type="range" id="calc-range-electronics" min="0" max="10" value="2" class="w-full accent-navy-900 bg-slate-200 cursor-pointer" />
+            <input type="range" id="calc-range-electronics" min="0" max="10" value="2" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
 
-            <div class="flex justify-between text-xs font-semibold pt-2">
-              <span class="text-slate-700">Peralatan Olahraga & Outdoor</span>
-              <span id="calc-val-sports" class="text-navy-900 font-mono">1 barang (Rp 5.250.000)</span>
+            <div class="flex justify-between pt-2 text-xs font-semibold">
+              <span class="text-navy-900">Peralatan Olahraga &amp; Outdoor</span>
+              <span id="calc-val-sports" class="num text-clay-700">1 barang (Rp 5.250.000)</span>
             </div>
-            <input type="range" id="calc-range-sports" min="0" max="10" value="1" class="w-full accent-navy-900 bg-slate-200 cursor-pointer" />
+            <input type="range" id="calc-range-sports" min="0" max="10" value="1" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
           </div>
 
-          <div class="space-y-4 p-5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="space-y-4 rounded-2xl border border-navy-100 bg-paper-100 p-5">
             <div class="flex justify-between text-xs font-semibold">
-              <span class="text-slate-700">Alat Musik & Audio</span>
-              <span id="calc-val-music" class="text-navy-900 font-mono">1 barang (Rp 6.000.000)</span>
+              <span class="text-navy-900">Alat Musik &amp; Audio</span>
+              <span id="calc-val-music" class="num text-clay-700">1 barang (Rp 6.000.000)</span>
             </div>
-            <input type="range" id="calc-range-music" min="0" max="10" value="1" class="w-full accent-navy-900 bg-slate-200 cursor-pointer" />
+            <input type="range" id="calc-range-music" min="0" max="10" value="1" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
 
-            <div class="flex justify-between text-xs font-semibold pt-2">
-              <span class="text-slate-700">Koleksi & Furnitur</span>
-              <span id="calc-val-other" class="text-navy-900 font-mono">3 barang (Rp 3.600.000)</span>
+            <div class="flex justify-between pt-2 text-xs font-semibold">
+              <span class="text-navy-900">Koleksi &amp; Furnitur</span>
+              <span id="calc-val-other" class="num text-clay-700">3 barang (Rp 3.600.000)</span>
             </div>
-            <input type="range" id="calc-range-other" min="0" max="15" value="3" class="w-full accent-navy-900 bg-slate-200 cursor-pointer" />
+            <input type="range" id="calc-range-other" min="0" max="15" value="3" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
           </div>
         </div>
 
         <!-- Calculator Result Card -->
-        <div class="max-w-md mx-auto p-6 rounded-xl bg-slate-900 text-white border border-slate-800 text-center space-y-3 shadow-md">
-          <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Perkiraan Nilai Simpanan</span>
-          <div id="calc-total-display" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">
+        <div class="mx-auto max-w-md space-y-3 rounded-2xl bg-navy-900 p-6 text-center text-white shadow-lg">
+          <span class="text-xs font-bold uppercase tracking-wider text-navy-200">Total Perkiraan Nilai Simpanan</span>
+          <div id="calc-total-display" class="num font-display text-3xl font-extrabold text-white sm:text-4xl">
             Rp 29.850.000
           </div>
-          <p class="text-slate-300 text-xs">
+          <p class="text-xs text-navy-200">
             Mulai catat barang-barangmu sekarang biar tau aset simpananmu dan siap dijual kapan aja.
           </p>
-          <button id="btn-calc-cta" class="w-full py-3 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-xs transition-all">
+          <button id="btn-calc-cta" class="w-full rounded-full bg-brand-600 py-3 text-xs font-bold text-white shadow-xs transition-all hover:bg-brand-500">
             Mulai Catat Barangku
           </button>
         </div>
@@ -125,38 +130,38 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- THREE CORE PILLARS OF STUFF8 -->
       <section class="space-y-8">
-        <div class="text-center space-y-2 max-w-xl mx-auto">
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Cara Kerja Stuff8</h2>
-          <p class="text-slate-600 text-xs sm:text-sm">Fokus rapiin inventaris pribadi dulu, baru jual santai kemudian.</p>
+        <div class="mx-auto max-w-xl space-y-2 text-center">
+          <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Cara Kerja Stuff8</h2>
+          <p class="text-xs text-slate-600 sm:text-sm">Fokus rapiin inventaris pribadi dulu, baru jual santai kemudian.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="p-6 rounded-xl bg-white border border-slate-200 space-y-3 hover:border-brand-500/40 hover:shadow-xs transition-all">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div class="card space-y-3 p-6 transition-all hover:border-clay-300 hover:shadow-md">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 shrink-0 rounded-lg bg-slate-100 text-navy-900 flex items-center justify-center font-bold text-sm">1</div>
-              <h3 class="font-bold text-slate-900 text-base">Galeri Simpanan Privat</h3>
+              <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-clay-600 text-sm font-bold text-white">1</div>
+              <h3 class="font-display text-base font-bold text-navy-900">Galeri Simpanan Privat</h3>
             </div>
-            <p class="text-slate-600 text-xs leading-relaxed">
+            <p class="text-xs leading-relaxed text-slate-600">
               Catat harga beli, kondisi, perkiraan nilai, sampai posisi simpan barang. Katalogmu 100% rahasia dan aman.
             </p>
           </div>
 
-          <div class="p-6 rounded-xl bg-white border border-slate-200 space-y-3 hover:border-brand-500/40 hover:shadow-xs transition-all">
+          <div class="card space-y-3 p-6 transition-all hover:border-brand-300 hover:shadow-md">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 shrink-0 rounded-lg bg-slate-100 text-navy-900 flex items-center justify-center font-bold text-sm">2</div>
-              <h3 class="font-bold text-slate-900 text-base">Sekali klik .. ke Marketplace!</h3>
+              <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-navy-900 text-sm font-bold text-white">2</div>
+              <h3 class="font-display text-base font-bold text-navy-900">Sekali klik .. ke Marketplace!</h3>
             </div>
-            <p class="text-slate-600 text-xs leading-relaxed">
+            <p class="text-xs leading-relaxed text-slate-600">
               Nggak perlu ribet ketik ulang deskripsi. Cukup aktifkan status "Dijual", barang langsung tayang di marketplace.
             </p>
           </div>
 
-          <div class="p-6 rounded-xl bg-white border border-slate-200 space-y-3 hover:border-brand-500/40 hover:shadow-xs transition-all">
+          <div class="card space-y-3 p-6 transition-all hover:border-brand-300 hover:shadow-md">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 shrink-0 rounded-lg bg-slate-100 text-navy-900 flex items-center justify-center font-bold text-sm">3</div>
-              <h3 class="font-bold text-slate-900 text-base">Penawaran Langsung</h3>
+              <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">3</div>
+              <h3 class="font-display text-base font-bold text-navy-900">Penawaran Langsung</h3>
             </div>
-            <p class="text-slate-600 text-xs leading-relaxed">
+            <p class="text-xs leading-relaxed text-slate-600">
               Pembeli bisa langsung ngirim penawaran harga. Kamu tinggal cek penawaran di dashboard dan tentukan pilihan.
             </p>
           </div>
@@ -165,75 +170,74 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- INTERACTIVE DEMO SANDBOX -->
       <section id="interactive-demo" class="space-y-6 scroll-mt-24">
-        <div class="text-center space-y-2">
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+        <div class="space-y-2 text-center">
+          <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
             Cobain Gimana Cara Kerja Stuff8
           </h2>
-          <p class="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
+          <p class="mx-auto max-w-xl text-xs text-slate-600 sm:text-sm">
             Pilih contoh barang di bawah, geser tombol jualnya, dan lihat gimana mulusnya barang berpindah dari galeri pribadi ke marketplace publik.
           </p>
         </div>
 
         <!-- Sample Item Selector Tabs -->
         <div class="flex flex-wrap justify-center gap-2 text-xs font-semibold">
-          <button id="demo-tab-camera" class="demo-item-btn active px-4 py-2 rounded-lg bg-navy-900 text-white font-semibold shadow-xs transition-all">
+          <button id="demo-tab-camera" class="demo-item-btn active rounded-full bg-navy-900 px-4 py-2 font-bold text-white shadow-xs transition-all">
             Kamera Fujifilm (Rp 21,7 Jt)
           </button>
-          <button id="demo-tab-bike" class="demo-item-btn px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all">
+          <button id="demo-tab-bike" class="demo-item-btn rounded-full border border-navy-100 bg-white px-4 py-2 text-slate-600 transition-all hover:bg-paper-100 hover:text-navy-900">
             Sepeda Balap (Rp 10,2 Jt)
           </button>
-          <button id="demo-tab-macbook" class="demo-item-btn px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all">
+          <button id="demo-tab-macbook" class="demo-item-btn rounded-full border border-navy-100 bg-white px-4 py-2 text-slate-600 transition-all hover:bg-paper-100 hover:text-navy-900">
             MacBook Pro M2 (Rp 27 Jt)
           </button>
-          <button id="demo-tab-guitar" class="demo-item-btn px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all">
+          <button id="demo-tab-guitar" class="demo-item-btn rounded-full border border-navy-100 bg-white px-4 py-2 text-slate-600 transition-all hover:bg-paper-100 hover:text-navy-900">
             Gitar Akustik (Rp 6,3 Jt)
           </button>
         </div>
 
         <!-- Interactive Sandbox Card -->
-        <div class="max-w-4xl mx-auto bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 shadow-xs relative overflow-hidden">
-          
+        <div class="card relative mx-auto grid max-w-4xl grid-cols-1 gap-8 overflow-hidden p-6 sm:p-8 md:grid-cols-12">
           <!-- Image Column -->
-          <div class="md:col-span-5 relative group rounded-xl overflow-hidden bg-slate-100 h-64 md:h-full border border-slate-200">
-            <img id="demo-card-img" src="/fujifilm-camera.jpg" alt="Contoh Barang" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102" />
-            <span id="demo-card-badge" class="absolute top-3 right-3 px-3 py-1 rounded-md text-xs font-semibold bg-slate-900/80 text-white shadow-xs backdrop-blur-xs transition-all">
+          <div class="relative h-64 overflow-hidden rounded-xl border border-navy-100 bg-navy-100 md:col-span-5 md:h-full">
+            <img id="demo-card-img" src="/fujifilm-camera.jpg" alt="Contoh Barang" class="size-full object-cover transition-transform duration-500 group-hover:scale-102" />
+            <span id="demo-card-badge" class="absolute right-3 top-3 rounded-md bg-navy-900/90 px-3 py-1 text-xs font-bold text-white shadow-xs backdrop-blur-xs transition-all">
               Simpanan Privat
             </span>
           </div>
 
           <!-- Details & Controls Column -->
-          <div class="md:col-span-7 space-y-6 flex flex-col justify-between">
+          <div class="flex flex-col justify-between space-y-6 md:col-span-7">
             <div class="space-y-3">
               <div class="flex items-center justify-between">
-                <span id="demo-card-category" class="text-xs font-semibold uppercase tracking-wider text-brand-700">Kamera & Fotografi</span>
-                <span id="demo-card-location" class="text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">Lokasi: Lemari Rak B</span>
+                <span id="demo-card-category" class="text-xs font-bold uppercase tracking-wider text-clay-600">Kamera &amp; Fotografi</span>
+                <span id="demo-card-location" class="rounded-md border border-navy-100 bg-paper-100 px-2.5 py-1 text-xs text-slate-500">Lokasi: Lemari Rak B</span>
               </div>
-              <h3 id="demo-card-title" class="text-xl sm:text-2xl font-bold text-slate-900">Kamera Compact Fujifilm X100V</h3>
-              <p id="demo-card-desc" class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+              <h3 id="demo-card-title" class="font-display text-xl font-bold text-navy-900 sm:text-2xl">Kamera Compact Fujifilm X100V</h3>
+              <p id="demo-card-desc" class="text-xs leading-relaxed text-slate-600 sm:text-sm">
                 Kondisi mulus banget, lensa fix 23mm F2, shutter count di bawah 2.500. Lengkap dus ori dan strap kulit.
               </p>
             </div>
 
             <!-- Value & Toggle Box -->
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
+            <div class="space-y-4 rounded-2xl border border-navy-100 bg-paper-100 p-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <span class="text-slate-500 text-xs font-medium">Perkiraan Nilai Barang:</span>
-                  <div id="demo-card-val" class="text-xl font-bold text-navy-900">Rp 21.750.000</div>
+                  <span class="text-xs font-medium text-slate-500">Perkiraan Nilai Barang:</span>
+                  <div id="demo-card-val" class="num text-xl font-extrabold text-clay-700">Rp 21.750.000</div>
                 </div>
                 <div class="text-right">
-                  <span class="text-slate-500 text-xs font-medium">Kondisi:</span>
-                  <div id="demo-card-condition" class="text-sm font-semibold text-slate-800">Mulus Beli Baru</div>
+                  <span class="text-xs font-medium text-slate-500">Kondisi:</span>
+                  <div id="demo-card-condition" class="text-sm font-semibold text-navy-900">Mulus Beli Baru</div>
                 </div>
               </div>
 
               <!-- Interactive Toggle Switch -->
-              <div class="pt-3 border-t border-slate-200 flex items-center justify-between gap-4">
+              <div class="flex items-center justify-between gap-4 border-t border-navy-100 pt-3">
                 <div>
-                  <span class="block text-xs font-bold text-slate-800">Status di Marketplace Publik</span>
+                  <span class="block text-xs font-bold text-navy-900">Status di Marketplace Publik</span>
                   <span id="demo-toggle-label" class="block text-[11px] text-slate-500">Status: Cuma Disimpan Privat</span>
                 </div>
-                <button id="btn-demo-toggle-sellable" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-semibold text-xs transition-all flex items-center gap-2">
+                <button id="btn-demo-toggle-sellable" class="inline-flex items-center gap-2 rounded-full bg-navy-900 px-4 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-navy-800">
                   <span>Aktifkan Status Dijual</span>
                 </button>
               </div>
@@ -247,10 +251,10 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- PUBLIC MARKETPLACE PREVIEW FOR VISITORS -->
       <section class="space-y-6 pt-4">
-        <div class="border-b border-slate-200 pb-4">
+        <div class="border-b border-navy-100 pb-4">
           <div>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Barang Dijual Komunitas</h2>
-            <p class="text-slate-600 text-xs">Daftar barang yang lagi dipajang oleh pengguna lain</p>
+            <h2 class="font-display text-xl font-extrabold tracking-tight text-navy-900 sm:text-2xl">Barang Dijual Komunitas</h2>
+            <p class="text-xs text-slate-600">Daftar barang yang lagi dipajang oleh pengguna lain</p>
           </div>
         </div>
 
@@ -260,21 +264,21 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- INTERACTIVE DEMO: SIMULASI ALUR CHAT REALTIME SETELAH PENAWARAN DISETUJUI -->
-      <section id="demo-approved-bids-section" class="space-y-6 pt-6 border-t border-slate-200 scroll-mt-24 hidden">
-        <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 space-y-6 shadow-xs">
-          <div class="border-b border-slate-200 pb-4">
-            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Simulasi Alur: Negosiasi & Chat Real-Time dengan Bidder Pilihan</h2>
-            <p class="text-slate-600 text-xs sm:text-sm mt-1">
+      <section id="demo-approved-bids-section" class="space-y-6 border-t border-navy-100 pt-6 scroll-mt-24 hidden">
+        <div class="card space-y-6 p-6 sm:p-8">
+          <div class="border-b border-navy-100 pb-4">
+            <h2 class="font-display text-xl font-extrabold tracking-tight text-navy-900 sm:text-2xl">Simulasi Alur: Negosiasi &amp; Chat Real-Time dengan Bidder Pilihan</h2>
+            <p class="mt-1 text-xs text-slate-600 sm:text-sm">
               Alur obrolan ini muncul setelah ada penawaran pada barang di marketplace. Pilih tab produk di bawah untuk melihat obrolan realtime tiap produk!
             </p>
           </div>
 
           <!-- Product Tabs Bar (Appears when items have bids) -->
-          <div id="visitor-chat-product-tabs" class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold text-slate-600 no-scrollbar">
+          <div id="visitor-chat-product-tabs" class="no-scrollbar flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold text-slate-600">
             <!-- Dynamic product tabs rendered here -->
           </div>
 
-          <div id="visitor-approved-bids-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div id="visitor-approved-bids-container" class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <!-- Dynamic interactive cards rendered here -->
           </div>
         </div>
@@ -292,33 +296,33 @@ import Layout from '../layouts/Layout.astro';
       <div class="hidden grid-cols-2 gap-3 md:grid md:grid-cols-4">
         <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
           <span class="text-xs font-medium text-slate-500">Total Barang</span>
-          <div id="stat-total-items" class="num mt-1 text-2xl font-bold text-navy-900">0</div>
+          <div id="stat-total-items" class="num mt-1 text-2xl font-bold text-navy-900"><span class="skeleton inline-block h-7 w-16 align-middle"></span></div>
           <span class="mt-1 block text-[11px] text-slate-400">koleksi pribadimu</span>
         </div>
         <div class="rounded-2xl border border-clay-200 bg-gradient-to-br from-clay-50 to-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
           <span class="text-xs font-medium text-clay-700">Est. Total Nilai</span>
-          <div id="stat-total-value" class="num mt-1 text-2xl font-extrabold text-clay-700">Rp 0</div>
+          <div id="stat-total-value" class="num mt-1 text-2xl font-extrabold text-clay-700"><span class="skeleton inline-block h-7 w-24 align-middle"></span></div>
           <span class="mt-1 block text-[11px] text-clay-500">apa yang kamu punya</span>
         </div>
         <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
           <span class="text-xs font-medium text-slate-500">Barang Dipajang</span>
-          <div id="stat-sellable-count" class="num mt-1 text-2xl font-bold text-brand-700">0</div>
+          <div id="stat-sellable-count" class="num mt-1 text-2xl font-bold text-brand-700"><span class="skeleton inline-block h-7 w-16 align-middle"></span></div>
           <span class="mt-1 block text-[11px] text-slate-400">tampil di Pasar</span>
         </div>
         <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
           <span class="text-xs font-medium text-slate-500">Penawaran Masuk</span>
-          <div id="stat-bids-count" class="num mt-1 text-2xl font-bold text-navy-900">0</div>
+          <div id="stat-bids-count" class="num mt-1 text-2xl font-bold text-navy-900"><span class="skeleton inline-block h-7 w-16 align-middle"></span></div>
           <span class="mt-1 block text-[11px] text-slate-400">dari pembeli</span>
         </div>
       </div>
 
       <!-- Widget: Penawaran Disetujui & Chat Real-Time dengan Bidder Pilihan -->
-      <div id="approved-bids-widget" class="hidden p-6 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-xs">
-        <div class="border-b border-slate-200 pb-3">
-          <h3 class="text-lg font-bold text-slate-900 tracking-tight">Negosiasi & Chat Real-Time dengan Bidder Pilihan</h3>
+      <div id="approved-bids-widget" class="hidden space-y-4 rounded-2xl border border-navy-100 bg-white p-6 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
+        <div class="border-b border-navy-100 pb-3">
+          <h3 class="font-display text-lg font-bold tracking-tight text-navy-900">Negosiasi &amp; Chat Real-Time dengan Bidder Pilihan</h3>
         </div>
 
-        <div id="approved-bids-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="approved-bids-container" class="grid grid-cols-1 gap-4 md:grid-cols-2">
           <!-- Dynamic cards for approved bids will render here -->
         </div>
       </div>
@@ -357,7 +361,10 @@ import Layout from '../layouts/Layout.astro';
       <!-- Section 1: Private Inventory View -->
       <section id="inventory-section" class="flex min-h-0 flex-1 flex-col gap-3">
         <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          <!-- Dynamic Inventory Items Rendered Here -->
+          <!-- Loading skeletons, replaced on first render -->
+          <div class="overflow-hidden rounded-2xl border border-navy-100 bg-white"><div class="skeleton h-36 rounded-none sm:h-48"></div><div class="space-y-2 p-4"><div class="skeleton h-3 w-1/3"></div><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div></div></div>
+          <div class="hidden overflow-hidden rounded-2xl border border-navy-100 bg-white md:block"><div class="skeleton h-36 rounded-none sm:h-48"></div><div class="space-y-2 p-4"><div class="skeleton h-3 w-1/3"></div><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div></div></div>
+          <div class="hidden overflow-hidden rounded-2xl border border-navy-100 bg-white md:block"><div class="skeleton h-36 rounded-none sm:h-48"></div><div class="space-y-2 p-4"><div class="skeleton h-3 w-1/3"></div><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div></div></div>
         </div>
         <nav id="inventory-pagination" class="hidden items-center justify-between gap-3" aria-label="Navigasi halaman inventaris"></nav>
       </section>
@@ -371,13 +378,13 @@ import Layout from '../layouts/Layout.astro';
   <!-- ================================================================= -->
 
   <!-- ONBOARDING WIZARD MODAL -->
-  <div id="modal-wizard" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-xl relative overflow-hidden">
+  <div id="modal-wizard" class="fixed inset-0 bg-navy-950/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-navy-100 rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-xl relative overflow-hidden">
       <!-- Header -->
-      <div class="flex items-center justify-between text-xs font-semibold text-slate-500 border-b border-slate-200 pb-3">
+      <div class="flex items-center justify-between text-xs font-semibold text-slate-500 border-b border-navy-100 pb-3">
         <div class="flex items-center gap-2">
           <img src="/logo.png" alt="Stuff8" class="h-6 w-auto object-contain" />
-          <span class="text-slate-800 font-semibold">Panduan Pengguna Stuff8</span>
+          <span class="text-navy-900 font-semibold">Panduan Pengguna Stuff8</span>
         </div>
         <div class="flex items-center gap-1.5 text-slate-500">
           <span id="wizard-step-indicator" class="text-navy-900 font-mono text-[11px]">Langkah 1 dari 2</span>
@@ -388,14 +395,14 @@ import Layout from '../layouts/Layout.astro';
       <!-- WIZARD STEP 1: Account Authentication (Sign In / Sign Up) -->
       <div id="wizard-step-1" class="space-y-5">
         <div class="space-y-1">
-          <h2 class="text-xl font-bold text-slate-900">Selamat Datang di Stuff8!</h2>
+          <h2 class="text-xl font-bold text-navy-900">Selamat Datang di Stuff8!</h2>
           <p class="text-slate-600 text-xs">Masuk atau buat akun baru yuk buat mulai ngerapiin barang-barangmu.</p>
         </div>
 
         <!-- Auth Toggle Switcher -->
-        <div class="flex rounded-lg bg-slate-100 p-1 border border-slate-200 text-xs font-semibold text-slate-600">
+        <div class="flex rounded-lg bg-navy-100 p-1 border border-navy-100 text-xs font-semibold text-slate-600">
           <button id="tab-auth-signin" type="button" class="flex-1 py-2 rounded-md bg-white text-navy-900 font-bold shadow-xs transition-all">Masuk</button>
-          <button id="tab-auth-signup" type="button" class="flex-1 py-2 rounded-md hover:text-slate-900 transition-all">Buat Akun Baru</button>
+          <button id="tab-auth-signup" type="button" class="flex-1 py-2 rounded-md hover:text-navy-900 transition-all">Buat Akun Baru</button>
         </div>
 
         <!-- SIGN IN FORM -->
@@ -404,13 +411,13 @@ import Layout from '../layouts/Layout.astro';
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
-            <input type="text" id="signin-username" required placeholder="Masukkan username kamu" class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="signin-username" required placeholder="Masukkan username kamu" class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Kata Sandi</label>
             <div class="relative">
-              <input type="password" id="signin-password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 pr-20 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+              <input type="password" id="signin-password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 pr-20 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
               <button type="button" data-password-toggle="signin-password" aria-label="Tampilkan kata sandi" aria-pressed="false" class="absolute inset-y-0 right-0 px-3 text-xs font-semibold text-slate-500 hover:text-navy-900 focus:outline-none focus-visible:text-navy-900">
                 <svg data-password-eye="hidden" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z" /><circle cx="12" cy="12" r="2.75" stroke-width="2" /></svg>
                 <svg data-password-eye="visible" class="hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 3 18 18M10.584 10.587A2 2 0 0 0 13.414 13.4M9.88 5.3A10.9 10.9 0 0 1 12 5.1c6 0 9.75 6.9 9.75 6.9a18.5 18.5 0 0 1-3.04 3.88M6.23 6.23A18.4 18.4 0 0 0 2.25 12s3.75 6.9 9.75 6.9a10.9 10.9 0 0 0 3.18-.48" /></svg>
@@ -430,24 +437,24 @@ import Layout from '../layouts/Layout.astro';
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap</label>
-            <input type="text" id="signup-name" required placeholder="Contoh: Alex Rivera" class="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="signup-name" required placeholder="Contoh: Alex Rivera" class="w-full px-3.5 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
-              <input type="text" id="signup-username" required placeholder="alexrivera" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+              <input type="text" id="signup-username" required placeholder="alexrivera" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Email</label>
-              <input type="email" id="signup-email" required placeholder="alex@domain.com" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+              <input type="email" id="signup-email" required placeholder="alex@domain.com" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
             </div>
           </div>
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Kata Sandi</label>
             <div class="relative">
-              <input type="password" id="signup-password" required placeholder="Password123!" class="w-full px-3.5 py-2 pr-20 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+              <input type="password" id="signup-password" required placeholder="Password123!" class="w-full px-3.5 py-2 pr-20 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
               <button type="button" data-password-toggle="signup-password" aria-label="Tampilkan kata sandi" aria-pressed="false" class="absolute inset-y-0 right-0 px-3 text-xs font-semibold text-slate-500 hover:text-navy-900 focus:outline-none focus-visible:text-navy-900">
                 <svg data-password-eye="hidden" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z" /><circle cx="12" cy="12" r="2.75" stroke-width="2" /></svg>
                 <svg data-password-eye="visible" class="hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 3 18 18M10.584 10.587A2 2 0 0 0 13.414 13.4M9.88 5.3A10.9 10.9 0 0 1 12 5.1c6 0 9.75 6.9 9.75 6.9a18.5 18.5 0 0 1-3.04 3.88M6.23 6.23A18.4 18.4 0 0 0 2.25 12s3.75 6.9 9.75 6.9a10.9 10.9 0 0 0 3.18-.48" /></svg>
@@ -465,38 +472,38 @@ import Layout from '../layouts/Layout.astro';
       <!-- WIZARD STEP 2: Feature Walkthrough -->
       <div id="wizard-step-2" class="space-y-5 hidden">
         <div class="space-y-1">
-          <h2 class="text-xl font-bold text-slate-900">Gimana Cara Kerja Stuff8?</h2>
+          <h2 class="text-xl font-bold text-navy-900">Gimana Cara Kerja Stuff8?</h2>
           <p class="text-slate-600 text-xs">Urus inventaris dulu, jualannya belakangan. Simak 3 langkah mudah ini:</p>
         </div>
 
         <div class="space-y-3">
-          <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+          <div class="p-3.5 rounded-lg bg-paper-100 border border-navy-100 flex items-start gap-3">
             <div class="w-7 h-7 rounded-md bg-navy-900 text-white flex items-center justify-center text-xs shrink-0 font-bold">1</div>
             <div>
-              <h4 class="text-sm font-bold text-slate-900">Inventaris Digital Privat</h4>
+              <h4 class="text-sm font-bold text-navy-900">Inventaris Digital Privat</h4>
               <p class="text-slate-600 text-xs mt-0.5">Catat semua barangmu secara privat. Simpan lokasi barang, harga beli, kondisi, dan perkiraan nilainya.</p>
             </div>
           </div>
 
-          <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+          <div class="p-3.5 rounded-lg bg-paper-100 border border-navy-100 flex items-start gap-3">
             <div class="w-7 h-7 rounded-md bg-navy-900 text-white flex items-center justify-center text-xs shrink-0 font-bold">2</div>
             <div>
-              <h4 class="text-sm font-bold text-slate-900">Sekali klik .. ke Marketplace!</h4>
+              <h4 class="text-sm font-bold text-navy-900">Sekali klik .. ke Marketplace!</h4>
               <p class="text-slate-600 text-xs mt-0.5">Begitu mau jual barang, tinggal aktifkan status "Dijual", barang langsung tayang di marketplace publik.</p>
             </div>
           </div>
 
-          <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+          <div class="p-3.5 rounded-lg bg-paper-100 border border-navy-100 flex items-start gap-3">
             <div class="w-7 h-7 rounded-md bg-navy-900 text-white flex items-center justify-center text-xs shrink-0 font-bold">3</div>
             <div>
-              <h4 class="text-sm font-bold text-slate-900">Penawaran & Nego Langsung</h4>
+              <h4 class="text-sm font-bold text-navy-900">Penawaran & Nego Langsung</h4>
               <p class="text-slate-600 text-xs mt-0.5">Pembeli yang tertarik bakal ngirim penawaran tunai. Tinggal terima tawaran yang pas buat transaksi.</p>
             </div>
           </div>
         </div>
 
         <div class="flex justify-between items-center pt-2">
-          <button type="button" id="btn-wizard-back-1" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">← Kembali</button>
+          <button type="button" id="btn-wizard-back-1" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold">← Kembali</button>
           <button type="button" id="btn-wizard-next-2" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Selesai →</button>
         </div>
       </div>
@@ -504,20 +511,20 @@ import Layout from '../layouts/Layout.astro';
       <!-- WIZARD STEP 3: Add First Inventory Item -->
       <div id="wizard-step-3" class="space-y-5 hidden">
         <div class="space-y-1">
-          <h2 class="text-xl font-bold text-slate-900">Tambah Barang Pertama Kamu</h2>
+          <h2 class="text-xl font-bold text-navy-900">Tambah Barang Pertama Kamu</h2>
           <p class="text-slate-600 text-xs">Isi galeri pribadimu dengan barang pertamamu.</p>
         </div>
 
         <form id="wizard-form-first-item" class="space-y-3.5">
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Barang</label>
-            <input type="text" id="w-item-title" required placeholder="Contoh: Kamera Sony Alpha A7 III Body Only" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="w-item-title" required placeholder="Contoh: Kamera Sony Alpha A7 III Body Only" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
-              <select id="w-item-category" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none">
+              <select id="w-item-category" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none">
                 <option value="Cameras">Kamera</option>
                 <option value="Electronics">Elektronik</option>
                 <option value="Bicycles">Sepeda</option>
@@ -528,7 +535,7 @@ import Layout from '../layouts/Layout.astro';
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Kondisi</label>
-              <select id="w-item-condition" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none">
+              <select id="w-item-condition" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none">
                 <option value="Like New">Mulus Beli Baru</option>
                 <option value="Good">Bagus</option>
                 <option value="Fair">Cukup</option>
@@ -539,30 +546,30 @@ import Layout from '../layouts/Layout.astro';
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Deskripsi Barang</label>
-            <textarea id="w-item-description" rows="2" placeholder="Tulis kelengkapan, garansi, atau catatan minus barang..." class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none"></textarea>
+            <textarea id="w-item-description" rows="2" placeholder="Tulis kelengkapan, garansi, atau catatan minus barang..." class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none"></textarea>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Perkiraan Harga (Rp)</label>
-              <input type="number" id="w-item-est-value" placeholder="18000000" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+              <input type="number" id="w-item-est-value" placeholder="18000000" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Lokasi Simpan</label>
-              <input type="text" id="w-item-location" placeholder="Lemari Kaca Rak 2" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
+              <input type="text" id="w-item-location" placeholder="Lemari Kaca Rak 2" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
             </div>
           </div>
 
-          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
+          <div class="p-3 rounded-lg bg-paper-100 border border-navy-100 flex items-center justify-between">
             <div>
-              <span class="block text-xs font-semibold text-slate-800">Langsung Dipajang di Marketplace?</span>
+              <span class="block text-xs font-semibold text-navy-900">Langsung Dipajang di Marketplace?</span>
               <span class="block text-[11px] text-slate-500">Barang bakal langsung kelihatan oleh pengguna lain</span>
             </div>
             <input type="checkbox" id="w-item-sellable" class="w-4 h-4 accent-navy-900 rounded cursor-pointer" />
           </div>
 
           <div class="flex justify-between items-center pt-2">
-            <button type="button" id="btn-wizard-back-2" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">← Kembali</button>
+            <button type="button" id="btn-wizard-back-2" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold">← Kembali</button>
             <button type="submit" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Simpan & Selesai</button>
           </div>
         </form>
@@ -572,11 +579,11 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <!-- Modal: Place Bid -->
-  <div id="modal-bid" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl relative">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+  <div id="modal-bid" class="fixed inset-0 bg-navy-950/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-navy-100 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl relative">
+      <div class="flex items-center justify-between border-b border-navy-100 pb-3">
         <div>
-          <h3 class="text-lg font-bold text-slate-900">Simulasi Penawaran Harga</h3>
+          <h3 class="text-lg font-bold text-navy-900">Simulasi Penawaran Harga</h3>
           <p class="text-xs text-slate-500">Simulasikan penawaran pembeli untuk barang ini</p>
         </div>
         <button id="btn-close-bid-modal" class="text-slate-400 hover:text-slate-700 text-xl font-bold">×</button>
@@ -586,7 +593,7 @@ import Layout from '../layouts/Layout.astro';
         <input type="hidden" id="bid-item-id" />
         
         <!-- Logged in random user badge -->
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+        <div class="p-3 rounded-xl bg-paper-100 border border-navy-100 flex items-center justify-between">
           <div class="space-y-0.5">
             <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Penawar (Logged-in User)</span>
             <span id="bid-sim-name" class="block text-sm font-bold text-navy-900">Budi Santoso</span>
@@ -595,8 +602,8 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <!-- Product info -->
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-0.5">
-          <span id="bid-item-title" class="block font-bold text-slate-900 text-sm">Nama Barang</span>
+        <div class="p-3 rounded-xl bg-paper-100 border border-navy-100 space-y-0.5">
+          <span id="bid-item-title" class="block font-bold text-navy-900 text-sm">Nama Barang</span>
           <span id="bid-asking-price" class="block text-slate-600 text-xs font-semibold">Harga Buka: Rp 0</span>
         </div>
 
@@ -604,39 +611,39 @@ import Layout from '../layouts/Layout.astro';
         <div class="space-y-2">
           <div class="flex items-start justify-between gap-2 min-h-[44px]">
             <div class="pt-0.5">
-              <label class="block text-xs font-bold text-slate-800">Jumlah Penawaran Kamu</label>
+              <label class="block text-xs font-bold text-navy-900">Jumlah Penawaran Kamu</label>
               <p class="text-[11px] text-slate-500 font-medium">Bisa diatur dengan stepper atau %</p>
             </div>
             <div class="flex flex-col items-end gap-1 shrink-0">
-              <span id="bid-diff-badge" class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-300 transition-all select-none whitespace-nowrap">Harga Pas (0%)</span>
+              <span id="bid-diff-badge" class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-navy-100 text-slate-700 border border-navy-200 transition-all select-none whitespace-nowrap">Harga Pas (0%)</span>
               <span id="bid-amount-formatted" class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 shadow-2xs select-none whitespace-nowrap">Rp 0</span>
             </div>
           </div>
           
           <div class="flex items-center gap-2">
-            <button type="button" id="btn-bid-step-down" class="px-3.5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-all select-none">
+            <button type="button" id="btn-bid-step-down" class="px-3.5 py-2.5 rounded-lg bg-navy-100 hover:bg-navy-200 text-navy-900 text-xs font-bold border border-navy-200 transition-all select-none">
               - 100rb
             </button>
             <div class="relative flex-1">
               <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm select-none">Rp</span>
-              <input type="text" inputmode="numeric" id="bid-amount" required class="w-full pl-9 pr-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-base font-bold text-center focus:border-navy-900 focus:outline-none" />
+              <input type="text" inputmode="numeric" id="bid-amount" required class="w-full pl-9 pr-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-base font-bold text-center focus:border-navy-900 focus:outline-none" />
             </div>
-            <button type="button" id="btn-bid-step-up" class="px-3.5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-all select-none">
+            <button type="button" id="btn-bid-step-up" class="px-3.5 py-2.5 rounded-lg bg-navy-100 hover:bg-navy-200 text-navy-900 text-xs font-bold border border-navy-200 transition-all select-none">
               + 100rb
             </button>
           </div>
 
           <!-- Quick percentage shortcuts & reset buttons -->
           <div class="grid grid-cols-4 gap-1.5 pt-1">
-            <button type="button" id="btn-bid-pct-down" class="text-xs py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-200 transition-all shadow-2xs select-none">-5%</button>
-            <button type="button" id="btn-bid-pct-reset" class="text-xs py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-200 transition-all shadow-2xs select-none">Harga Pas</button>
+            <button type="button" id="btn-bid-pct-down" class="text-xs py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 font-bold border border-navy-100 transition-all shadow-2xs select-none">-5%</button>
+            <button type="button" id="btn-bid-pct-reset" class="text-xs py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 font-bold border border-navy-100 transition-all shadow-2xs select-none">Harga Pas</button>
             <button type="button" id="btn-bid-highest" class="text-xs py-2 rounded-lg bg-navy-900 text-white font-bold shadow-2xs transition-all select-none">Harga Tertinggi</button>
-            <button type="button" id="btn-bid-pct-up" class="text-xs py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-200 transition-all shadow-2xs select-none">+5%</button>
+            <button type="button" id="btn-bid-pct-up" class="text-xs py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 font-bold border border-navy-100 transition-all shadow-2xs select-none">+5%</button>
           </div>
         </div>
 
-        <div class="flex justify-end gap-3 pt-3 border-t border-slate-200">
-          <button type="button" id="btn-cancel-bid-modal" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold">Batal</button>
+        <div class="flex justify-end gap-3 pt-3 border-t border-navy-100">
+          <button type="button" id="btn-cancel-bid-modal" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-sm font-semibold">Batal</button>
           <button type="submit" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-sm font-bold shadow-xs transition-all">Kirim Penawaran</button>
         </div>
       </form>
@@ -644,17 +651,17 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <!-- Modal: Real-time Deals Chat -->
-  <div id="modal-chat" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
-    <div class="bg-white border border-slate-200 rounded-2xl max-w-xl w-full h-[620px] max-h-[92vh] flex flex-col shadow-2xl overflow-hidden relative">
+  <div id="modal-chat" class="fixed inset-0 bg-navy-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-white border border-navy-100 rounded-2xl max-w-xl w-full h-[620px] max-h-[92vh] flex flex-col shadow-2xl overflow-hidden relative">
       
       <!-- Chat Header -->
-      <div class="p-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0">
+      <div class="p-4 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
         <div class="flex items-center gap-3">
           <div class="relative">
             <div id="chat-bidder-avatar" class="w-10 h-10 rounded-full bg-navy-700 text-white font-bold text-base flex items-center justify-center border border-white/20">
               B
             </div>
-            <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-900" title="Online"></span>
+            <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-navy-900" title="Online"></span>
           </div>
           <div>
             <div class="flex items-center gap-2">
@@ -680,22 +687,22 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <!-- Messages Body -->
-      <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50">
+      <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto space-y-3 bg-paper-100">
         <!-- Dynamic chat message bubbles -->
       </div>
 
       <!-- Quick Approach Chips -->
-      <div class="px-3 py-2 bg-white border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto text-[11px] font-medium shrink-0">
+      <div class="px-3 py-2 bg-white border-t border-navy-100 flex items-center gap-1.5 overflow-x-auto text-[11px] font-medium shrink-0">
         <span class="text-slate-400 shrink-0 font-bold px-1">Balas Cepat:</span>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 shrink-0 transition-all">Halo! Kapan kita bisa ketemuan COD?</button>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 shrink-0 transition-all">Lokasi penyerahan barang di mana ya?</button>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 shrink-0 transition-all">Barang lengkap dus ori & siap COD!</button>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 shrink-0 transition-all">Bisa bayar via QRIS atau Tunai</button>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Halo! Kapan kita bisa ketemuan COD?</button>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Lokasi penyerahan barang di mana ya?</button>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Barang lengkap dus ori & siap COD!</button>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Bisa bayar via QRIS atau Tunai</button>
       </div>
 
       <!-- Input Form -->
-      <form id="form-chat-send" class="p-3 bg-white border-t border-slate-200 flex items-center gap-2 shrink-0">
-        <input type="text" id="chat-input-message" autocomplete="off" required placeholder="Tulis pesan ke bidder pilihan..." class="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-900 text-sm focus:border-navy-900 focus:bg-white focus:outline-none transition-all" />
+      <form id="form-chat-send" class="p-3 bg-white border-t border-navy-100 flex items-center gap-2 shrink-0">
+        <input type="text" id="chat-input-message" autocomplete="off" required placeholder="Tulis pesan ke bidder pilihan..." class="flex-1 px-4 py-2.5 rounded-xl bg-navy-100 border border-navy-100 text-navy-900 text-sm focus:border-navy-900 focus:bg-white focus:outline-none transition-all" />
         <button type="submit" class="px-5 py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs flex items-center gap-1.5 shrink-0 transition-all">
           <span>Kirim</span>
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -705,21 +712,21 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <!-- Modal: Konfirmasi SOLD -->
-  <div id="modal-confirm-sold" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+  <div id="modal-confirm-sold" class="fixed inset-0 bg-navy-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-navy-100 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
       <div class="flex items-center gap-3 text-emerald-600">
         <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-xl">
           🏷️
         </div>
         <div>
-          <h3 class="font-extrabold text-slate-900 text-lg">Konfirmasi Produk Terjual (SOLD)</h3>
+          <h3 class="font-extrabold text-navy-900 text-lg">Konfirmasi Produk Terjual (SOLD)</h3>
           <p class="text-xs text-slate-500">Tutup proses bidding & perpindahan kepemilikan</p>
         </div>
       </div>
       
-      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs text-slate-700">
-        <p>Apakah Anda yakin transaksi COD dengan <strong id="confirm-sold-buyer-name" class="text-slate-900 font-bold">Pembeli</strong> untuk produk <strong id="confirm-sold-item-title" class="text-slate-900 font-bold">Produk</strong> telah <strong>SELESAI</strong>?</p>
-        <div class="pt-2 border-t border-slate-200 flex justify-between font-semibold">
+      <div class="p-4 rounded-xl bg-paper-100 border border-navy-100 space-y-2 text-xs text-slate-700">
+        <p>Apakah Anda yakin transaksi COD dengan <strong id="confirm-sold-buyer-name" class="text-navy-900 font-bold">Pembeli</strong> untuk produk <strong id="confirm-sold-item-title" class="text-navy-900 font-bold">Produk</strong> telah <strong>SELESAI</strong>?</p>
+        <div class="pt-2 border-t border-navy-100 flex justify-between font-semibold">
           <span>Harga Transaksi Akhir:</span>
           <span id="confirm-sold-amount" class="text-emerald-700 font-mono font-bold text-sm">Rp 0</span>
         </div>
@@ -731,7 +738,7 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-2">
-        <button type="button" id="btn-cancel-sold-confirm" onclick="document.getElementById('modal-confirm-sold').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all">
+        <button type="button" id="btn-cancel-sold-confirm" onclick="document.getElementById('modal-confirm-sold').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold transition-all">
           Batal
         </button>
         <button type="button" id="btn-execute-sold-confirm" onclick="executeMarkSold()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-all flex items-center gap-1.5">
@@ -742,13 +749,13 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <!-- Modal: Riwayat Kepemilikan (Provenance Log) -->
-  <div id="modal-ownership-history" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+  <div id="modal-ownership-history" class="fixed inset-0 bg-navy-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-navy-100 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-navy-100 pb-3">
         <div class="flex items-center gap-2">
           <span class="text-xl">📜</span>
           <div>
-            <h3 class="font-extrabold text-slate-900 text-base">Riwayat Kepemilikan</h3>
+            <h3 class="font-extrabold text-navy-900 text-base">Riwayat Kepemilikan</h3>
             <p id="ownership-item-title" class="text-xs text-slate-500 font-semibold">Nama Barang</p>
           </div>
         </div>
@@ -759,7 +766,7 @@ import Layout from '../layouts/Layout.astro';
         <!-- Dynamic timeline entries -->
       </div>
 
-      <div class="pt-3 border-t border-slate-100 flex justify-end">
+      <div class="pt-3 border-t border-navy-100 flex justify-end">
         <button type="button" onclick="document.getElementById('modal-ownership-history').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold">
           Tutup
         </button>
@@ -810,8 +817,6 @@ import Layout from '../layouts/Layout.astro';
 
     const modalBid = document.getElementById('modal-bid');
     const modalWizard = document.getElementById('modal-wizard');
-    const appNotice = document.getElementById('app-notice');
-    let noticeTimeout: number | undefined;
 
     function escapeHtml(value: string) {
       return value.replace(/[&<>'"]/g, char => ({
@@ -820,11 +825,7 @@ import Layout from '../layouts/Layout.astro';
     }
 
     function showNotice(message: string) {
-      if (!appNotice) return;
-      appNotice.textContent = message;
-      appNotice.classList.remove('hidden');
-      if (noticeTimeout) window.clearTimeout(noticeTimeout);
-      noticeTimeout = window.setTimeout(() => appNotice.classList.add('hidden'), 4000);
+      window.stuff8Toast?.(message, { variant: 'info', title: 'Perhatian' });
     }
 
     function categoryLabel(category: string) {
@@ -1080,13 +1081,13 @@ import Layout from '../layouts/Layout.astro';
       return `
         <img src="${storagePhotoUrl(photo)}" alt="${escapeHtml(item.title || `Foto barang ${currentIndex + 1}`)}" class="${imageClass} object-cover" />
         ${photos.length > 1 ? `
-          <button type="button" onclick="${previousAction}" class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-slate-800 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto sebelumnya">
+          <button type="button" onclick="${previousAction}" class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto sebelumnya">
             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" /></svg>
           </button>
-          <button type="button" onclick="${nextAction}" class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-slate-800 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto berikutnya">
+          <button type="button" onclick="${nextAction}" class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto berikutnya">
             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" /></svg>
           </button>
-          <span class="absolute bottom-2 right-2 rounded-full bg-slate-950/70 px-2 py-0.5 text-[11px] font-semibold text-white">${currentIndex + 1}/${photos.length}</span>
+          <span class="absolute bottom-2 right-2 rounded-full bg-navy-950/70 px-2 py-0.5 text-[11px] font-semibold text-white">${currentIndex + 1}/${photos.length}</span>
         ` : ''}
       `;
     }
@@ -1197,14 +1198,14 @@ import Layout from '../layouts/Layout.astro';
     // Auth Mode Toggles
     tabAuthSignin?.addEventListener('click', () => {
       tabAuthSignin.className = 'flex-1 py-2 rounded-md bg-white text-navy-900 font-bold shadow-xs transition-all';
-      tabAuthSignup!.className = 'flex-1 py-2 rounded-md hover:text-slate-900 transition-all font-semibold';
+      tabAuthSignup!.className = 'flex-1 py-2 rounded-md hover:text-navy-900 transition-all font-semibold';
       formAuthSignin?.classList.remove('hidden');
       formAuthSignup?.classList.add('hidden');
     });
 
     tabAuthSignup?.addEventListener('click', () => {
       tabAuthSignup.className = 'flex-1 py-2 rounded-md bg-white text-navy-900 font-bold shadow-xs transition-all';
-      tabAuthSignin!.className = 'flex-1 py-2 rounded-md hover:text-slate-900 transition-all font-semibold';
+      tabAuthSignin!.className = 'flex-1 py-2 rounded-md hover:text-navy-900 transition-all font-semibold';
       formAuthSignup?.classList.remove('hidden');
       formAuthSignin?.classList.add('hidden');
     });
@@ -1363,6 +1364,7 @@ import Layout from '../layouts/Layout.astro';
       }
 
       localStorage.setItem('stuff8_wizard_completed', 'true');
+      window.stuff8Toast?.('Barang pertama kamu tersimpan dan siap diurus.', { variant: 'success', title: 'Selamat datang di Stuff8!' });
       closeWizard();
       await loadData();
     });
@@ -1457,17 +1459,17 @@ import Layout from '../layouts/Layout.astro';
         }
         if (btnToggle) {
           btnToggle.innerHTML = '<span>Sembunyikan dari Marketplace</span>';
-          btnToggle.className = 'px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold text-xs transition-all';
+          btnToggle.className = 'inline-flex items-center gap-2 rounded-full bg-navy-200 hover:bg-slate-300 px-4 py-2 text-xs font-bold text-navy-900 transition-all';
         }
         if (toggleLabel) toggleLabel.textContent = 'Status: Lagi tayang di feed marketplace';
       } else {
         if (badgeEl) {
           badgeEl.textContent = 'Simpanan Privat';
-          badgeEl.className = 'absolute top-3 right-3 px-3 py-1 rounded-md text-xs font-semibold bg-slate-900/80 text-white shadow-xs backdrop-blur-xs transition-all';
+          badgeEl.className = 'absolute right-3 top-3 rounded-md bg-navy-900/90 px-3 py-1 text-xs font-bold text-white shadow-xs backdrop-blur-xs transition-all';
         }
         if (btnToggle) {
           btnToggle.innerHTML = '<span>Aktifkan Status Dijual</span>';
-          btnToggle.className = 'px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-semibold text-xs transition-all';
+          btnToggle.className = 'inline-flex items-center gap-2 rounded-full bg-navy-900 hover:bg-navy-800 px-4 py-2 text-xs font-bold text-white shadow-xs transition-all';
         }
         if (toggleLabel) toggleLabel.textContent = 'Status: Cuma Disimpan Privat';
       }
@@ -1477,9 +1479,9 @@ import Layout from '../layouts/Layout.astro';
       btn.addEventListener('click', (e) => {
         const id = (e.currentTarget as HTMLElement).id;
         document.querySelectorAll('.demo-item-btn').forEach(b => {
-          b.className = 'demo-item-btn px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all font-medium';
+          b.className = 'demo-item-btn rounded-full border border-navy-100 bg-white px-4 py-2 text-slate-600 transition-all hover:bg-paper-100 hover:text-navy-900 font-medium';
         });
-        (e.currentTarget as HTMLElement).className = 'demo-item-btn active px-4 py-2 rounded-lg bg-navy-900 text-white font-semibold shadow-xs transition-all';
+        (e.currentTarget as HTMLElement).className = 'demo-item-btn active rounded-full bg-navy-900 px-4 py-2 font-bold text-white shadow-xs transition-all';
 
         if (id.includes('camera')) activeDemoKey = 'camera';
         if (id.includes('bike')) activeDemoKey = 'bike';
@@ -1774,22 +1776,22 @@ import Layout from '../layouts/Layout.astro';
         const dateStr = rec.transferred_at ? (new Date(rec.transferred_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })) : 'Baru saja';
 
         return `
-          <div class="relative pl-8 pb-4 border-l-2 ${isLatest ? 'border-emerald-500' : 'border-slate-200'} last:pb-0">
+          <div class="relative pl-8 pb-4 border-l-2 ${isLatest ? 'border-emerald-500' : 'border-navy-100'} last:pb-0">
             <div class="absolute -left-[10px] top-0 w-5 h-5 rounded-full ${isSoldRecord ? 'bg-emerald-500 ring-4 ring-emerald-100' : 'bg-slate-400'} flex items-center justify-center text-[10px] text-white font-bold">
               ${isSoldRecord ? '✓' : idx + 1}
             </div>
-            <div class="p-3.5 rounded-xl ${isSoldRecord ? 'bg-emerald-50/70 border border-emerald-200' : 'bg-slate-50 border border-slate-200'} space-y-2 shadow-2xs">
+            <div class="p-3.5 rounded-xl ${isSoldRecord ? 'bg-emerald-50/70 border border-emerald-200' : 'bg-paper-100 border border-navy-100'} space-y-2 shadow-2xs">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   <span class="text-lg">${isSoldRecord ? '🏷️' : '📍'}</span>
-                  <strong class="text-sm ${isSoldRecord ? 'text-emerald-900' : 'text-slate-900'}">${rec.to_owner_name}</strong>
+                  <strong class="text-sm ${isSoldRecord ? 'text-emerald-900' : 'text-navy-900'}">${rec.to_owner_name}</strong>
                 </div>
                 <span class="text-[11px] text-slate-500 font-mono">${dateStr}</span>
               </div>
               <div class="text-xs ${isSoldRecord ? 'text-emerald-700' : 'text-slate-600'} font-semibold">
                 Rp ${(rec.price || 0).toLocaleString('id-ID')}
               </div>
-              <div class="text-[11px] text-slate-500 pt-1 border-t border-slate-200/60 italic">
+              <div class="text-[11px] text-slate-500 pt-1 border-t border-navy-100/60 italic">
                 ${rec.notes}
               </div>
             </div>
@@ -1822,9 +1824,9 @@ import Layout from '../layouts/Layout.astro';
 
       if (allListings.length === 0) {
         visitorMktGrid.innerHTML = `
-          <div class="col-span-full p-8 rounded-2xl bg-white border border-slate-200 text-center space-y-3 shadow-xs">
-            <h4 class="text-slate-800 font-bold text-sm">Belum Ada Barang Dipajang</h4>
-            <p class="text-slate-500 text-xs max-w-sm mx-auto">Aktifkan status dijual pada contoh barang di atas untuk memajangnya di marketplace komunitas.</p>
+          <div class="col-span-full p-8 rounded-2xl bg-white border border-navy-100 text-center space-y-3 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
+            <h4 class="text-sm font-bold text-navy-900">Belum Ada Barang Dipajang</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">Aktifkan status dijual pada contoh barang di atas untuk memajangnya di marketplace komunitas.</p>
           </div>
         `;
       } else {
@@ -1838,7 +1840,7 @@ import Layout from '../layouts/Layout.astro';
           const topBiddersHtml = (!isSold && bidsForItem.length > 0) ? `
             <div class="absolute top-3 left-3 flex flex-col gap-1 z-10 max-w-[70%]">
               ${bidsForItem.map((b, idx) => `
-                <div class="px-2 py-0.5 rounded bg-slate-900/85 text-white text-[10px] font-medium backdrop-blur-xs shadow-xs flex items-center gap-1 border border-white/10">
+                <div class="px-2 py-0.5 rounded bg-navy-950/85 text-white text-[10px] font-medium backdrop-blur-xs shadow-xs flex items-center gap-1 border border-white/10">
                   <span class="text-amber-400 font-bold">#${idx + 1}</span>
                   <span class="text-emerald-400 font-bold">Rp ${parseInt(b.amount.toString()).toLocaleString('id-ID')}</span>
                   <span class="text-slate-300 text-[10px] truncate font-normal">• ${b.buyer_name}</span>
@@ -1848,8 +1850,8 @@ import Layout from '../layouts/Layout.astro';
           ` : '';
 
           return `
-            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs relative">
-              <div class="h-48 bg-slate-100 relative overflow-hidden">
+            <div class="bg-white border border-navy-100 rounded-2xl overflow-hidden hover:border-brand-300 hover:shadow-md transition-all flex flex-col justify-between shadow-[0_1px_2px_rgba(15,30,25,0.04)] relative">
+              <div class="h-48 bg-navy-100 relative overflow-hidden">
                 ${renderProductPhotoCarousel(item, `visitor-marketplace-${itemId}`, `w-full h-full ${isSold ? 'grayscale opacity-75' : ''}`)}
                 
                 ${topBiddersHtml}
@@ -1864,7 +1866,7 @@ import Layout from '../layouts/Layout.astro';
                       💬 Dalam Diskusi
                     </span>
                   ` : `
-                    <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-navy-900 text-white shadow-xs">
+                    <span class="num px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-xs">
                       Rp ${parseInt(item.asking_price || 0).toLocaleString('id-ID')}
                     </span>
                   `}
@@ -1872,8 +1874,8 @@ import Layout from '../layouts/Layout.astro';
               </div>
               <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
                 <div>
-                  <span class="text-xs font-semibold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
-                  <h3 class="font-bold text-slate-900 text-base leading-snug">${item.title}</h3>
+                  <span class="text-xs font-bold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
+                  <h3 class="font-bold text-navy-900 text-base leading-snug">${item.title}</h3>
                   <p class="text-slate-600 text-xs line-clamp-2 mt-1">${item.description}</p>
                 </div>
 
@@ -1881,16 +1883,16 @@ import Layout from '../layouts/Layout.astro';
                   ${isSold ? `
                     <div class="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex justify-between items-center">
                       <span>Terjual ke: <strong>${item.buyer_name || 'Pembeli'}</strong></span>
-                      <strong class="font-mono text-emerald-700">Rp ${parseInt((item.final_price || item.asking_price || 0).toString()).toLocaleString('id-ID')}</strong>
+                      <strong class="num text-emerald-700">Rp ${parseInt((item.final_price || item.asking_price || 0).toString()).toLocaleString('id-ID')}</strong>
                     </div>
-                    <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-2xs">
+                    <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2.5 rounded-lg border border-navy-100 hover:bg-paper-100 text-navy-900 font-bold text-xs transition-all flex items-center justify-center gap-1.5">
                       <span>📜 Riwayat Kepemilikan (Provenance)</span>
                     </button>
                   ` : `
-                    <button onclick="openBidModal('${itemId}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all">
+                    <button onclick="openBidModal('${itemId}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-xs transition-all">
                       Ajukan Penawaran Harga
                     </button>
-                    <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-semibold text-[11px] transition-all flex items-center justify-center gap-1">
+                    <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2 rounded-lg border border-navy-100 hover:bg-paper-100 text-slate-600 font-semibold text-[11px] transition-all flex items-center justify-center gap-1">
                       <span>📜 Riwayat Kepemilikan</span>
                     </button>
                   `}
@@ -1953,18 +1955,18 @@ import Layout from '../layouts/Layout.astro';
             ? '1 barang sedang tersedia di Marketplace.'
             : `${marketplaceListingTotal.toLocaleString('id-ID')} barang sedang tersedia di Marketplace.`;
           gridInventory.innerHTML = `
-            <div class="flex min-h-80 flex-1 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xs">
+            <div class="flex min-h-80 flex-1 flex-col items-center justify-center rounded-2xl border border-navy-100 bg-white p-6 text-center shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
               <img src="/images/no-item-image.webp" alt="Inventaris masih kosong" class="mb-4 size-36 object-contain sm:size-40" />
               <div class="space-y-1">
-                <h3 class="text-slate-900 font-bold text-sm">${hasSelectedCategory ? `Belum ada barang di ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'Belum ada barang'}</h3>
-                <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Tambahkan barang untuk mulai mengatur inventarismu.</p>
+                <h3 class="text-sm font-bold text-navy-900">${hasSelectedCategory ? `Belum ada barang di ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'Belum ada barang'}</h3>
+                <p class="mx-auto max-w-sm text-xs leading-relaxed text-slate-600">Tambahkan barang untuk mulai mengatur inventarismu.</p>
               </div>
-              <a href="/inventory/form/" class="mt-3 inline-flex min-h-9 items-center justify-center rounded-lg bg-navy-900 px-3 py-2 text-white text-xs font-bold shadow-xs transition-colors hover:bg-navy-800">
+              <a href="/inventory/form/" class="mt-3 inline-flex min-h-9 items-center justify-center rounded-full bg-navy-900 px-3 py-2 text-xs font-bold text-white shadow-xs transition-colors hover:bg-navy-800">
                 Tambah barang
               </a>
               ${showMarketplaceInvite ? `
-                <div class="mt-5 max-w-sm border-t border-slate-100 pt-4">
-                  <p class="text-sm font-semibold text-slate-800">Sambil mulai, cari inspirasi di Marketplace.</p>
+                <div class="mt-5 max-w-sm border-t border-navy-100 pt-4">
+                  <p class="text-sm font-semibold text-navy-900">Sambil mulai, cari inspirasi di Marketplace.</p>
                   <p id="empty-inventory-marketplace-count" class="mt-1 text-xs leading-relaxed text-slate-500">${marketplaceAvailability}</p>
                   <a href="/marketplace/" class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-brand-700 transition-colors hover:text-brand-800">
                     Lihat Marketplace <span aria-hidden="true">→</span>
@@ -1976,7 +1978,7 @@ import Layout from '../layouts/Layout.astro';
         } else {
           gridInventory.innerHTML = visibleItems.map(item => inventoryView === 'list' ? `
             <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="flex cursor-pointer gap-3 rounded-2xl border border-navy-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,30,25,0.04)] transition-all hover:border-clay-300 hover:shadow-md">
-              <div class="relative size-20 shrink-0 overflow-hidden rounded-xl bg-slate-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
+              <div class="relative size-20 shrink-0 overflow-hidden rounded-xl bg-navy-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
               <div class="min-w-0 flex-1">
                 <div class="flex items-start justify-between gap-3"><div class="min-w-0"><p class="truncate text-[11px] font-bold uppercase tracking-wider text-clay-600">${item.category}</p><h3 class="truncate text-sm font-bold text-navy-900">${item.title}</h3></div><span class="num shrink-0 text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span></div>
                 <p class="mt-1 line-clamp-1 text-xs text-slate-500">${item.description || 'Tanpa deskripsi'}</p>
@@ -1987,22 +1989,22 @@ import Layout from '../layouts/Layout.astro';
             </article>
           ` : inventoryView === 'thumbnail' ? `
             <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="cursor-pointer overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-[0_1px_2px_rgba(15,30,25,0.04)] transition-all hover:border-clay-300 hover:shadow-md">
-              <div class="relative aspect-square bg-slate-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-bold text-white">SOLD (Terjual)</span>` : ''}</div>
+              <div class="relative aspect-square bg-navy-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-bold text-white">SOLD (Terjual)</span>` : ''}</div>
               <div class="space-y-1 p-3"><p class="truncate text-[11px] font-bold text-clay-600">${item.category}</p><h3 class="mt-0.5 truncate text-sm font-bold text-navy-900">${item.title}</h3><p class="num text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</p></div>
             </article>
           ` : `
             <div onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="group cursor-pointer bg-white border border-navy-100 rounded-2xl overflow-hidden hover:border-clay-300 hover:shadow-lg transition-all flex flex-col justify-between shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-              <div class="h-36 sm:h-48 bg-slate-100 relative overflow-hidden flex items-center justify-center">
+              <div class="h-36 sm:h-48 bg-navy-100 relative overflow-hidden flex items-center justify-center">
                 ${renderProductPhotoCarousel(item, `inventory-card-${item.id}`, 'w-full h-full')}
                 ${isItemSold(item)
                   ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[11px] font-bold text-white shadow-xs">SOLD (Terjual)</span>`
-                  : `<span class="absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-semibold ${item.sellable ? 'bg-navy-900 text-white shadow-xs' : 'bg-slate-200 text-slate-700'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span>`}
+                  : `<span class="absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-semibold ${item.sellable ? 'bg-navy-900 text-white shadow-xs' : 'bg-navy-200 text-slate-700'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span>`}
               </div>
               <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
                 <div>
                   <div class="flex items-center justify-between gap-2">
                     <span class="text-[11px] font-bold text-clay-600 uppercase tracking-wider">${item.category}</span>
-                    ${item.condition ? `<span class="shrink-0 rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">${escapeHtml(item.condition)}</span>` : ''}
+                    ${item.condition ? `<span class="shrink-0 rounded-md bg-navy-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">${escapeHtml(item.condition)}</span>` : ''}
                   </div>
                   <h3 class="font-bold text-navy-900 text-base leading-snug mt-1">${item.title}</h3>
                   <p class="text-slate-500 text-xs line-clamp-2 mt-1">${item.description || 'Tanpa deskripsi'}</p>
@@ -2051,9 +2053,9 @@ import Layout from '../layouts/Layout.astro';
         inventoryPagination.classList.toggle('hidden', !showPagination);
         inventoryPagination.classList.toggle('flex', showPagination);
         inventoryPagination.innerHTML = showPagination ? `
-          <button type="button" onclick="changeInventoryPage(${inventoryMeta.page - 1})" ${inventoryMeta.page === 1 ? 'disabled' : ''} class="min-h-9 rounded-lg border border-slate-200 px-3 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Sebelumnya</button>
+          <button type="button" onclick="changeInventoryPage(${inventoryMeta.page - 1})" ${inventoryMeta.page === 1 ? 'disabled' : ''} class="min-h-9 rounded-lg border border-navy-100 px-3 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Sebelumnya</button>
           <span class="text-xs font-semibold text-slate-500">Halaman ${inventoryMeta.page} dari ${inventoryMeta.total_pages}</span>
-          <button type="button" onclick="changeInventoryPage(${inventoryMeta.page + 1})" ${inventoryMeta.page === inventoryMeta.total_pages ? 'disabled' : ''} class="min-h-9 rounded-lg border border-slate-200 px-3 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Berikutnya</button>
+          <button type="button" onclick="changeInventoryPage(${inventoryMeta.page + 1})" ${inventoryMeta.page === inventoryMeta.total_pages ? 'disabled' : ''} class="min-h-9 rounded-lg border border-navy-100 px-3 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Berikutnya</button>
         ` : '';
       }
 
@@ -2061,9 +2063,9 @@ import Layout from '../layouts/Layout.astro';
       if (gridMarketplace) {
         if (marketplaceListings.length === 0) {
           gridMarketplace.innerHTML = `
-            <div class="col-span-full p-12 rounded-2xl bg-white border border-slate-200 text-center space-y-4 shadow-xs">
+            <div class="col-span-full p-12 rounded-2xl bg-white border border-navy-100 text-center space-y-4 shadow-xs">
               <div class="space-y-1">
-                <h3 class="text-slate-900 font-bold text-base">Belum Ada Barang Dipajang</h3>
+                <h3 class="text-navy-900 font-bold text-base">Belum Ada Barang Dipajang</h3>
                 <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Aktifkan status dijual pada barang di inventaris pribadimu untuk menayangkannya di sini.</p>
               </div>
             </div>
@@ -2076,8 +2078,8 @@ import Layout from '../layouts/Layout.astro';
             const hasInterview = bidsForItem.some(b => (localChatMessages[b.id] && localChatMessages[b.id].length > 0) || b.status === 'Interviewing');
 
             return `
-              <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs">
-                <div class="h-48 bg-slate-100 relative overflow-hidden">
+              <div class="bg-white border border-navy-100 rounded-2xl overflow-hidden hover:border-navy-200 hover:shadow-md transition-all flex flex-col justify-between shadow-xs">
+                <div class="h-48 bg-navy-100 relative overflow-hidden">
                   ${renderProductPhotoCarousel(item, `marketplace-${itemId}`, `w-full h-full ${isSold ? 'grayscale opacity-75' : ''}`)}
                   <div class="absolute top-3 right-3 flex flex-col gap-1 items-end">
                     ${isSold ? `
@@ -2098,7 +2100,7 @@ import Layout from '../layouts/Layout.astro';
                 <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
                   <div>
                     <span class="text-xs font-semibold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
-                    <h3 class="font-bold text-slate-900 text-base leading-snug">${item.title}</h3>
+                    <h3 class="font-bold text-navy-900 text-base leading-snug">${item.title}</h3>
                     <p class="text-slate-600 text-xs line-clamp-2 mt-1">${item.description}</p>
                   </div>
 
@@ -2108,14 +2110,14 @@ import Layout from '../layouts/Layout.astro';
                         <span>Terjual ke: <strong>${item.buyer_name || 'Pembeli'}</strong></span>
                         <strong class="font-mono text-emerald-700">Rp ${parseInt((item.final_price || item.asking_price || 0).toString()).toLocaleString('id-ID')}</strong>
                       </div>
-                      <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2.5 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-2xs">
+                      <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2.5 rounded-lg border border-navy-200 hover:bg-paper-100 text-slate-700 font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-2xs">
                         <span>📜 Riwayat Kepemilikan (Provenance)</span>
                       </button>
                     ` : `
                       <button onclick="openBidModal('${itemId}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all">
                         Ajukan Penawaran Harga
                       </button>
-                      <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-semibold text-[11px] transition-all flex items-center justify-center gap-1">
+                      <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2 rounded-lg border border-navy-100 hover:bg-paper-100 text-slate-600 font-semibold text-[11px] transition-all flex items-center justify-center gap-1">
                         <span>📜 Riwayat Kepemilikan</span>
                       </button>
                     `}
@@ -2131,9 +2133,9 @@ import Layout from '../layouts/Layout.astro';
       if (listBids) {
         if (bids.length === 0) {
           listBids.innerHTML = `
-            <div class="p-12 rounded-2xl bg-white border border-slate-200 text-center space-y-4 shadow-xs">
+            <div class="p-12 rounded-2xl bg-white border border-navy-100 text-center space-y-4 shadow-xs">
               <div class="space-y-1">
-                <h3 class="text-slate-900 font-bold text-base">Belum Ada Penawaran Masuk</h3>
+                <h3 class="text-navy-900 font-bold text-base">Belum Ada Penawaran Masuk</h3>
                 <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Saat calon pembeli ngirim penawaran tunai pada barangmu, daftarnya bakal muncul di sini.</p>
               </div>
             </div>
@@ -2144,12 +2146,12 @@ import Layout from '../layouts/Layout.astro';
             const statusStr = typeof bid.status === 'string' ? bid.status : Object.keys(bid.status || {})[0] || 'Pending';
             const statusDisplay = statusStr === 'Accepted' || statusStr === 'accepted' ? 'Diterima' : 'Menunggu Respons';
             return `
-              <div class="p-5 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+              <div class="p-5 rounded-2xl bg-white border border-navy-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
                 <div class="space-y-1">
                   <span class="text-xs font-bold uppercase tracking-wider text-brand-700">${item ? item.title : 'Barang #' + bid.item_id.substring(0, 8)}</span>
-                  <h4 class="font-bold text-slate-900 text-base">Penawaran: Rp ${(bid.amount || 0).toLocaleString('id-ID')} <span class="text-xs font-normal text-slate-500">oleh ${bid.buyer_name}</span></h4>
+                  <h4 class="font-bold text-navy-900 text-base">Penawaran: Rp ${(bid.amount || 0).toLocaleString('id-ID')} <span class="text-xs font-normal text-slate-500">oleh ${bid.buyer_name}</span></h4>
                   <p class="text-slate-600 text-xs">${bid.note || 'Tidak ada pesan'}</p>
-                  <span class="inline-block text-xs text-slate-500">Kontak: <code class="text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">${bid.contact_info}</code></span>
+                  <span class="inline-block text-xs text-slate-500">Kontak: <code class="text-navy-900 bg-navy-100 px-1.5 py-0.5 rounded border border-navy-100">${bid.contact_info}</code></span>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -2221,6 +2223,7 @@ import Layout from '../layouts/Layout.astro';
         });
 
         await loadData();
+        window.stuff8Toast?.(newSellable ? 'Barang kini tayang dan bisa ditawar di Pasar.' : 'Listing ditarik dari Pasar, kembali jadi koleksi pribadi.', { variant: 'success', title: newSellable ? 'Dipajang di Pasar' : 'Ditarik dari Pasar' });
       } catch (err) {
         console.error('Failed to toggle sellable state:', err);
       }
@@ -2265,11 +2268,11 @@ import Layout from '../layouts/Layout.astro';
             diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-300 transition-all select-none whitespace-nowrap";
           } else {
             diffBadgeEl.textContent = "Harga Pas (0%)";
-            diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-300 transition-all select-none whitespace-nowrap";
+            diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-navy-100 text-slate-700 border border-navy-200 transition-all select-none whitespace-nowrap";
           }
         } else {
           diffBadgeEl.textContent = "Harga Pas";
-          diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-300 transition-all select-none whitespace-nowrap";
+          diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-navy-100 text-slate-700 border border-navy-200 transition-all select-none whitespace-nowrap";
         }
       }
     };
@@ -2403,7 +2406,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="max-w-[82%] px-4 py-2.5 rounded-2xl text-xs leading-relaxed ${
               isMe 
                 ? 'bg-navy-900 text-white rounded-tr-none shadow-xs' 
-                : 'bg-white text-slate-800 border border-slate-200/90 rounded-tl-none shadow-2xs'
+                : 'bg-white text-navy-900 border border-navy-100/90 rounded-tl-none shadow-2xs'
             }">
               ${msg.message}
             </div>
@@ -2532,8 +2535,8 @@ import Layout from '../layouts/Layout.astro';
       if (container) {
         if (acceptedBids.length === 0) {
           container.innerHTML = `
-            <div class="col-span-full p-6 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-2">
-              <p class="text-slate-800 text-xs font-semibold">Belum Ada Penawaran Disetujui</p>
+            <div class="col-span-full p-6 rounded-xl bg-paper-100 border border-navy-100 text-center space-y-2">
+              <p class="text-navy-900 text-xs font-semibold">Belum Ada Penawaran Disetujui</p>
               <p class="text-slate-600 text-[11px] max-w-md mx-auto leading-relaxed">
                 Ketika kamu menyetujui penawaran harga dari pembeli di tab "Penawaran & Nego", widget chat realtime akan aktif di sini untuk melakukan pendekatan dan menyepakati transaksi COD.
               </p>
@@ -2587,7 +2590,7 @@ import Layout from '../layouts/Layout.astro';
             <button onclick="switchVisitorProductTab('all')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg border transition-all text-[11px] sm:text-xs font-bold shrink-0 whitespace-nowrap ${
               activeVisitorProductTab === 'all' 
                 ? 'bg-navy-900 text-white border-navy-900 shadow-xs' 
-                : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
+                : 'bg-navy-100 text-slate-700 border-navy-100 hover:bg-navy-200'
             }">
               Semua (${allVisitorDeals.length})
             </button>
@@ -2603,7 +2606,7 @@ import Layout from '../layouts/Layout.astro';
                 <button onclick="switchVisitorProductTab('${itemId}')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg border transition-all text-[11px] sm:text-xs font-semibold shrink-0 whitespace-nowrap ${
                   activeVisitorProductTab === itemId 
                     ? 'bg-navy-900 text-white border-navy-900 font-bold shadow-xs' 
-                    : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
+                    : 'bg-navy-100 text-slate-700 border-navy-100 hover:bg-navy-200'
                 }">
                   ${shortTitle} (${count})
                 </button>
@@ -2618,12 +2621,12 @@ import Layout from '../layouts/Layout.astro';
         if (allVisitorDeals.length === 0) {
           visitorContainer.className = "grid grid-cols-1 gap-4";
           visitorContainer.innerHTML = `
-            <div class="col-span-full p-8 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-3">
-              <div class="w-12 h-12 rounded-full bg-white text-slate-600 font-bold text-xl flex items-center justify-center mx-auto border border-slate-200 shadow-2xs">
+            <div class="col-span-full p-8 rounded-xl bg-paper-100 border border-navy-100 text-center space-y-3">
+              <div class="w-12 h-12 rounded-full bg-white text-slate-600 font-bold text-xl flex items-center justify-center mx-auto border border-navy-100 shadow-2xs">
                 💬
               </div>
               <div class="space-y-1 max-w-md mx-auto">
-                <h4 class="text-slate-900 font-bold text-sm">Belum Ada Penawaran pada Barang Marketplace</h4>
+                <h4 class="text-navy-900 font-bold text-sm">Belum Ada Penawaran pada Barang Marketplace</h4>
                 <p class="text-slate-600 text-xs leading-relaxed">
                   Alur simulasi ini menggunakan data riil. Silakan klik tombol <strong class="text-emerald-700 font-bold">"Ajukan Penawaran Harga"</strong> pada salah satu barang di marketplace di atas untuk mengirim penawaran dan menguji alur negosiasi & chat realtime per produk!
                 </p>
@@ -2647,7 +2650,7 @@ import Layout from '../layouts/Layout.astro';
       if (filteredDeals.length === 0) {
         visitorContainer.className = "grid grid-cols-1 gap-4";
         visitorContainer.innerHTML = `
-          <div class="col-span-full p-6 rounded-xl bg-slate-50 border border-slate-200 text-center text-slate-600 text-xs">
+          <div class="col-span-full p-6 rounded-xl bg-paper-100 border border-navy-100 text-center text-slate-600 text-xs">
             Belum ada penawaran untuk produk ini.
           </div>
         `;
@@ -2702,15 +2705,15 @@ import Layout from '../layouts/Layout.astro';
                 <div onclick="selectVisitorBidder('${bid.id}')" class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
                   isSelected 
                     ? 'bg-navy-900 text-white border-navy-900 shadow-xs' 
-                    : 'bg-white text-slate-900 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-2xs'
+                    : 'bg-white text-navy-900 border-navy-100 hover:border-navy-200 hover:bg-paper-100 shadow-2xs'
                 }">
                   <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5 min-w-0">
-                      <div class="w-8 h-8 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-navy-900'} font-bold flex items-center justify-center text-xs shrink-0">
+                      <div class="w-8 h-8 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-navy-100 text-navy-900'} font-bold flex items-center justify-center text-xs shrink-0">
                         ${bInitial}
                       </div>
                       <div class="min-w-0">
-                        <h5 class="font-bold text-xs truncate ${isSelected ? 'text-white' : 'text-slate-900'}">${bid.buyer_name}</h5>
+                        <h5 class="font-bold text-xs truncate ${isSelected ? 'text-white' : 'text-navy-900'}">${bid.buyer_name}</h5>
                         <span class="text-[10px] ${isSelected ? 'text-slate-300' : 'text-slate-500'} block truncate">${bTitle}</span>
                       </div>
                     </div>
@@ -2718,7 +2721,7 @@ import Layout from '../layouts/Layout.astro';
                       Rp ${(bid.amount || 0).toLocaleString('id-ID')}
                     </span>
                   </div>
-                  <div class="text-[11px] ${isSelected ? 'text-slate-300 border-white/10' : 'text-slate-500 border-slate-100'} truncate pt-1 border-t flex items-center gap-1">
+                  <div class="text-[11px] ${isSelected ? 'text-slate-300 border-white/10' : 'text-slate-500 border-navy-100'} truncate pt-1 border-t flex items-center gap-1">
                     <span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-emerald-400' : 'bg-emerald-500'} animate-pulse shrink-0"></span>
                     <span class="truncate">${lastMsg}</span>
                   </div>
@@ -2729,16 +2732,16 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <!-- Right Column: Detail Card & Inline Real-Time Chat Panel -->
-        <div class="lg:col-span-7 rounded-2xl bg-white border border-slate-200 p-5 space-y-4 shadow-xs">
+        <div class="lg:col-span-7 rounded-2xl bg-white border border-navy-100 p-5 space-y-4 shadow-xs">
           <!-- Detail Header -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-navy-100 pb-3">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-slate-100 text-navy-900 font-bold flex items-center justify-center border border-slate-200 text-base shrink-0">
+              <div class="w-10 h-10 rounded-full bg-navy-100 text-navy-900 font-bold flex items-center justify-center border border-navy-100 text-base shrink-0">
                 ${(activeBid.buyer_name || 'B').charAt(0).toUpperCase()}
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <h4 class="font-bold text-slate-900 text-sm">${activeBid.buyer_name}</h4>
+                  <h4 class="font-bold text-navy-900 text-sm">${activeBid.buyer_name}</h4>
                   ${isBidSold ? `
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">👤 Pemilik Baru</span>
                   ` : `
@@ -2765,8 +2768,8 @@ import Layout from '../layouts/Layout.astro';
           </div>
 
           <!-- Product & Agreed Price Banner -->
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-            <span class="font-bold text-slate-800 truncate">${itemTitle}</span>
+          <div class="p-3 rounded-xl bg-paper-100 border border-navy-100 flex items-center justify-between text-xs">
+            <span class="font-bold text-navy-900 truncate">${itemTitle}</span>
             <div class="shrink-0 text-right">
               <span class="text-slate-500 block text-[10px]">Harga Disepakati:</span>
               <span class="text-emerald-700 font-extrabold text-sm">Rp ${(activeBid.amount || 0).toLocaleString('id-ID')}</span>
@@ -2774,20 +2777,20 @@ import Layout from '../layouts/Layout.astro';
           </div>
 
           <!-- Inline Real-time Chat Box -->
-          <div id="visitor-inline-messages-container" class="h-64 sm:h-72 overflow-y-auto p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="visitor-inline-messages-container" class="h-64 sm:h-72 overflow-y-auto p-4 rounded-xl bg-paper-100 border border-navy-100 space-y-3">
             <!-- Messages rendered dynamically -->
           </div>
 
           <!-- Quick Chips -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] text-slate-600 no-scrollbar">
-            <button type="button" onclick="sendInlineVisitorMessage('Siap kak! Lokasi COD di mana?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Lokasi COD?</button>
-            <button type="button" onclick="sendInlineVisitorMessage('Jam berapa jam ketemuan?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Jam ketemuan?</button>
-            <button type="button" onclick="sendInlineVisitorMessage('Bisa bayar tunai / QRIS pas COD ya.')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-medium shrink-0 transition-all">Tunai / QRIS</button>
+            <button type="button" onclick="sendInlineVisitorMessage('Siap kak! Lokasi COD di mana?')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">Lokasi COD?</button>
+            <button type="button" onclick="sendInlineVisitorMessage('Jam berapa jam ketemuan?')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">Jam ketemuan?</button>
+            <button type="button" onclick="sendInlineVisitorMessage('Bisa bayar tunai / QRIS pas COD ya.')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">Tunai / QRIS</button>
           </div>
 
           <!-- Message Input Form -->
           <form id="visitor-inline-chat-form" onsubmit="event.preventDefault(); const input = document.getElementById('visitor-inline-chat-input'); if(input && input.value) sendInlineVisitorMessage(input.value);" class="flex items-center gap-2">
-            <input type="text" id="visitor-inline-chat-input" placeholder="Tulis pesan obrolan ke ${activeBid.buyer_name}..." required class="flex-1 px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="visitor-inline-chat-input" placeholder="Tulis pesan obrolan ke ${activeBid.buyer_name}..." required class="flex-1 px-3.5 py-2.5 rounded-lg bg-white border border-navy-200 text-navy-900 text-xs focus:border-navy-900 focus:outline-none" />
             <button type="submit" class="px-4 py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all shrink-0">
               Kirim
             </button>
@@ -2808,14 +2811,14 @@ import Layout from '../layouts/Layout.astro';
       const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Penawaran disetujui — Siap obrol transaksi COD';
 
       return `
-        <div class="p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-3 shadow-xs">
+        <div class="p-4 rounded-xl bg-white border border-navy-100 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-3 shadow-xs">
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-slate-100 text-navy-900 font-bold flex items-center justify-center border border-slate-200 text-base shrink-0">
+              <div class="w-10 h-10 rounded-full bg-navy-100 text-navy-900 font-bold flex items-center justify-center border border-navy-100 text-base shrink-0">
                 ${initial}
               </div>
               <div class="min-w-0">
-                <h4 class="font-bold text-slate-900 text-sm truncate">${bid.buyer_name}</h4>
+                <h4 class="font-bold text-navy-900 text-sm truncate">${bid.buyer_name}</h4>
                 <span class="text-[11px] text-slate-500 block truncate">Kontak: ${bid.contact_info}</span>
               </div>
             </div>
@@ -2824,13 +2827,13 @@ import Layout from '../layouts/Layout.astro';
             </span>
           </div>
 
-          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
-            <div class="text-slate-800 font-semibold text-xs truncate">${itemTitle}</div>
+          <div class="p-3 rounded-lg bg-paper-100 border border-navy-100 space-y-1">
+            <div class="text-navy-900 font-semibold text-xs truncate">${itemTitle}</div>
             <div class="flex justify-between items-center text-xs">
               <span class="text-slate-500">Harga Disepakati:</span>
               <span class="text-emerald-700 font-extrabold text-sm">Rp ${(bid.amount || 0).toLocaleString('id-ID')}</span>
             </div>
-            <div class="text-[11px] text-slate-500 truncate pt-1 border-t border-slate-200 flex items-center gap-1">
+            <div class="text-[11px] text-slate-500 truncate pt-1 border-t border-navy-100 flex items-center gap-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
               <span class="truncate">${lastMsg}</span>
             </div>

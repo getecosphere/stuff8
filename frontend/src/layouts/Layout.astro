@@ -162,8 +162,39 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
         </div>
       </div>
     </footer>}
+    <div id="stuff8-toasts" class="pointer-events-none fixed inset-x-0 bottom-4 z-[120] flex flex-col items-center gap-2 px-4 sm:bottom-5 sm:right-5 sm:items-end sm:px-0" aria-live="polite" aria-atomic="false"></div>
   </body>
   <script>
+    // Global toast helper — used by every page for short, warm confirmations.
+    (function initStuff8Toast() {
+      if (window.stuff8Toast) return;
+      const container = document.getElementById('stuff8-toasts');
+      const visual: Record<string, { accent: string; chip: string; icon: string }> = {
+        success: { accent: 'border-brand-600', chip: 'bg-brand-600 text-white', icon: '<svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>' },
+        error: { accent: 'border-rose-600', chip: 'bg-rose-600 text-white', icon: '<svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m9 9 6 6M15 9l-6 6"/></svg>' },
+        info: { accent: 'border-navy-900', chip: 'bg-navy-900 text-white', icon: '<svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 8h.01M12 12v4"/></svg>' }
+      };
+      window.stuff8Toast = (message: string, options: { variant?: 'success' | 'error' | 'info'; title?: string; duration?: number } = {}) => {
+        if (!container) return;
+        const variant = options.variant || 'info';
+        const tone = visual[variant] || visual.info;
+        const toast = document.createElement('div');
+        toast.className = `stuff8-toast pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-2xl border border-navy-100 border-l-4 bg-white p-3.5 pr-3 shadow-lg shadow-navy-900/10 ${tone.accent}`;
+        toast.setAttribute('role', variant === 'error' ? 'alert' : 'status');
+        toast.innerHTML = `<span class="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full ${tone.chip}" aria-hidden="true">${tone.icon}</span><div class="min-w-0 flex-1"><p class="text-sm font-bold leading-snug text-navy-900">${options.title || (variant === 'error' ? 'Terjadi kendala' : variant === 'success' ? 'Berhasil' : 'Info')}</p>${message ? `<p class="mt-0.5 text-xs leading-relaxed text-slate-600">${message}</p>` : ''}</div><button type="button" class="stuff8-toast-close inline-flex size-6 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-navy-900" aria-label="Tutup notifikasi">×</button>`;
+        container.append(toast);
+        const dismiss = () => {
+          if (toast.dataset.gone) return;
+          toast.dataset.gone = '1';
+          toast.classList.add('stuff8-toast-leave');
+          toast.addEventListener('animationend', () => toast.remove(), { once: true });
+        };
+        toast.querySelector('.stuff8-toast-close')?.addEventListener('click', dismiss);
+        window.setTimeout(dismiss, options.duration ?? (variant === 'error' ? 6000 : 4200));
+        return dismiss;
+      };
+    })();
+
     const readStuff8Session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const logoLink = document.getElementById('stuff8-logo-link');
     if (readStuff8Session()?.user && logoLink) logoLink.setAttribute('href', '/inventory/');
@@ -225,8 +256,13 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       verificationStatus.textContent = 'Mengirim email verifikasi…';
       try {
         const response = await fetch(`${authApi}/auth/resend-verification`, { method: 'POST', headers: { Authorization: `Bearer ${session.token}` } });
-        verificationStatus.textContent = response.ok ? 'Permintaan email verifikasi diterima oleh Brevo. Periksa inbox dan folder spam; tautan berlaku 24 jam.' : 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
-      } catch { verificationStatus.textContent = 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.'; }
+        const ok = response.ok;
+        verificationStatus.textContent = ok ? 'Permintaan email verifikasi diterima oleh Brevo. Periksa inbox dan folder spam; tautan berlaku 24 jam.' : 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
+        window.stuff8Toast?.(ok ? 'Cek inbox dan folder spam — tautan berlaku 24 jam.' : 'Email belum dapat dikirim, coba lagi nanti.', { variant: ok ? 'success' : 'error', title: ok ? 'Email verifikasi terkirim' : 'Gagal mengirim' });
+      } catch {
+        verificationStatus.textContent = 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
+        window.stuff8Toast?.('Email belum dapat dikirim, coba lagi nanti.', { variant: 'error', title: 'Gagal mengirim' });
+      }
     });
 
     // The home page owns its richer inventory controls. Every other page still
