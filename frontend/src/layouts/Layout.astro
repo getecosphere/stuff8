@@ -8,7 +8,7 @@ interface Props {
 const { 
   description = "Rapiin barang-barang kamu dalam inventaris digital. Ada barang nganggur? Tinggal sekali klik langsung pajang di marketplace!"
 } = Astro.props;
-const isInventory = Astro.url.pathname === '/inventory' || Astro.url.pathname === '/inventory/';
+const isInventory = Astro.url.pathname === '/inventory' || Astro.url.pathname === '/inventory/' || Astro.url.pathname.startsWith('/inventory/');
 const isMarketplace = Astro.url.pathname.startsWith('/marketplace');
 const isEmailVerification = Astro.url.pathname.startsWith('/auth/verify-email');
 const isChat = Astro.url.pathname.startsWith('/chat');
@@ -232,7 +232,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
         document.getElementById('btn-sidebar-login')?.classList.add('hidden');
         document.getElementById('btn-logout')?.classList.remove('hidden');
       }
-      document.getElementById('btn-sidebar-add-item')?.addEventListener('click', () => location.assign('/inventory/?add-item=1'));
+      document.getElementById('btn-sidebar-add-item')?.addEventListener('click', () => location.assign('/inventory/form/'));
       document.getElementById('btn-sidebar-login')?.addEventListener('click', () => location.assign('/auth/signup/'));
       document.getElementById('btn-sidebar-guide')?.addEventListener('click', () => location.assign('/?guide=1'));
       document.getElementById('btn-logout')?.addEventListener('click', () => { localStorage.removeItem('stuff8_session'); location.assign('/'); });

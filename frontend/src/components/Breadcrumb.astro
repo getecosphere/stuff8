@@ -1,0 +1,29 @@
+---
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  crumbs: Crumb[];
+  currentId?: string;
+}
+
+const { crumbs, currentId } = Astro.props;
+const lastIndex = crumbs.length - 1;
+---
+
+<nav aria-label="Breadcrumb">
+  <ol class="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
+    {crumbs.map((crumb, index) => (
+      <li class="flex items-center gap-1.5">
+        {index > 0 && <span class="text-slate-300" aria-hidden="true">/</span>}
+        {index === lastIndex ? (
+          <span id={currentId} aria-current="page" class="text-navy-900">{crumb.label}</span>
+        ) : (
+          <a href={crumb.href} class="text-slate-500 transition-colors hover:text-navy-900">{crumb.label}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

@@ -566,118 +566,6 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </div>
 
-  <!-- Modal: Add Inventory Item (Direct) -->
-  <div id="modal-item" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-xl relative">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h3 id="item-modal-title" class="text-lg font-bold text-slate-900">Tambah Barang ke Inventaris</h3>
-        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-700 text-xl font-bold">×</button>
-      </div>
-
-      <form id="form-item" class="space-y-4">
-        <div id="item-details-step" class="space-y-4">
-        <div>
-          <input type="text" id="input-title" required aria-label="Nama barang" placeholder="Nama Barang (contoh: Kamera Sony A7 III Body Only)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <input id="input-category" type="text" required list="inventory-category-options" autocomplete="off" aria-label="Kategori" placeholder="Cari atau pilih kategori" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-            <datalist id="inventory-category-options"></datalist>
-          </div>
-          <div>
-            <select id="input-condition" required aria-label="Kondisi" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none">
-              <option value="" disabled selected>Kondisi</option>
-              <option value="Like New">Mulus Beli Baru</option>
-              <option value="Good">Bagus</option>
-              <option value="Fair">Cukup</option>
-              <option value="Used">Pernah Pakai</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <textarea id="input-description" rows="2" aria-label="Deskripsi barang" placeholder="Deskripsi Barang: kelengkapan, garansi, atau catatan fisik..." class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none"></textarea>
-        </div>
-
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <input type="text" id="input-purchase-price" required inputmode="numeric" aria-label="Harga beli dalam rupiah" placeholder="Harga Beli (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-          </div>
-          <div>
-            <input type="text" id="input-estimated-value" inputmode="numeric" aria-label="Nilai jual dalam rupiah" placeholder="Nilai Jual (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-          </div>
-          <div class="sm:col-span-2">
-            <input type="text" id="input-storage-location" aria-label="Lokasi simpan privat" placeholder="Lokasi Simpan (Privat)" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-          </div>
-        </div>
-
-        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
-          <div>
-            <span class="block text-sm font-semibold text-slate-800">Mau Dijual?</span>
-            <span class="block text-xs text-slate-500">Tampilkan barang di marketplace publik</span>
-          </div>
-          <input type="checkbox" id="input-sellable" class="w-5 h-5 accent-navy-900 rounded cursor-pointer" />
-        </div>
-
-        <div id="asking-price-container" class="hidden">
-          <input type="text" id="input-asking-price" inputmode="numeric" aria-label="Harga buka dalam rupiah" placeholder="Harga Buka (Rp)" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-900/50 text-slate-900 text-sm focus:border-navy-900 focus:outline-none" />
-        </div>
-        </div>
-
-        <section id="item-photo-step" class="hidden space-y-4" aria-labelledby="item-photo-step-title">
-          <div class="rounded-xl border border-brand-100 bg-brand-50/50 p-4">
-            <p class="text-xs font-bold uppercase tracking-wider text-brand-700">Langkah 2 dari 2</p>
-            <h4 id="item-photo-step-title" class="mt-1 text-base font-bold text-slate-900">Upload foto barang</h4>
-            <p class="mt-1 text-xs leading-relaxed text-slate-600">Pilih satu atau beberapa foto. Storage akan mengubahnya ke WebP hanya jika hasilnya lebih kecil.</p>
-          </div>
-          <label for="input-item-photos" class="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 text-center transition-colors hover:border-navy-900 hover:bg-slate-100">
-            <svg class="size-7 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 16l4.6-4.6a2 2 0 012.8 0L14 14m-1-1l1.6-1.6a2 2 0 012.8 0L20 16M5 20h14a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
-            <span class="mt-2 text-sm font-bold text-slate-800">Pilih foto</span>
-            <span class="mt-1 text-xs text-slate-500">JPG, PNG, atau WebP · maksimal 20 MB per foto</span>
-          </label>
-          <input id="input-item-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple class="sr-only" />
-          <p id="item-photo-upload-status" class="hidden text-xs font-medium text-slate-600" role="status"></p>
-          <div id="item-photo-carousel"></div>
-        </section>
-
-        <p id="item-form-error" class="hidden rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700" role="alert"></p>
-        <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
-          <button type="button" id="btn-delete-item" class="hidden px-3 py-2 text-sm font-bold text-rose-700 hover:text-rose-800">Hapus</button>
-          <div class="ml-auto flex gap-3">
-          <button type="button" id="btn-cancel-modal" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold">Batal</button>
-          <button type="submit" id="btn-save-item" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-sm font-bold shadow-xs">Simpan Barang</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal: Add inventory category -->
-  <div id="modal-category" class="fixed inset-0 z-50 hidden items-end bg-slate-900/50 p-4 sm:items-center" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
-    <div class="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <h2 id="category-modal-title" class="text-base font-bold text-slate-900">Kategori baru</h2>
-          <p class="mt-0.5 text-xs text-slate-500">Gunakan nama yang mudah dikenali.</p>
-        </div>
-        <button id="btn-close-category-modal" type="button" aria-label="Tutup" class="flex size-8 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">×</button>
-      </div>
-
-      <form id="form-category" class="mt-5 space-y-4">
-        <div>
-          <label for="input-category-name" class="mb-1.5 block text-xs font-semibold text-slate-700">Nama kategori</label>
-          <input id="input-category-name" type="text" maxlength="40" autocomplete="off" placeholder="Contoh: Koleksi film" class="min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-navy-900 focus:ring-2 focus:ring-navy-900/10" />
-          <p id="category-form-error" class="mt-1.5 hidden text-xs font-medium text-rose-700" role="alert"></p>
-        </div>
-        <div class="flex justify-end gap-2 border-t border-slate-100 pt-4">
-          <button id="btn-cancel-category-modal" type="button" class="min-h-10 rounded-lg px-3 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">Batal</button>
-          <button type="submit" class="min-h-10 rounded-lg bg-navy-900 px-4 text-xs font-bold text-white transition-colors hover:bg-navy-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">Simpan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- Modal: Place Bid -->
   <div id="modal-bid" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl relative">
@@ -894,16 +782,11 @@ import Layout from '../layouts/Layout.astro';
     let inventoryPage = 1;
     let inventoryView: 'list' | 'thumbnail' | 'card' = 'card';
     let inventoryMeta = { total: 0, total_value: 0, page: 1, limit: 12, total_pages: 1, category_counts: [] as Array<{ category: string; count: number }> };
-    let editingItemId: string | null = null;
-    let deleteConfirmationArmed = false;
     let customInventoryCategories: string[] = [];
     let categoryPreferenceOwnerId: string | null = null;
     let inventoryViewPreferenceOwnerId: string | null = null;
-    let photoUploadItem: any | null = null;
-    let photoCarouselIndex = 0;
 
     const DEFAULT_INVENTORY_CATEGORIES = ['Electronics', 'Cameras', 'Bicycles', 'Books', 'Musical Instruments', 'Furniture'];
-    const CREATE_CATEGORY_LABEL = '+ Buat kategori baru';
 
     // DOM Views
     const signedOutLanding = document.getElementById('signed-out-landing');
@@ -920,38 +803,10 @@ import Layout from '../layouts/Layout.astro';
     const inventoryViewTrigger = document.getElementById('inventory-view-trigger');
     const inventoryPagination = document.getElementById('inventory-pagination');
 
-    const modalItem = document.getElementById('modal-item');
-    const modalCategory = document.getElementById('modal-category');
     const modalBid = document.getElementById('modal-bid');
     const modalWizard = document.getElementById('modal-wizard');
-    const itemForm = document.getElementById('form-item') as HTMLFormElement | null;
-    const itemModalTitle = document.getElementById('item-modal-title');
-    const deleteItemButton = document.getElementById('btn-delete-item');
-    const saveItemButton = document.getElementById('btn-save-item');
-    const categoryNameInput = document.getElementById('input-category-name') as HTMLInputElement | null;
-    const categoryFormError = document.getElementById('category-form-error');
-    const itemFormError = document.getElementById('item-form-error');
-    const itemDetailsStep = document.getElementById('item-details-step');
-    const itemPhotoStep = document.getElementById('item-photo-step');
-    const itemPhotosInput = document.getElementById('input-item-photos') as HTMLInputElement | null;
-    const itemPhotoCarousel = document.getElementById('item-photo-carousel');
-    const itemPhotoUploadStatus = document.getElementById('item-photo-upload-status');
     const appNotice = document.getElementById('app-notice');
     let noticeTimeout: number | undefined;
-
-    const inputSellable = document.getElementById('input-sellable') as HTMLInputElement;
-    const askingPriceContainer = document.getElementById('asking-price-container');
-
-    function parseRupiah(value: string) {
-      const digits = value.replace(/\D/g, '');
-      const amount = digits ? Number(digits) : null;
-      return amount !== null && Number.isSafeInteger(amount) ? amount : null;
-    }
-
-    function formatRupiahInput(input: HTMLInputElement) {
-      const amount = parseRupiah(input.value);
-      input.value = amount === null ? '' : `Rp ${amount.toLocaleString('id-ID')}`;
-    }
 
     function escapeHtml(value: string) {
       return value.replace(/[&<>'"]/g, char => ({
@@ -1022,19 +877,6 @@ import Layout from '../layouts/Layout.astro';
 
     function syncCategorySelects() {
       const categories = getSelectableInventoryCategories();
-      const itemCategoryInput = document.getElementById('input-category') as HTMLInputElement | null;
-      const categoryOptions = document.getElementById('inventory-category-options');
-      if (itemCategoryInput && categoryOptions) {
-        const currentCategory = categories.find(category => categoryLabel(category) === itemCategoryInput.value || category === itemCategoryInput.value);
-        categoryOptions.innerHTML = `<option value="${CREATE_CATEGORY_LABEL}"></option>${categories.map(category =>
-          `<option value="${escapeHtml(categoryLabel(category))}"></option>`
-        ).join('')}`;
-        const selectedCategory = selectedInventoryCategory !== 'all' && categories.includes(selectedInventoryCategory)
-          ? selectedInventoryCategory
-          : currentCategory;
-        itemCategoryInput.value = selectedCategory ? categoryLabel(selectedCategory) : '';
-      }
-
       const wizardCategorySelect = document.getElementById('w-item-category') as HTMLSelectElement | null;
       if (wizardCategorySelect) {
         const currentValue = wizardCategorySelect.value;
@@ -1065,32 +907,6 @@ import Layout from '../layouts/Layout.astro';
         ...categories.map(category => renderTab(category, categoryLabel(category), inventoryMeta.category_counts.find(entry => entry.category === category)?.count || 0))
       ].join('');
       syncCategorySelects();
-    }
-
-    function closeCategoryModal() {
-      modalCategory?.classList.add('hidden');
-      modalCategory?.classList.remove('flex');
-    }
-
-    function showCategoryError(message: string) {
-      if (!categoryFormError) return;
-      categoryFormError.textContent = message;
-      categoryFormError.classList.remove('hidden');
-    }
-
-    function showItemFormError(message: string) {
-      if (!itemFormError) return;
-      itemFormError.textContent = message;
-      itemFormError.classList.remove('hidden');
-    }
-
-    function openCategoryModal() {
-      if (!modalCategory || !categoryNameInput) return;
-      categoryFormError?.classList.add('hidden');
-      categoryNameInput.value = '';
-      modalCategory.classList.remove('hidden');
-      modalCategory.classList.add('flex');
-      requestAnimationFrame(() => categoryNameInput.focus());
     }
 
     // Onboarding Wizard Elements
@@ -1270,95 +1086,8 @@ import Layout from '../layouts/Layout.astro';
       `;
     }
 
-    function setItemPhotoStep(item: any | null) {
-      photoUploadItem = item;
-      photoCarouselIndex = 0;
-      const uploadingPhotos = Boolean(item);
-      itemDetailsStep?.classList.toggle('hidden', uploadingPhotos);
-      itemPhotoStep?.classList.toggle('hidden', !uploadingPhotos);
-      if (saveItemButton) {
-        saveItemButton.type = uploadingPhotos ? 'button' : 'submit';
-        saveItemButton.textContent = uploadingPhotos ? 'Selesai' : (editingItemId ? 'Simpan Perubahan' : 'Simpan Barang');
-      }
-      if (itemModalTitle) itemModalTitle.textContent = uploadingPhotos ? 'Foto Barang — Langkah 2 dari 2' : (editingItemId ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventaris');
-      if (itemPhotosInput) itemPhotosInput.value = '';
-      itemPhotoUploadStatus?.classList.add('hidden');
-      renderItemPhotoCarousel();
-    }
-
-    function renderItemPhotoCarousel() {
-      if (!itemPhotoCarousel) return;
-      const photos: string[] = photoUploadItem?.photos || [];
-      if (!photoUploadItem) {
-        itemPhotoCarousel.innerHTML = '';
-        return;
-      }
-      if (photos.length === 0) {
-        itemPhotoCarousel.innerHTML = '<div class="rounded-xl border border-slate-200 bg-white p-4 text-center text-xs text-slate-500">Belum ada foto. Kamu dapat menambahkannya sekarang atau nanti dari detail barang.</div>';
-        return;
-      }
-      photoCarouselIndex = Math.min(photoCarouselIndex, photos.length - 1);
-      const active = storagePhotoUrl(photos[photoCarouselIndex]);
-      itemPhotoCarousel.innerHTML = `
-        <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-          <div class="relative aspect-[4/3]">
-            <img src="${active}" alt="Foto barang ${photoCarouselIndex + 1}" class="size-full object-contain" />
-            ${photos.length > 1 ? `<button type="button" onclick="window.inventoryPhotoPrevious()" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm" aria-label="Foto sebelumnya">←</button><button type="button" onclick="window.inventoryPhotoNext()" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm" aria-label="Foto berikutnya">→</button>` : ''}
-          </div>
-          <div class="flex gap-2 overflow-x-auto p-2">${photos.map((photo, index) => `<button type="button" onclick="window.inventoryPhotoSelect(${index})" class="size-12 shrink-0 overflow-hidden rounded-md border ${index === photoCarouselIndex ? 'border-navy-900 ring-2 ring-navy-900/15' : 'border-slate-200'}"><img src="${storagePhotoUrl(photo)}" alt="" class="size-full object-cover" /></button>`).join('')}</div>
-        </div>`;
-    }
-
-    async function uploadInventoryPhotos(files: FileList) {
-      if (!photoUploadItem || !currentSession?.user) return;
-      const selected = Array.from(files);
-      if (selected.length === 0) return;
-      itemPhotoUploadStatus?.classList.remove('hidden');
-      try {
-        for (let index = 0; index < selected.length; index += 1) {
-          const file = selected[index];
-          itemPhotoUploadStatus!.textContent = `Mengunggah foto ${index + 1} dari ${selected.length}…`;
-          const body = new FormData();
-          body.append('file', file);
-          body.append('owner_id', currentSession.user.id);
-          body.append('namespace', 'inventory');
-          body.append('reference_id', photoUploadItem.id);
-          const uploaded = await fetch(`${PHOTOS_API}/storage/objects`, { method: 'POST', body });
-          if (!uploaded.ok) throw new Error(await uploaded.text());
-          const object = await uploaded.json();
-          const photos = [...(photoUploadItem.photos || []), object.key];
-          const updated = await fetch(`${INVENTORY_API}/items/${photoUploadItem.id}`, {
-            method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ owner_id: currentSession.user.id, photos })
-          });
-          if (!updated.ok) throw new Error(await updated.text());
-          photoUploadItem = await updated.json();
-          const local = items.find(item => item.id === photoUploadItem.id);
-          if (local) Object.assign(local, photoUploadItem);
-        }
-        itemPhotoUploadStatus!.textContent = `${selected.length} foto berhasil ditambahkan.`;
-        renderItemPhotoCarousel();
-        await loadData();
-      } catch (error) {
-        console.error('Failed to upload inventory photos:', error);
-        itemPhotoUploadStatus!.textContent = 'Foto belum dapat diunggah. Coba lagi.';
-      }
-    }
-
     function openAddItem() {
-      if (!currentSession || !currentSession.user) {
-        openAuth();
-      } else {
-        editingItemId = null;
-        deleteConfirmationArmed = false;
-        itemForm?.reset();
-        setItemPhotoStep(null);
-        syncCategorySelects();
-        deleteItemButton?.classList.add('hidden');
-        askingPriceContainer?.classList.add('hidden');
-        itemFormError?.classList.add('hidden');
-        modalItem?.classList.remove('hidden');
-      }
+      location.assign('/inventory/form/');
     }
 
     function openItemEditor(itemId: string) {
@@ -1367,30 +1096,7 @@ import Layout from '../layouts/Layout.astro';
         showNotice('Hanya pemilik barang yang dapat mengubah data ini.');
         return;
       }
-
-      editingItemId = item.id;
-      deleteConfirmationArmed = false;
-      syncCategorySelects();
-      (document.getElementById('input-title') as HTMLInputElement).value = item.title || '';
-      (document.getElementById('input-category') as HTMLInputElement).value = categoryLabel(item.category || '');
-      (document.getElementById('input-condition') as HTMLSelectElement).value = item.condition || '';
-      (document.getElementById('input-description') as HTMLTextAreaElement).value = item.description || '';
-      (document.getElementById('input-storage-location') as HTMLInputElement).value = item.storage_location || '';
-      const purchasePriceInput = document.getElementById('input-purchase-price') as HTMLInputElement;
-      purchasePriceInput.value = item.purchase_price == null ? '' : String(item.purchase_price);
-      formatRupiahInput(purchasePriceInput);
-      const saleValueInput = document.getElementById('input-estimated-value') as HTMLInputElement;
-      saleValueInput.value = item.estimated_value == null ? '' : String(item.estimated_value);
-      formatRupiahInput(saleValueInput);
-      inputSellable.checked = Boolean(item.sellable);
-      const askingPriceInput = document.getElementById('input-asking-price') as HTMLInputElement;
-      askingPriceInput.value = item.asking_price == null ? '' : String(item.asking_price);
-      formatRupiahInput(askingPriceInput);
-      askingPriceContainer?.classList.toggle('hidden', !item.sellable);
-      setItemPhotoStep(null);
-      deleteItemButton?.classList.remove('hidden');
-      itemFormError?.classList.add('hidden');
-      modalItem?.classList.remove('hidden');
+      location.assign(`/inventory/form/?id=${encodeURIComponent(itemId)}`);
     }
 
     const isItemSold = (item: any) => Boolean(
@@ -1422,175 +1128,8 @@ import Layout from '../layouts/Layout.astro';
         render();
       });
     });
-    document.getElementById('input-category')?.addEventListener('input', event => {
-      const input = event.currentTarget as HTMLInputElement;
-      if (input.value !== CREATE_CATEGORY_LABEL) return;
-
-      input.value = '';
-      openCategoryModal();
-    });
-    document.getElementById('btn-close-category-modal')?.addEventListener('click', closeCategoryModal);
-    document.getElementById('btn-cancel-category-modal')?.addEventListener('click', closeCategoryModal);
-    document.getElementById('form-category')?.addEventListener('submit', event => {
-      event.preventDefault();
-      const category = categoryNameInput?.value.trim() || '';
-      if (!category) {
-        showCategoryError('Masukkan nama kategori terlebih dahulu.');
-        categoryNameInput?.focus();
-        return;
-      }
-      if (getSelectableInventoryCategories().some(existing => existing.toLocaleLowerCase() === category.toLocaleLowerCase())) {
-        showCategoryError('Kategori ini sudah tersedia.');
-        categoryNameInput?.focus();
-        return;
-      }
-
-      customInventoryCategories.push(category);
-      localStorage.setItem(categoryPreferenceKey(), JSON.stringify(customInventoryCategories));
-      syncCategorySelects();
-      const itemCategoryInput = document.getElementById('input-category') as HTMLInputElement | null;
-      if (itemCategoryInput) itemCategoryInput.value = categoryLabel(category);
-      closeCategoryModal();
-    });
-    document.getElementById('btn-close-modal')?.addEventListener('click', () => { photoUploadItem = null; modalItem?.classList.add('hidden'); });
-    document.getElementById('btn-cancel-modal')?.addEventListener('click', () => { photoUploadItem = null; modalItem?.classList.add('hidden'); });
-    deleteItemButton?.addEventListener('click', async () => {
-      if (!editingItemId || !currentSession?.user) return;
-      if (!deleteConfirmationArmed) {
-        deleteConfirmationArmed = true;
-        deleteItemButton.textContent = 'Klik lagi untuk hapus';
-        showItemFormError('Tindakan ini menghapus barang dari inventaris. Klik Hapus sekali lagi untuk mengonfirmasi.');
-        return;
-      }
-
-      try {
-        const response = await fetch(`${INVENTORY_API}/items/${editingItemId}?owner_id=${encodeURIComponent(currentSession.user.id)}`, { method: 'DELETE' });
-        if (!response.ok) throw new Error(await response.text());
-        modalItem?.classList.add('hidden');
-        editingItemId = null;
-        deleteConfirmationArmed = false;
-        await loadData();
-      } catch (error) {
-        console.error('Failed to delete inventory item:', error);
-        showItemFormError('Barang belum dapat dihapus. Pastikan Anda adalah pemilik barang ini.');
-      }
-    });
-
     document.getElementById('btn-close-bid-modal')?.addEventListener('click', () => modalBid?.classList.add('hidden'));
     document.getElementById('btn-cancel-bid-modal')?.addEventListener('click', () => modalBid?.classList.add('hidden'));
-
-    inputSellable?.addEventListener('change', () => {
-      askingPriceContainer?.classList.toggle('hidden', !inputSellable.checked);
-    });
-
-    ['input-purchase-price', 'input-estimated-value', 'input-asking-price'].forEach(id => {
-      const input = document.getElementById(id) as HTMLInputElement | null;
-      input?.addEventListener('input', () => formatRupiahInput(input));
-    });
-
-    itemPhotosInput?.addEventListener('change', () => {
-      if (itemPhotosInput.files) uploadInventoryPhotos(itemPhotosInput.files);
-    });
-
-    saveItemButton?.addEventListener('click', () => {
-      if (!photoUploadItem) return;
-      photoUploadItem = null;
-      itemPhotoStep?.classList.add('hidden');
-      modalItem?.classList.add('hidden');
-    });
-
-    document.getElementById('form-item')?.addEventListener('submit', async event => {
-      event.preventDefault();
-      const form = event.currentTarget as HTMLFormElement;
-      itemFormError?.classList.add('hidden');
-      if (!currentSession?.user) {
-        openAuth();
-        return;
-      }
-
-      const title = (document.getElementById('input-title') as HTMLInputElement).value.trim();
-      const categoryInput = (document.getElementById('input-category') as HTMLInputElement).value.trim();
-      const category = getSelectableInventoryCategories().find(value => value === categoryInput || categoryLabel(value) === categoryInput);
-      const condition = (document.getElementById('input-condition') as HTMLSelectElement).value;
-      const description = (document.getElementById('input-description') as HTMLTextAreaElement).value.trim();
-      const purchasePrice = parseRupiah((document.getElementById('input-purchase-price') as HTMLInputElement).value);
-      const estimatedValueInput = (document.getElementById('input-estimated-value') as HTMLInputElement).value;
-      const estimatedValue = estimatedValueInput ? parseRupiah(estimatedValueInput) : null;
-      const storageLocation = (document.getElementById('input-storage-location') as HTMLInputElement).value.trim();
-      const isSellable = inputSellable.checked;
-      const askingPriceInput = (document.getElementById('input-asking-price') as HTMLInputElement).value;
-      const askingPrice = isSellable && askingPriceInput ? parseRupiah(askingPriceInput) : null;
-
-      if (!category) {
-        showItemFormError('Pilih kategori dari daftar, atau buat kategori baru.');
-        return;
-      }
-      if (purchasePrice === null || purchasePrice < 0 || (estimatedValue !== null && estimatedValue < 0) || (askingPrice !== null && askingPrice < 0)) {
-        showItemFormError('Masukkan nilai harga yang valid.');
-        return;
-      }
-
-      try {
-        const response = await fetch(editingItemId ? `${INVENTORY_API}/items/${editingItemId}` : `${INVENTORY_API}/items`, {
-          method: editingItemId ? 'PATCH' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            owner_id: currentSession.user.id,
-            title,
-            category,
-            condition,
-            description,
-            purchase_price: purchasePrice,
-            estimated_value: estimatedValue,
-            asking_price: askingPrice,
-            storage_location: storageLocation || null,
-            sellable: isSellable,
-            status: isSellable ? 'sellable' : 'collection'
-          })
-        });
-        if (!response.ok) {
-          const detail = await response.text();
-          throw new Error(detail || `Layanan inventaris merespons HTTP ${response.status}.`);
-        }
-
-        const newItem = await response.json();
-        if (isSellable) {
-          await fetch(`${MARKETPLACE_API}/sync-item`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              item_id: newItem.id,
-              seller_id: newItem.owner_id,
-              seller_name: currentSession?.user?.name || currentSession?.user?.username || 'Pemilik Stuff8',
-              title: newItem.title,
-              description: newItem.description,
-              category: newItem.category,
-              condition: newItem.condition,
-              photos: newItem.photos || [],
-              asking_price: askingPrice ?? purchasePrice,
-              general_location: storageLocation || 'Area Lokal',
-              sellable: true
-            })
-          });
-        }
-
-        if (editingItemId) {
-          form.reset();
-          editingItemId = null;
-          askingPriceContainer?.classList.add('hidden');
-          modalItem?.classList.add('hidden');
-          await loadData();
-          return;
-        }
-        editingItemId = newItem.id;
-        deleteConfirmationArmed = false;
-        setItemPhotoStep(newItem);
-        await loadData();
-      } catch (error) {
-        console.error('Failed to create inventory item:', error);
-        showItemFormError('Barang belum dapat disimpan. Periksa koneksi layanan lalu coba lagi.');
-      }
-    });
 
     // Wizard Controls
     function setWizardStep(step: 1 | 2) {
@@ -1643,7 +1182,7 @@ import Layout from '../layouts/Layout.astro';
     });
     document.getElementById('btn-sidebar-add-item')?.addEventListener('click', () => {
       closeSidebar();
-      openAddItem();
+      location.assign('/inventory/form/');
     });
     document.getElementById('btn-close-wizard')?.addEventListener('click', closeWizard);
 
@@ -2043,16 +1582,16 @@ import Layout from '../layouts/Layout.astro';
         render();
 
         // The inventory detail page's Edit button lands here (?edit=<id>);
-        // open the editor for that item once its data is loaded.
+        // forward the visitor to the full-page editor for that item.
         const editParam = new URLSearchParams(location.search).get('edit');
         if (editParam && currentSession?.user) {
           const editable = items.find((entry: any) => entry.id === editParam && entry.owner_id === currentSession.user.id);
           if (editable) {
-            openItemEditor(editParam);
-          } else {
-            showNotice('Barang ini tidak dapat diedit: bukan milik Anda atau sudah berpindah tangan.');
-            history.replaceState(null, '', '/inventory/');
+            location.assign(`/inventory/form/?id=${encodeURIComponent(editParam)}`);
+            return;
           }
+          showNotice('Barang ini tidak dapat diedit: bukan milik Anda atau sudah berpindah tangan.');
+          history.replaceState(null, '', '/inventory/');
         }
 
         // Re-sync sellable items whose photos in the marketplace listing are
@@ -2415,9 +1954,9 @@ import Layout from '../layouts/Layout.astro';
                 <h3 class="text-slate-900 font-bold text-sm">${hasSelectedCategory ? `Belum ada barang di ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'Belum ada barang'}</h3>
                 <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Tambahkan barang untuk mulai mengatur inventarismu.</p>
               </div>
-              <button onclick="window.openAddItem()" class="mt-3 min-h-9 px-3 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-colors">
+              <a href="/inventory/form/" class="mt-3 inline-flex min-h-9 items-center justify-center rounded-lg bg-navy-900 px-3 py-2 text-white text-xs font-bold shadow-xs transition-colors hover:bg-navy-800">
                 Tambah barang
-              </button>
+              </a>
               ${showMarketplaceInvite ? `
                 <div class="mt-5 max-w-sm border-t border-slate-100 pt-4">
                   <p class="text-sm font-semibold text-slate-800">Sambil mulai, cari inspirasi di Marketplace.</p>
@@ -2624,22 +2163,6 @@ import Layout from '../layouts/Layout.astro';
     (window as any).openWizard = openAuth;
     (window as any).openAddItem = openAddItem;
     (window as any).openItemEditor = openItemEditor;
-    (window as any).inventoryPhotoPrevious = () => {
-      const total = photoUploadItem?.photos?.length || 0;
-      if (!total) return;
-      photoCarouselIndex = (photoCarouselIndex - 1 + total) % total;
-      renderItemPhotoCarousel();
-    };
-    (window as any).inventoryPhotoNext = () => {
-      const total = photoUploadItem?.photos?.length || 0;
-      if (!total) return;
-      photoCarouselIndex = (photoCarouselIndex + 1) % total;
-      renderItemPhotoCarousel();
-    };
-    (window as any).inventoryPhotoSelect = (index: number) => {
-      photoCarouselIndex = index;
-      renderItemPhotoCarousel();
-    };
     (window as any).changeProductPhoto = (carouselKey: string, direction: number, total: number) => {
       if (total < 2) return;
       const current = productPhotoIndexes.get(carouselKey) || 0;
@@ -3639,7 +3162,7 @@ import Layout from '../layouts/Layout.astro';
     if (!isRedirectingForRoute) {
       const authIntent = new URLSearchParams(location.search).get('auth');
       if (!currentSession?.user && authIntent) location.replace(`/auth/${authIntent === 'signin' ? 'signin' : 'signup'}/`);
-      if (currentSession?.user && new URLSearchParams(location.search).get('add-item') === '1') openAddItem();
+      if (currentSession?.user && new URLSearchParams(location.search).get('add-item') === '1') location.assign('/inventory/form/');
       renderDemoSandbox();
       updateCalculator();
       loadData();

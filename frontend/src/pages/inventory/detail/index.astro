@@ -1,10 +1,18 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import Breadcrumb from '../../../components/Breadcrumb.astro';
 ---
 
 <Layout>
   <div class="mx-auto w-full max-w-5xl px-4 py-5 sm:px-6 lg:px-8">
-    <a href="/inventory/" class="text-xs font-bold text-navy-900 hover:underline">← Kembali ke Inventaris</a>
+    <Breadcrumb
+      currentId="breadcrumb-current"
+      crumbs={[
+        { label: 'Beranda', href: '/' },
+        { label: 'Inventaris', href: '/inventory/' },
+        { label: 'Detail Barang' }
+      ]}
+    />
     <article id="inventory-detail" class="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">Memuat barang…</article>
   </div>
   <script>
@@ -30,6 +38,9 @@ import Layout from '../../../layouts/Layout.astro';
       if (!response.ok) throw new Error('Barang tidak tersedia atau sudah dihapus.');
       const item = await response.json();
       const sold = isSold(item);
+      const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+      if (breadcrumbCurrent) breadcrumbCurrent.textContent = item.title || 'Detail Barang';
+      document.title = `${item.title || 'Detail Barang'} - Stuff8`;
       const photos = Array.isArray(item.photos) && item.photos.length ? item.photos : [undefined];
       const statusBadge = sold
         ? `<span class="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white">✓ SOLD (Terjual)</span>`
@@ -56,7 +67,7 @@ import Layout from '../../../layouts/Layout.astro';
             </dl>
             <div class="flex items-center gap-3">
               <a href="/inventory/" class="inline-flex items-center justify-center rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50">Kembali</a>
-              <a href="/inventory/?edit=${encodeURIComponent(item.id)}" class="inline-flex items-center justify-center rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-navy-800">Edit</a>
+              <a href="/inventory/form/?id=${encodeURIComponent(item.id)}" class="inline-flex items-center justify-center rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-navy-800">Edit</a>
             </div>
           </div>
         </div>
