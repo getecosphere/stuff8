@@ -319,7 +319,25 @@ import Layout from '../../layouts/Layout.astro';
       document.querySelectorAll<HTMLButtonElement>('[data-conversation]').forEach(button => button.addEventListener('click', () => openConversation(conversations.find(conversation => conversation.conversation_id === button.dataset.conversation))));
     }
 
+    // Marketplace sale announcements are persisted once per conversation but
+    // read by every participant. The same stored message is rendered
+    // differently for the seller, the winning buyer, and the losing bidders.
+    const saleNoticeText = (message: any) => {
+      const sale = message.sale || {};
+      const viewer = user()?.id;
+      if (viewer === sale.buyer_id) {
+        return `Terima kasih, ${sale.title} sudah terjual kepadamu seharga ${money(sale.final_price)}. Barangnya sekarang masuk ke inventarismu. Semoga bermanfaat!`;
+      }
+      if (viewer === message.sender_id) {
+        return `Barang ${sale.title} sudah terjual kepada ${sale.buyer_name} seharga ${money(sale.final_price)}. Terima kasih sudah bertransaksi di Stuff8!`;
+      }
+      return `Terima kasih sudah mengajukan penawaran untuk ${sale.title}. Barang ini sudah terjual kepada ${sale.buyer_name}, jadi negosiasi ini kami tutup. Semoga segera menemukan barang yang pas.`;
+    };
+
     async function renderMessage(message: any) {
+      if (message.kind === 'sale') {
+        return `<div id="message-${message.message_id}" class="flex justify-center px-2"><div class="max-w-[92%] rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-center text-xs font-semibold leading-relaxed text-emerald-800">${escapeHtml(saleNoticeText(message))}</div></div>`;
+      }
       const mine = message.sender_id === user()?.id;
       const profile = await profileFor(message.sender_id);
       const files = attachmentsMarkup(message.attachments || []);
@@ -398,7 +416,13 @@ import Layout from '../../layouts/Layout.astro';
             return;
           }
           closeSaleDialog();
-          location.assign('/inventory/');
+          // Stay on the chat page. Invalidate the cached listing so the sold
+          // item re-renders without the Terjual button and the conversation
+          // list reflects the new ownership.
+          listings.delete(listing.id);
+          listingOwners.delete(listing.id);
+          await renderList();
+          if (activeConversation) await openConversation(activeConversation);
         };
       }
       (document.getElementById('message-form') as HTMLFormElement).onsubmit = event => { event.preventDefault(); if (messageInput.value.trim()) { sendMessage({ body: messageInput.value }); messageInput.value = ''; sendWs({ type: 'typing', is_typing: false }); } };
