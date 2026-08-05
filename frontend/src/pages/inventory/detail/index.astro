@@ -1,0 +1,68 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="mx-auto w-full max-w-5xl px-4 py-5 sm:px-6 lg:px-8">
+    <a href="/inventory/" class="text-xs font-bold text-navy-900 hover:underline">← Kembali ke Inventaris</a>
+    <article id="inventory-detail" class="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">Memuat barang…</article>
+  </div>
+  <script>
+    const INVENTORY = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
+    const PHOTOS = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
+    const root = document.getElementById('inventory-detail')!;
+    const id = new URLSearchParams(location.search).get('id');
+    const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
+    const user = () => session()?.user;
+    const headers = () => ({ 'Authorization': `Bearer ${session()?.token}` });
+    const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
+    const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
+    const photoUrl = (key?: string) => key ? `${PHOTOS}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}` : '/images/no-item-image.webp';
+    const isSold = (item: any) => Boolean(item?.is_sold || item?.isSold || (typeof item?.status === 'string' && item.status.toLowerCase() === 'sold'));
+
+    async function load() {
+      if (!id) throw new Error('Barang tidak ditemukan.');
+      if (!user()?.id) {
+        root.innerHTML = `<div class="py-10 text-center"><h1 class="text-lg font-extrabold text-navy-900">Detail Inventaris</h1><p class="mt-2 text-sm text-slate-600">Masuk terlebih dahulu untuk melihat detail barang.</p><a href="/auth/signup/?return_to=${encodeURIComponent(location.pathname + location.search)}" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Daftar atau masuk</a></div>`;
+        return;
+      }
+      const response = await fetch(`${INVENTORY}/items/${encodeURIComponent(id)}`, { headers: headers() });
+      if (!response.ok) throw new Error('Barang tidak tersedia atau sudah dihapus.');
+      const item = await response.json();
+      const sold = isSold(item);
+      const photos = Array.isArray(item.photos) && item.photos.length ? item.photos : [undefined];
+      const statusBadge = sold
+        ? `<span class="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white">✓ SOLD (Terjual)</span>`
+        : `<span class="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold ${item.sellable ? 'bg-navy-900 text-white' : 'bg-slate-200 text-slate-700'}">${item.sellable ? 'Dijual di Marketplace' : 'Koleksi Pribadi'}</span>`;
+      root.innerHTML = `
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-3">
+            <div class="aspect-square overflow-hidden rounded-xl bg-slate-100"><img id="detail-photo" src="${photoUrl(photos[0])}" alt="${escapeHtml(item.title || 'Foto barang')}" class="size-full object-cover" /></div>
+            ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-photo="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-slate-200"><img src="${photoUrl(photo)}" alt="Foto ${index + 1}" class="size-full object-cover" /></button>`).join('')}</div>` : ''}
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-xs font-bold uppercase tracking-wider text-brand-700">${escapeHtml(item.category || '')} · ${escapeHtml(item.condition || '')}</p>
+              ${statusBadge}
+            </div>
+            <h1 class="text-2xl font-extrabold tracking-tight text-navy-900">${escapeHtml(item.title || 'Tanpa judul')}</h1>
+            <p class="whitespace-pre-line text-sm leading-relaxed text-slate-600">${escapeHtml(item.description || 'Tanpa deskripsi')}</p>
+            ${sold ? `<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-sm font-extrabold text-emerald-800">Terjual</p><p class="mt-1 text-sm leading-relaxed text-emerald-700">${escapeHtml(item.buyer_name ? `Terjual ke ${item.buyer_name}` : 'Barang sudah terjual')} seharga ${money(item.final_price || item.asking_price)}.</p><a href="/marketplace/detail/?id=${encodeURIComponent(item.id)}" class="mt-2 inline-block text-sm font-bold text-emerald-800 underline">Lihat listing marketplace →</a></div>` : ''}
+            <dl class="grid grid-cols-2 gap-3 border-y border-slate-100 py-4 text-sm">
+              <div><dt class="text-xs text-slate-500">Harga beli</dt><dd class="mt-0.5 font-bold text-slate-800">${money(item.purchase_price)}</dd></div>
+              <div><dt class="text-xs text-slate-500">Nilai jual</dt><dd class="mt-0.5 font-bold text-slate-800">${money(item.estimated_value)}</dd></div>
+              ${item.sellable ? `<div class="col-span-2"><dt class="text-xs text-slate-500">Harga buka</dt><dd class="mt-0.5 font-bold text-navy-900">${money(item.asking_price)}</dd></div>` : ''}
+              <div class="col-span-2"><dt class="text-xs text-slate-500">Lokasi simpan (privat)</dt><dd class="mt-0.5 font-semibold text-slate-800">${escapeHtml(item.storage_location || '-')}</dd></div>
+            </dl>
+            <div class="flex items-center gap-3">
+              <a href="/inventory/" class="inline-flex items-center justify-center rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50">Kembali</a>
+              <a href="/inventory/?edit=${encodeURIComponent(item.id)}" class="inline-flex items-center justify-center rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-navy-800">Edit</a>
+            </div>
+          </div>
+        </div>
+      `;
+      document.querySelectorAll<HTMLButtonElement>('[data-photo]').forEach(button => button.addEventListener('click', () => { (document.getElementById('detail-photo') as HTMLImageElement).src = photoUrl(photos[Number(button.dataset.photo)]); }));
+    }
+    load().catch(error => { root.innerHTML = `<div class="py-10 text-center text-sm text-rose-700">${escapeHtml(error?.message || 'Barang tidak dapat dimuat.')}</div>`; });
+  </script>
+</Layout>
