@@ -379,7 +379,7 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- ONBOARDING WIZARD MODAL -->
   <div id="modal-wizard" class="fixed inset-0 bg-navy-950/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-navy-100 rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-xl relative overflow-hidden">
+    <div class="bg-white border border-navy-100 rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-xl relative max-h-[calc(100dvh-2rem)] overflow-y-auto">
       <!-- Header -->
       <div class="flex items-center justify-between text-xs font-semibold text-slate-500 border-b border-navy-100 pb-3">
         <div class="flex items-center gap-2">
@@ -580,7 +580,7 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- Modal: Place Bid -->
   <div id="modal-bid" class="fixed inset-0 bg-navy-950/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-navy-100 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl relative">
+    <div class="bg-white border border-navy-100 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl relative max-h-[calc(100dvh-2rem)] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-navy-100 pb-3">
         <div>
           <h3 class="text-lg font-bold text-navy-900">Simulasi Penawaran Harga</h3>
@@ -713,7 +713,7 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- Modal: Konfirmasi SOLD -->
   <div id="modal-confirm-sold" class="fixed inset-0 bg-navy-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-navy-100 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+    <div class="bg-white border border-navy-100 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl relative max-h-[calc(100dvh-2rem)] overflow-y-auto">
       <div class="flex items-center gap-3 text-emerald-600">
         <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-xl">
           🏷️
@@ -750,7 +750,7 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- Modal: Riwayat Kepemilikan (Provenance Log) -->
   <div id="modal-ownership-history" class="fixed inset-0 bg-navy-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border border-navy-100 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+    <div class="bg-white border border-navy-100 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative max-h-[calc(100dvh-2rem)] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-navy-100 pb-3">
         <div class="flex items-center gap-2">
           <span class="text-xl">📜</span>

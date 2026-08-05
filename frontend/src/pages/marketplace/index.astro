@@ -5,23 +5,13 @@ import Layout from '../../layouts/Layout.astro';
 <Layout>
   <div class="mx-auto flex min-h-[calc(100dvh-10rem)] w-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
     <section class="flex min-h-0 flex-1 flex-col gap-3" aria-label="Marketplace">
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-500 via-brand-600 to-navy-900 px-6 py-8 text-white shadow-lg">
-        <div class="relative z-10 max-w-xl">
-          <p class="text-[11px] font-bold uppercase tracking-widest text-brand-100">Pasar Stuff8</p>
-          <h1 class="mt-1 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">Temukan barang, tawar langsung.</h1>
-          <p class="mt-2 text-sm text-brand-50/90">Koleksi dari rumah-rumah nyata. Lihat, tawar, dan bawa pulang.</p>
-        </div>
-        <div class="pointer-events-none absolute -right-10 -top-16 size-56 rounded-full bg-white/10 blur-2xl" aria-hidden="true"></div>
-        <div class="pointer-events-none absolute -bottom-20 right-24 size-40 rounded-full bg-brand-300/20 blur-xl" aria-hidden="true"></div>
+      <div class="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+        <h1 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Pasar Stuff8</h1>
+        <p id="marketplace-total" class="shrink-0 pb-1 text-xs font-semibold text-slate-500">Belum ada barang</p>
       </div>
 
-      <div class="flex items-end justify-between gap-3">
-        <p class="page-heading">Jelajahi barang</p>
-        <p id="marketplace-total" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">Belum ada barang</p>
-      </div>
-
-      <div id="marketplace-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori marketplace">
-        <!-- Dynamic category tabs rendered here -->
+      <div id="marketplace-category-tabs" class="flex items-stretch gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori marketplace">
+        <!-- Dynamic category showcase rendered here -->
       </div>
 
       <div class="flex items-center gap-2">
@@ -99,17 +89,33 @@ import Layout from '../../layouts/Layout.astro';
         <p class="mt-1 max-w-sm text-xs leading-5 text-slate-500">${escapeHtml(message)}</p>
       </div>`;
 
+    const CATEGORY_META: Record<string, { label: string; icon: string }> = {
+      '': { label: 'Semua', icon: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke-width="2"/></svg>' },
+      'Electronics': { label: 'Elektronik', icon: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="11" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M8 21h8M12 15v6"/></svg>' },
+      'Cameras': { label: 'Kamera', icon: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.5 4h-5L7.5 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.5L14.5 4z"/><circle cx="12" cy="13" r="3" stroke-width="2"/></svg>' },
+      'Bicycles': { label: 'Sepeda', icon: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5" stroke-width="2"/><circle cx="18.5" cy="17.5" r="3.5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.5 17.5 9 10h4l3 7.5M9 10h4l1.5-3H11"/></svg>' },
+      'Books': { label: 'Buku', icon: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/><path stroke-linecap="round" stroke-width="2" d="M20 17v3"/></svg>' },
+      'Musical Instruments': { label: 'Alat Musik', icon: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke-width="2"/></svg>' },
+      'Furniture': { label: 'Furnitur', icon: '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9" width="18" height="6" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M5 15v3.5M19 15v3.5M7.5 15v-3h9v3"/></svg>' }
+    };
+    const FALLBACK_ICON = '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.6 13.4 11 3.8H5a2 2 0 0 0-2 2v6l9.6 9.6a2 2 0 0 0 2.8 0l5.2-5.2a2 2 0 0 0 0-2.8z"/><circle cx="7.5" cy="7.5" r="1" stroke-width="2"/></svg>';
+    const categoryMeta = (value: string) => CATEGORY_META[value] || { label: value, icon: FALLBACK_ICON };
+
     function renderCategoryTabs() {
       if (category && !categories.some(entry => entry.category === category)) category = '';
       const total = categories.reduce((sum, entry) => sum + entry.count, 0);
-      const renderTab = (value: string, label: string, count: number) => {
+      const renderTab = (value: string, count: number) => {
         const active = category === value;
-        const countLabel = count > 0 ? `<span class="ml-1 ${active ? 'text-brand-100' : 'text-slate-400'}">${count}</span>` : '';
-        return `<button type="button" role="tab" aria-selected="${active}" data-marketplace-category="${escapeHtml(value)}" class="shrink-0 min-h-9 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 ${active ? 'border-brand-600 bg-brand-600 text-white' : 'border-navy-100 bg-white text-slate-700 hover:border-brand-300 hover:bg-brand-50'}">${escapeHtml(label)}${countLabel}</button>`;
+        const meta = categoryMeta(value);
+        return `<button type="button" role="tab" aria-selected="${active}" data-marketplace-category="${escapeHtml(value)}" class="group flex min-w-[5.5rem] shrink-0 flex-col items-center gap-1.5 rounded-2xl border px-3 py-3 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 ${active ? 'border-brand-600 bg-brand-600 text-white shadow-sm' : 'border-navy-100 bg-white text-slate-700 hover:border-brand-300 hover:bg-brand-50'}">
+          <span class="flex size-10 items-center justify-center rounded-xl ${active ? 'bg-white/15 text-white' : 'bg-brand-50 text-brand-700 group-hover:bg-brand-100'}">${meta.icon}</span>
+          <span class="max-w-full truncate text-xs font-bold">${escapeHtml(meta.label)}</span>
+          <span class="num text-[10px] font-semibold ${active ? 'text-brand-100' : 'text-slate-400'}">${count} barang</span>
+        </button>`;
       };
       categoryTabs.innerHTML = [
-        renderTab('', 'Semua', total),
-        ...categories.map(entry => renderTab(entry.category, entry.category, entry.count))
+        renderTab('', total),
+        ...categories.map(entry => renderTab(entry.category, entry.count))
       ].join('');
     }
 
