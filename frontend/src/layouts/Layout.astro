@@ -79,6 +79,19 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
               <span class="sr-only">Inbox</span>
             </a>
           </nav>
+          <div class="relative" id="notifications-bell-wrap">
+            <button id="btn-notifications" type="button" aria-label="Notifikasi" aria-expanded="false" aria-controls="notifications-panel" class="relative hidden size-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">
+              <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              <span id="notifications-badge" class="absolute -right-1 -top-1 hidden min-w-[1.125rem] rounded-full bg-rose-600 px-1 py-px text-center text-[10px] font-bold leading-4 text-white shadow-xs">0</span>
+            </button>
+            <div id="notifications-panel" class="absolute right-0 top-12 z-50 hidden w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+              <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+                <p class="text-sm font-bold text-slate-900">Notifikasi</p>
+                <button id="btn-notifications-read-all" type="button" class="text-xs font-bold text-navy-900 hover:underline">Tandai semua dibaca</button>
+              </div>
+              <div id="notifications-list" class="max-h-96 overflow-y-auto"></div>
+            </div>
+          </div>
           <button id="btn-sidebar-toggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="app-sidebar" class="inline-flex size-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">
             <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16" /></svg>
           </button>
@@ -224,5 +237,133 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       document.getElementById('btn-sidebar-guide')?.addEventListener('click', () => location.assign('/?guide=1'));
       document.getElementById('btn-logout')?.addEventListener('click', () => { localStorage.removeItem('stuff8_session'); location.assign('/'); });
     }
+
+    // ─── Notifications bell (every page) ─────────────────────────────────────
+    const notificationsApi = import.meta.env.PUBLIC_NOTIFICATIONS_URL || '/api/notifications';
+    const notificationsBell = document.getElementById('btn-notifications');
+    const notificationsBadge = document.getElementById('notifications-badge');
+    const notificationsPanel = document.getElementById('notifications-panel');
+    const notificationsList = document.getElementById('notifications-list');
+    let notificationsSocket: WebSocket | undefined;
+    let notificationReconnectTimer: number | undefined;
+    let notificationUnread = 0;
+    let recentNotifications: any[] = [];
+
+    const notificationHeaders = () => ({ 'Authorization': `Bearer ${readStuff8Session()?.token}` });
+    const escapeNotification = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
+    const notificationTime = (value?: string) => {
+      const date = new Date(value || 0);
+      if (Number.isNaN(date.getTime())) return '';
+      const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+      if (seconds < 60) return 'Baru saja';
+      if (seconds < 3600) return `${Math.floor(seconds / 60)} menit lalu`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)} jam lalu`;
+      return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+    };
+    const renderNotificationBadge = () => {
+      if (!notificationsBadge) return;
+      if (notificationUnread > 0) {
+        notificationsBadge.textContent = notificationUnread > 99 ? '99+' : String(notificationUnread);
+        notificationsBadge.classList.remove('hidden');
+      } else {
+        notificationsBadge.classList.add('hidden');
+      }
+    };
+    const renderNotificationsList = () => {
+      if (!notificationsList) return;
+      if (!recentNotifications.length) {
+        notificationsList.innerHTML = '<p class="p-6 text-center text-xs text-slate-500">Belum ada notifikasi.</p>';
+        return;
+      }
+      notificationsList.innerHTML = recentNotifications.map(notification => `
+        <a href="${escapeNotification(notification.link || '#')}" data-notification-id="${escapeNotification(notification.id || '')}" class="flex gap-3 border-b border-slate-100 px-4 py-3 transition-colors hover:bg-slate-50 ${notification.read ? '' : 'bg-brand-50/40'}">
+          <span class="mt-1.5 size-2 shrink-0 rounded-full ${notification.read ? 'bg-transparent' : 'bg-brand-600'}" aria-hidden="true"></span>
+          <span class="min-w-0">
+            <span class="block truncate text-xs font-bold text-slate-900">${escapeNotification(notification.title || 'Notifikasi')}</span>
+            <span class="mt-0.5 line-clamp-2 block text-xs leading-relaxed text-slate-600">${escapeNotification(notification.body || '')}</span>
+            <span class="mt-1 block text-[10px] text-slate-400">${notificationTime(notification.createdAt)}</span>
+          </span>
+        </a>`).join('');
+      notificationsList.querySelectorAll<HTMLAnchorElement>('[data-notification-id]').forEach(link => {
+        link.addEventListener('click', () => {
+          const id = link.dataset.notificationId;
+          if (!id) return;
+          fetch(`${notificationsApi}/${encodeURIComponent(id)}/read`, { method: 'POST', headers: notificationHeaders() }).catch(() => {});
+          const item = recentNotifications.find(entry => entry.id === id);
+          if (item) item.read = true;
+          notificationUnread = Math.max(0, notificationUnread - 1);
+          renderNotificationBadge();
+          renderNotificationsList();
+        });
+      });
+    };
+    const openNotificationsSocket = () => {
+      const token = readStuff8Session()?.token;
+      if (!token) return;
+      window.clearTimeout(notificationReconnectTimer);
+      const socket = new WebSocket(`${notificationsApi.replace(/^http/, 'ws')}/ws?token=${encodeURIComponent(token)}`);
+      notificationsSocket = socket;
+      socket.onmessage = event => {
+        try {
+          const payload = JSON.parse(event.data);
+          if (payload.type === 'init') {
+            notificationUnread = Number(payload.unread_count || 0);
+            recentNotifications = Array.isArray(payload.notifications) ? payload.notifications : [];
+            renderNotificationBadge();
+            renderNotificationsList();
+          } else if (payload.type === 'notification') {
+            recentNotifications = [payload.notification, ...recentNotifications.filter(entry => entry.id !== payload.notification?.id)].slice(0, 50);
+            renderNotificationsList();
+          } else if (payload.type === 'unread') {
+            notificationUnread = Number(payload.unread_count || 0);
+            renderNotificationBadge();
+          }
+        } catch { /* ignore malformed frames */ }
+      };
+      socket.onclose = () => {
+        if (notificationsSocket === socket) notificationsSocket = undefined;
+        notificationReconnectTimer = window.setTimeout(openNotificationsSocket, 5000);
+      };
+      socket.onerror = () => { socket.close(); };
+    };
+    const loadNotifications = async () => {
+      if (!readStuff8Session()?.token || !readStuff8Session()?.user?.id) return;
+      notificationsBell?.classList.remove('hidden');
+      notificationsBell?.classList.add('flex');
+      try {
+        const [listResponse, countResponse] = await Promise.all([
+          fetch(`${notificationsApi}?limit=20`, { headers: notificationHeaders() }),
+          fetch(`${notificationsApi}/unread-count`, { headers: notificationHeaders() })
+        ]);
+        if (listResponse.ok) recentNotifications = await listResponse.json();
+        if (countResponse.ok) notificationUnread = Number((await countResponse.json()).unread_count || 0);
+        renderNotificationBadge();
+        renderNotificationsList();
+      } catch { /* keep the bell hidden on failure */ }
+      openNotificationsSocket();
+    };
+    notificationsBell?.addEventListener('click', event => {
+      event.stopPropagation();
+      const isOpen = notificationsPanel?.classList.toggle('hidden') === false;
+      notificationsBell.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.getElementById('btn-notifications-read-all')?.addEventListener('click', async event => {
+      event.stopPropagation();
+      if (!readStuff8Session()?.token) return;
+      try { await fetch(`${notificationsApi}/read-all`, { method: 'POST', headers: notificationHeaders() }); } catch {}
+      recentNotifications.forEach(entry => { entry.read = true; });
+      notificationUnread = 0;
+      renderNotificationBadge();
+      renderNotificationsList();
+    });
+    document.addEventListener('click', event => {
+      if (notificationsPanel?.classList.contains('hidden')) return;
+      const wrap = document.getElementById('notifications-bell-wrap');
+      if (wrap && !wrap.contains(event.target as Node)) {
+        notificationsPanel.classList.add('hidden');
+        notificationsBell?.setAttribute('aria-expanded', 'false');
+      }
+    });
+    if (readStuff8Session()?.token && readStuff8Session()?.user?.id) loadNotifications();
   </script>
 </html>

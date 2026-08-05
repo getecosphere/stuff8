@@ -3417,7 +3417,7 @@ import Layout from '../layouts/Layout.astro';
 
       // Backend API calls
       try {
-        await fetch(`${BIDDING_API}/bids/${bidId}/sold`, { method: 'POST' });
+        await fetch(`${BIDDING_API}/bids/${bidId}/sold`, { method: 'POST', headers: (() => { const s = JSON.parse(localStorage.getItem('stuff8_session') || 'null'); return s?.token ? { 'Authorization': `Bearer ${s.token}` } : {}; })() });
       } catch (e) {}
 
       try {
@@ -3563,7 +3563,8 @@ import Layout from '../layouts/Layout.astro';
     (window as any).acceptBid = async (bidId: string) => {
       try {
         const res = await fetch(`${BIDDING_API}/bids/${bidId}/accept`, {
-          method: 'POST'
+          method: 'POST',
+          headers: (() => { const s = JSON.parse(localStorage.getItem('stuff8_session') || 'null'); return s?.token ? { 'Authorization': `Bearer ${s.token}` } : {}; })()
         });
         if (res.ok) {
           const data = await res.json();

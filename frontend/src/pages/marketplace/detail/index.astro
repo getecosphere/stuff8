@@ -98,7 +98,7 @@ import Layout from '../../../layouts/Layout.astro';
       const user = sender();
       const response = await fetch(`${BIDDING}/bids`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...chatHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify({
           item_id: item.id,
           buyer_id: user.id,
