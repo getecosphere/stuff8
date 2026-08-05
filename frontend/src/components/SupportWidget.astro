@@ -1,0 +1,165 @@
+---
+// Floating support chat (bottom-left) on every page. Opens for everyone, but
+// anonymous visitors must sign in before chatting — a lead-capture funnel, not
+// a hard gate. Backed by the reusable `rag` domain (PUBLIC_RAG_URL).
+---
+<div id="support-widget" class="fixed bottom-4 left-4 z-[80]">
+  <button id="support-widget-toggle" type="button" aria-expanded="false" aria-controls="support-widget-panel" aria-label="Buka pusat bantuan"
+    class="group flex h-14 items-center gap-2.5 rounded-full bg-navy-900 pl-4 pr-5 text-sm font-bold text-white shadow-xl shadow-navy-900/25 transition-all hover:bg-brand-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
+    <svg class="size-6 transition-transform group-hover:-rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.278-3.833A7.72 7.72 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    <span id="support-widget-label">Bantuan</span>
+  </button>
+
+  <div id="support-widget-panel" class="mt-3 hidden w-[calc(100vw-2rem)] max-w-[23rem] flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-2xl shadow-navy-900/20">
+    <div class="flex items-center justify-between gap-3 border-b border-navy-100 bg-navy-900 px-4 py-3">
+      <div class="flex items-center gap-2.5">
+        <span class="flex size-8 items-center justify-center rounded-full bg-white/10 text-white" aria-hidden="true">
+          <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.278-3.833A7.72 7.72 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </span>
+        <div class="min-w-0">
+          <p class="truncate text-sm font-bold text-white">Pusat Bantuan Stuff8</p>
+          <p class="text-[11px] text-navy-200">Balasan otomatis dari dokumentasi</p>
+        </div>
+      </div>
+      <button id="support-widget-close" type="button" aria-label="Tutup pusat bantuan" class="inline-flex size-8 items-center justify-center rounded-full text-navy-200 transition-colors hover:bg-white/10 hover:text-white">×</button>
+    </div>
+
+    <div id="support-widget-body" class="min-h-[24rem] flex-col">
+      <div id="support-widget-login" class="flex flex-col items-center gap-4 px-6 py-10 text-center">
+        <span class="flex size-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+          <svg class="size-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.278-3.833A7.72 7.72 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </span>
+        <div>
+          <p class="text-base font-extrabold text-navy-900">Halo! 👋</p>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">Punya pertanyaan soal Stuff8? Masuk dulu untuk mulai ngobrol dengan asisten bantuan kami — gratis dan tanpa ribet.</p>
+        </div>
+        <div class="flex w-full flex-col gap-2">
+          <a href="/auth/signup/" class="w-full rounded-xl bg-brand-600 px-4 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">Daftar sekarang</a>
+          <a href="/auth/signin/" class="w-full rounded-xl border border-navy-100 px-4 py-3 text-center text-sm font-bold text-navy-900 transition-colors hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">Saya sudah punya akun</a>
+        </div>
+        <p class="text-[11px] text-slate-400">Tanpa akun kamu bisa kelola inventaris pribadi setelah masuk.</p>
+      </div>
+
+      <div id="support-widget-chat" class="hidden h-[28rem] flex-col">
+        <div id="support-widget-messages" class="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4"></div>
+        <form id="support-widget-form" class="flex items-center gap-2 border-t border-navy-100 p-3">
+          <input id="support-widget-input" type="text" autocomplete="off" placeholder="Tanya apa saja…" maxlength="500"
+            class="h-11 min-w-0 flex-1 rounded-xl border border-navy-100 bg-white px-3.5 text-sm text-navy-900 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20" />
+          <button type="submit" id="support-widget-send" aria-label="Kirim" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white transition-colors hover:bg-brand-700 disabled:opacity-50">
+            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const RAG = import.meta.env.PUBLIC_RAG_URL || '/api/rag';
+  const panel = document.getElementById('support-widget-panel')!;
+  const toggle = document.getElementById('support-widget-toggle')!;
+  const label = document.getElementById('support-widget-label')!;
+  const closeBtn = document.getElementById('support-widget-close')!;
+  const loginView = document.getElementById('support-widget-login')!;
+  const chatView = document.getElementById('support-widget-chat')!;
+  const messages = document.getElementById('support-widget-messages')!;
+  const form = document.getElementById('support-widget-form')!;
+  const input = document.getElementById('support-widget-input') as HTMLInputElement | null;
+  const sendBtn = document.getElementById('support-widget-send') as HTMLButtonElement | null;
+
+  const readSession = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
+  const getSessionId = () => {
+    let id = localStorage.getItem('rag_session_id');
+    if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random())); localStorage.setItem('rag_session_id', id); }
+    return id;
+  };
+  const escapeHtml = (value: string) => value.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch] || ch));
+  const scrollToBottom = () => { messages.scrollTop = messages.scrollHeight; };
+
+  const setOpen = (open: boolean) => {
+    panel.classList.toggle('hidden', !open);
+    panel.classList.toggle('flex', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? 'Tutup' : 'Bantuan';
+    if (open) syncAuthState();
+  };
+  toggle.addEventListener('click', () => setOpen(panel.classList.contains('hidden')));
+  closeBtn.addEventListener('click', () => setOpen(false));
+
+  const addBubble = (role: 'user' | 'bot', text: string, sources?: string[]) => {
+    const wrap = document.createElement('div');
+    wrap.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+    const bubble = document.createElement('div');
+    bubble.className = role === 'user'
+      ? 'max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-sm bg-brand-600 px-3.5 py-2.5 text-sm text-white'
+      : 'max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-bl-sm border border-navy-100 bg-white px-3.5 py-2.5 text-sm text-navy-900';
+    bubble.textContent = text;
+    wrap.append(bubble);
+    messages.append(wrap);
+    if (sources && sources.length) {
+      const note = document.createElement('p');
+      note.className = 'max-w-[85%] text-[11px] leading-relaxed text-slate-400';
+      note.textContent = 'Sumber: ' + sources.map(s => s.file).slice(0, 3).join(', ');
+      messages.append(note);
+    }
+    scrollToBottom();
+  };
+
+  const addTyping = () => {
+    const wrap = document.createElement('div');
+    wrap.id = 'support-typing';
+    wrap.className = 'flex justify-start';
+    wrap.innerHTML = '<div class="flex items-center gap-1 rounded-2xl rounded-bl-sm border border-navy-100 bg-white px-4 py-3"><span class="size-1.5 animate-bounce rounded-full bg-slate-400"></span><span class="size-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:0.15s]"></span><span class="size-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:0.3s]"></span></div>';
+    messages.append(wrap);
+    scrollToBottom();
+    return wrap;
+  };
+
+  const syncAuthState = () => {
+    const user = readSession()?.user;
+    const loggedIn = Boolean(user?.id);
+    loginView.classList.toggle('hidden', loggedIn);
+    loginView.classList.toggle('flex', !loggedIn);
+    chatView.classList.toggle('hidden', !loggedIn);
+    chatView.classList.toggle('flex', loggedIn);
+    if (loggedIn && !messages.querySelector('[data-welcome]')) {
+      const welcome = document.createElement('div');
+      welcome.dataset.welcome = '1';
+      messages.append(welcome);
+      addBubble('bot', `Halo, ${user?.name || user?.username || ''}! 👋 Tanya apa saja seputar Stuff8 — cara menjual, kelola inventaris, atau pakai marketplace.`);
+      addBubble('bot', 'Tips: tulis pertanyaan spesifik, misalnya "Bagaimana cara menandai barang sebagai sellable?"');
+    }
+  };
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const question = input?.value.trim() || '';
+    if (!question) return;
+    const user = readSession()?.user;
+    if (!user?.id) { location.assign('/auth/signin/'); return; }
+    input!.value = '';
+    addBubble('user', question);
+    sendBtn!.disabled = true;
+    const typing = addTyping();
+    try {
+      const response = await fetch(`${RAG}/chat`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ question, session_id: getSessionId(), user_id: user.id })
+      });
+      const data = await response.json();
+      typing.remove();
+      if (!response.ok) {
+        addBubble('bot', data.error || 'Maaf, terjadi kendala. Coba lagi sebentar lagi.');
+        return;
+      }
+      addBubble('bot', data.answer || '', data.sources || []);
+    } catch {
+      typing.remove();
+      addBubble('bot', 'Maaf, asisten sedang tidak dapat dihubungi. Coba lagi nanti.');
+    } finally {
+      sendBtn!.disabled = false;
+      input?.focus();
+    }
+  });
+</script>
