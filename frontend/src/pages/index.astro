@@ -2042,6 +2042,19 @@ import Layout from '../layouts/Layout.astro';
 
         render();
 
+        // The inventory detail page's Edit button lands here (?edit=<id>);
+        // open the editor for that item once its data is loaded.
+        const editParam = new URLSearchParams(location.search).get('edit');
+        if (editParam && currentSession?.user) {
+          const editable = items.find((entry: any) => entry.id === editParam && entry.owner_id === currentSession.user.id);
+          if (editable) {
+            openItemEditor(editParam);
+          } else {
+            showNotice('Barang ini tidak dapat diedit: bukan milik Anda atau sudah berpindah tangan.');
+            history.replaceState(null, '', '/inventory/');
+          }
+        }
+
         // Re-sync sellable items whose photos in the marketplace listing are
         // stale or missing. This fixes listings published before photo upload
         // or before a re-deploy that changed the storage URL configuration.
@@ -3574,16 +3587,7 @@ import Layout from '../layouts/Layout.astro';
           const targetBid = bids.find(b => b.id === bidId);
           if (targetBid) {
             targetBid.status = 'Accepted';
-        render();
-
-        // The inventory detail page's Edit button lands here (?edit=<id>);
-        // open the editor for that item once its data is loaded.
-        const editParam = new URLSearchParams(location.search).get('edit');
-        if (editParam && currentSession?.user) {
-          const editable = items.find((entry: any) => entry.id === editParam && entry.owner_id === currentSession.user.id);
-          if (editable) openItemEditor(editParam);
-        }
-
+            render();
             (window as any).openChatModal(bidId);
           }
         }
