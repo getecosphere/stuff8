@@ -31,6 +31,8 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     </article>
   </div>
   <script>
+    import { openLightbox } from '../../../lib/lightbox';
+
     const INVENTORY = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const PHOTOS = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const root = document.getElementById('inventory-detail')!;
@@ -63,8 +65,8 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
       root.innerHTML = `
         <div class="grid gap-6 md:grid-cols-2">
           <div class="space-y-3">
-            <div class="aspect-square overflow-hidden rounded-xl bg-slate-100"><img id="detail-photo" src="${photoUrl(photos[0])}" alt="${escapeHtml(item.title || 'Foto barang')}" class="size-full object-cover" /></div>
-            ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-photo="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-navy-100"><img src="${photoUrl(photo)}" alt="Foto ${index + 1}" class="size-full object-cover" /></button>`).join('')}</div>` : ''}
+            <button type="button" data-main-photo class="group relative block aspect-square w-full cursor-zoom-in overflow-hidden rounded-xl bg-slate-100"><img id="detail-photo" src="${photoUrl(photos[0])}" alt="${escapeHtml(item.title || 'Foto barang')}" class="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /><span class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-navy-950/70 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-sm transition-colors group-hover:bg-navy-950"><svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v11m0 5 4.879-4.879m0 0a3 3 0 1 0 4.243-4.242 3 3 0 0 0-4.243 4.242Z"/></svg>Perbesar</span></button>
+            ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-photo="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-navy-100 transition hover:border-clay-400"><img src="${photoUrl(photo)}" alt="Foto ${index + 1}" class="size-full object-cover" /></button>`).join('')}</div>` : ''}
           </div>
           <div class="space-y-4">
             <div class="flex items-center justify-between gap-3">
@@ -87,7 +89,10 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
           </div>
         </div>
       `;
-      document.querySelectorAll<HTMLButtonElement>('[data-photo]').forEach(button => button.addEventListener('click', () => { (document.getElementById('detail-photo') as HTMLImageElement).src = photoUrl(photos[Number(button.dataset.photo)]); }));
+      const galleryPhotos = (photos[0] ? photos : [photos[0]]).map((photo: string) => ({ src: photoUrl(photo), alt: `${escapeHtml(item.title || 'Foto barang')} — foto` }));
+      let currentPhoto = 0;
+      document.querySelectorAll<HTMLButtonElement>('[data-photo]').forEach(button => button.addEventListener('click', () => { currentPhoto = Number(button.dataset.photo); (document.getElementById('detail-photo') as HTMLImageElement).src = photoUrl(photos[currentPhoto]); }));
+      document.querySelector<HTMLButtonElement>('[data-main-photo]')?.addEventListener('click', () => openLightbox(galleryPhotos, currentPhoto));
     }
     load().catch(error => { root.innerHTML = `<div class="py-10 text-center text-sm text-rose-700">${escapeHtml(error?.message || 'Barang tidak dapat dimuat.')}</div>`; });
   </script>

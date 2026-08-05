@@ -2084,8 +2084,8 @@ import Layout from '../layouts/Layout.astro';
           `;
         } else {
           gridInventory.innerHTML = visibleItems.map(item => inventoryView === 'list' ? `
-            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="flex cursor-pointer gap-3 rounded-2xl border border-navy-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,30,25,0.04)] transition-all hover:border-clay-300 hover:shadow-md">
-              <div class="relative size-20 shrink-0 overflow-hidden rounded-xl bg-navy-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
+            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="card-interactive flex cursor-pointer gap-3 rounded-2xl border border-navy-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,30,25,0.04)] hover:border-clay-300 hover:shadow-md">
+              <div class="card-img-zoom relative size-20 shrink-0 overflow-hidden rounded-xl bg-navy-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
               <div class="min-w-0 flex-1">
                 <div class="flex items-start justify-between gap-3"><div class="min-w-0"><p class="truncate text-[11px] font-bold uppercase tracking-wider text-clay-600">${item.category}</p><h3 class="truncate text-sm font-bold text-navy-900">${item.title}</h3></div><span class="num shrink-0 text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span></div>
                 <p class="mt-1 line-clamp-1 text-xs text-slate-500">${item.description || 'Tanpa deskripsi'}</p>
@@ -2095,13 +2095,13 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </article>
           ` : inventoryView === 'thumbnail' ? `
-            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="cursor-pointer overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-[0_1px_2px_rgba(15,30,25,0.04)] transition-all hover:border-clay-300 hover:shadow-md">
-              <div class="relative aspect-square bg-navy-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-bold text-white">SOLD (Terjual)</span>` : ''}</div>
+            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="card-interactive cursor-pointer overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-[0_1px_2px_rgba(15,30,25,0.04)] hover:border-clay-300 hover:shadow-md">
+              <div class="card-img-zoom relative aspect-square bg-navy-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-bold text-white">SOLD (Terjual)</span>` : ''}</div>
               <div class="space-y-1 p-3"><p class="truncate text-[11px] font-bold text-clay-600">${item.category}</p><h3 class="mt-0.5 truncate text-sm font-bold text-navy-900">${item.title}</h3><p class="num text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</p></div>
             </article>
           ` : `
-            <div onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="group cursor-pointer bg-white border border-navy-100 rounded-2xl overflow-hidden hover:border-clay-300 hover:shadow-lg transition-all flex flex-col justify-between shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-              <div class="h-36 sm:h-48 bg-navy-100 relative overflow-hidden flex items-center justify-center">
+            <div onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="group card-interactive cursor-pointer bg-white border border-navy-100 rounded-2xl overflow-hidden hover:border-clay-300 hover:shadow-lg flex flex-col justify-between shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
+              <div class="card-img-zoom h-36 sm:h-48 bg-navy-100 relative overflow-hidden flex items-center justify-center">
                 ${renderProductPhotoCarousel(item, `inventory-card-${item.id}`, 'w-full h-full')}
                 ${isItemSold(item)
                   ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[11px] font-bold text-white shadow-xs">SOLD (Terjual)</span>`

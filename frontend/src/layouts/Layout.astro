@@ -337,7 +337,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
     const renderNotificationsList = () => {
       if (!notificationsList) return;
       if (!recentNotifications.length) {
-        notificationsList.innerHTML = '<p class="p-6 text-center text-xs text-slate-500">Belum ada notifikasi.</p>';
+        notificationsList.innerHTML = '<p class="p-6 text-center text-xs text-slate-500">Belum ada notifikasi. Aktivitas offer dan marketplace akan muncul di sini.</p>';
         return;
       }
       notificationsList.innerHTML = recentNotifications.map(notification => `

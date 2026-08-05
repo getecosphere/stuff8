@@ -158,4 +158,214 @@
     border-radius: 9999px;
     background: theme('colors.navy.200');
   }
+
+  /* Lightbox: full-screen photo viewer (item detail pages) */
+  .lb-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(11 16 14 / 0.9);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    animation: lb-fade-in 200ms ease both;
+  }
+
+  .lb-figure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: zoom-out;
+  }
+
+  .lb-img {
+    max-width: calc(100vw - 2.5rem);
+    max-height: calc(100dvh - 5rem);
+    object-fit: contain;
+    border-radius: 1rem;
+    box-shadow: 0 20px 60px rgb(0 0 0 / 0.5);
+    background: #fff;
+  }
+
+  .lb-img-swap {
+    animation: lb-img-in 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .lb-close,
+  .lb-nav {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: none;
+    color: #fff;
+    background: rgb(255 255 255 / 0.12);
+    transition: background-color 150ms ease, transform 150ms ease;
+  }
+
+  .lb-close:hover,
+  .lb-nav:hover {
+    background: rgb(255 255 255 / 0.24);
+  }
+
+  .lb-close:active,
+  .lb-nav:active {
+    transform: scale(0.94);
+  }
+
+  .lb-close {
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .lb-close svg,
+  .lb-nav svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .lb-nav {
+    top: 50%;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translateY(-50%);
+  }
+
+  .lb-nav:active {
+    transform: translateY(-50%) scale(0.94);
+  }
+
+  .lb-nav-prev {
+    left: 1rem;
+  }
+
+  .lb-nav-next {
+    right: 1rem;
+  }
+
+  .lb-counter,
+  .lb-caption {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 9999px;
+    color: #fff;
+    background: rgb(15 23 20 / 0.75);
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .lb-counter {
+    bottom: 1.25rem;
+    padding: 0.35rem 0.9rem;
+  }
+
+  .lb-caption {
+    bottom: 3.75rem;
+    max-width: min(28rem, calc(100vw - 3rem));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0.3rem 0.85rem;
+    font-weight: 500;
+  }
+
+  .lb-leave {
+    animation: lb-fade-out 160ms ease both;
+  }
+
+  @keyframes lb-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes lb-fade-out {
+    to { opacity: 0; }
+  }
+
+  @keyframes lb-img-in {
+    from { opacity: 0; transform: scale(0.985); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Card hover: gentle lift + image zoom for interactive cards */
+  .card-interactive {
+    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 240ms ease, border-color 240ms ease;
+  }
+
+  .card-interactive:hover {
+    transform: translateY(-2px);
+  }
+
+  .card-interactive:active {
+    transform: translateY(-1px);
+  }
+
+  .card-img-zoom img {
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .group:hover .card-img-zoom img,
+  .card-img-zoom:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Tactile press for buttons/links */
+  .btn-press {
+    transition: transform 120ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, color 150ms ease;
+  }
+
+  .btn-press:active {
+    transform: scale(0.97);
+  }
+
+  /* Marketplace price ticker (marquee) */
+  .ticker-mask {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 36s linear infinite;
+  }
+
+  .ticker-mask:hover .ticker-track {
+    animation-play-state: paused;
+  }
+
+  .ticker-track > * {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+  }
+
+  @keyframes ticker-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lb-overlay,
+    .lb-img-swap,
+    .card-interactive,
+    .card-img-zoom img,
+    .btn-press,
+    .ticker-track {
+      animation: none;
+      transition: none;
+      transform: none;
+    }
+  }
 }
