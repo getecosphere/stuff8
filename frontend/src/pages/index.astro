@@ -288,23 +288,27 @@ import Layout from '../layouts/Layout.astro';
     <!-- ================================================================= -->
     <div id="signed-in-dashboard" class="hidden min-h-[calc(100dvh-10rem)] flex flex-col gap-4 transition-all duration-300">
       
-      <!-- Kept in the DOM for existing data updates; inventory management takes priority on mobile. -->
-      <div class="hidden grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-xs">
-          <span class="text-slate-500 text-xs font-medium">Total Barang</span>
-          <div id="stat-total-items" class="text-2xl font-bold text-slate-900">0</div>
+      <!-- Money-center stats: the personal pulse of the inventory -->
+      <div class="hidden grid-cols-2 gap-3 md:grid md:grid-cols-4">
+        <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
+          <span class="text-xs font-medium text-slate-500">Total Barang</span>
+          <div id="stat-total-items" class="num mt-1 text-2xl font-bold text-navy-900">0</div>
+          <span class="mt-1 block text-[11px] text-slate-400">koleksi pribadimu</span>
         </div>
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-xs">
-          <span class="text-slate-500 text-xs font-medium">Est. Total Nilai</span>
-          <div id="stat-total-value" class="text-2xl font-bold text-navy-900">Rp 0</div>
+        <div class="rounded-2xl border border-clay-200 bg-gradient-to-br from-clay-50 to-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
+          <span class="text-xs font-medium text-clay-700">Est. Total Nilai</span>
+          <div id="stat-total-value" class="num mt-1 text-2xl font-extrabold text-clay-700">Rp 0</div>
+          <span class="mt-1 block text-[11px] text-clay-500">apa yang kamu punya</span>
         </div>
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-xs">
-          <span class="text-slate-500 text-xs font-medium">Barang Dipajang</span>
-          <div id="stat-sellable-count" class="text-2xl font-bold text-brand-700">0</div>
+        <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
+          <span class="text-xs font-medium text-slate-500">Barang Dipajang</span>
+          <div id="stat-sellable-count" class="num mt-1 text-2xl font-bold text-brand-700">0</div>
+          <span class="mt-1 block text-[11px] text-slate-400">tampil di Pasar</span>
         </div>
-        <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-xs">
-          <span class="text-slate-500 text-xs font-medium">Penawaran Masuk</span>
-          <div id="stat-bids-count" class="text-2xl font-bold text-slate-900">0</div>
+        <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
+          <span class="text-xs font-medium text-slate-500">Penawaran Masuk</span>
+          <div id="stat-bids-count" class="num mt-1 text-2xl font-bold text-navy-900">0</div>
+          <span class="mt-1 block text-[11px] text-slate-400">dari pembeli</span>
         </div>
       </div>
 
@@ -323,7 +327,8 @@ import Layout from '../layouts/Layout.astro';
       <section id="inventory-category-section" class="space-y-3" aria-label="Ringkasan dan filter inventaris">
         <div class="flex items-end justify-between gap-3">
           <div class="min-w-0">
-            <h1 id="inventory-total-value" class="page-heading truncate">Belum ada nilai inventaris</h1>
+            <h1 id="inventory-total-value" class="font-display truncate text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Belum ada nilai inventaris</h1>
+            <p class="mt-1 text-xs text-slate-500">Koleksimu · tahu apa yang kamu punya, di mana, dan berapa nilainya.</p>
           </div>
           <p id="inventory-total-count" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">Belum ada barang</p>
         </div>
@@ -334,16 +339,16 @@ import Layout from '../layouts/Layout.astro';
           <label class="relative min-w-0 flex-1">
             <span class="sr-only">Cari barang inventaris</span>
             <svg class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m16 16 4 4"/></svg>
-            <input id="inventory-search" type="search" autocomplete="off" placeholder="Cari barang" class="min-h-10 w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-navy-900 focus:ring-2 focus:ring-navy-900/10" />
+            <input id="inventory-search" type="search" autocomplete="off" placeholder="Cari barang" class="min-h-10 w-full rounded-full border border-navy-100 bg-white py-2 pl-9 pr-3 text-sm text-navy-900 outline-none transition-colors placeholder:text-slate-400 focus:border-clay-500 focus:ring-2 focus:ring-clay-500/20" />
           </label>
           <details id="inventory-view-menu" class="relative shrink-0">
-            <summary id="inventory-view-trigger" aria-label="Pilih mode tampilan inventaris" class="flex size-10 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 marker:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-900/20 [&::-webkit-details-marker]:hidden">
+            <summary id="inventory-view-trigger" aria-label="Pilih mode tampilan inventaris" class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full border border-navy-100 bg-white text-slate-700 marker:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-500/20 [&::-webkit-details-marker]:hidden">
               <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg>
             </summary>
-            <div class="absolute right-0 z-20 mt-2 flex w-36 justify-around rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg" role="group" aria-label="Mode tampilan inventaris">
-              <button type="button" data-inventory-view="list" aria-label="Tampilan daftar" title="Tampilan daftar" class="rounded-md p-2 text-slate-600 hover:bg-slate-100"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
-              <button type="button" data-inventory-view="thumbnail" aria-label="Tampilan thumbnail" title="Tampilan thumbnail" class="rounded-md p-2 text-slate-600 hover:bg-slate-100"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1" stroke-width="2"/></svg></button>
-              <button type="button" data-inventory-view="card" aria-label="Tampilan kartu" title="Tampilan kartu" class="rounded-md p-2 text-slate-600 hover:bg-slate-100"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg></button>
+            <div class="absolute right-0 z-20 mt-2 flex w-36 justify-around rounded-full border border-navy-100 bg-white p-1.5 shadow-lg" role="group" aria-label="Mode tampilan inventaris">
+              <button type="button" data-inventory-view="list" aria-label="Tampilan daftar" title="Tampilan daftar" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
+              <button type="button" data-inventory-view="thumbnail" aria-label="Tampilan thumbnail" title="Tampilan thumbnail" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1" stroke-width="2"/></svg></button>
+              <button type="button" data-inventory-view="card" aria-label="Tampilan kartu" title="Tampilan kartu" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg></button>
             </div>
           </details>
         </div>
@@ -899,7 +904,7 @@ import Layout from '../layouts/Layout.astro';
       const renderTab = (category: string, label: string, count: number) => {
         const active = selectedInventoryCategory === category;
         const countLabel = count > 0 ? `<span class="ml-1 ${active ? 'text-slate-300' : 'text-slate-400'}">${count}</span>` : '';
-        return `<button type="button" role="tab" aria-selected="${active}" data-category="${escapeHtml(category)}" class="shrink-0 min-h-9 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900 ${active ? 'border-navy-900 bg-navy-900 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'}">${escapeHtml(label)}${countLabel}</button>`;
+        return `<button type="button" role="tab" aria-selected="${active}" data-category="${escapeHtml(category)}" class="shrink-0 min-h-9 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay-500 ${active ? 'border-clay-600 bg-clay-600 text-white' : 'border-navy-100 bg-white text-slate-700 hover:border-clay-300 hover:bg-clay-50'}">${escapeHtml(label)}${countLabel}</button>`;
       };
 
       categoryTabs.innerHTML = [
@@ -1970,56 +1975,59 @@ import Layout from '../layouts/Layout.astro';
           `;
         } else {
           gridInventory.innerHTML = visibleItems.map(item => inventoryView === 'list' ? `
-            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="flex cursor-pointer gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-xs transition-all hover:border-slate-300">
-              <div class="relative size-20 shrink-0 overflow-hidden rounded-lg bg-slate-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
+            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="flex cursor-pointer gap-3 rounded-2xl border border-navy-100 bg-white p-3 shadow-[0_1px_2px_rgba(15,30,25,0.04)] transition-all hover:border-clay-300 hover:shadow-md">
+              <div class="relative size-20 shrink-0 overflow-hidden rounded-xl bg-slate-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
               <div class="min-w-0 flex-1">
-                <div class="flex items-start justify-between gap-3"><div class="min-w-0"><p class="truncate text-xs font-semibold uppercase tracking-wider text-brand-700">${item.category}</p><h3 class="truncate text-sm font-bold text-slate-900">${item.title}</h3></div><span class="shrink-0 text-xs font-bold text-slate-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span></div>
+                <div class="flex items-start justify-between gap-3"><div class="min-w-0"><p class="truncate text-[11px] font-bold uppercase tracking-wider text-clay-600">${item.category}</p><h3 class="truncate text-sm font-bold text-navy-900">${item.title}</h3></div><span class="num shrink-0 text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span></div>
                 <p class="mt-1 line-clamp-1 text-xs text-slate-500">${item.description || 'Tanpa deskripsi'}</p>
                 ${isItemSold(item)
-                  ? `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-bold text-emerald-700">✓ SOLD (Terjual)</span>${soldListingLink(item)}</div>`
-                  : `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-semibold ${item.sellable ? 'text-navy-900' : 'text-slate-500'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span><button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" class="text-xs font-bold text-navy-900 hover:underline">${item.sellable ? 'Sembunyikan' : 'Jual'}</button></div>`}
+                  ? `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-bold text-brand-700">✓ SOLD (Terjual)</span>${soldListingLink(item)}</div>`
+                  : `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-semibold ${item.sellable ? 'text-navy-900' : 'text-slate-500'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span><button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" class="text-xs font-bold text-clay-700 hover:underline">${item.sellable ? 'Sembunyikan' : 'Jual'}</button></div>`}
               </div>
             </article>
           ` : inventoryView === 'thumbnail' ? `
-            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs transition-all hover:border-slate-300">
-              <div class="relative aspect-square bg-slate-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-emerald-600 px-2 py-1 text-[10px] font-bold text-white">SOLD (Terjual)</span>` : ''}</div>
-              <div class="p-3"><p class="truncate text-xs font-semibold text-brand-700">${item.category}</p><h3 class="mt-0.5 truncate text-sm font-bold text-slate-900">${item.title}</h3><p class="mt-1 text-xs font-semibold text-slate-600">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</p></div>
+            <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="cursor-pointer overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-[0_1px_2px_rgba(15,30,25,0.04)] transition-all hover:border-clay-300 hover:shadow-md">
+              <div class="relative aspect-square bg-slate-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-bold text-white">SOLD (Terjual)</span>` : ''}</div>
+              <div class="space-y-1 p-3"><p class="truncate text-[11px] font-bold text-clay-600">${item.category}</p><h3 class="mt-0.5 truncate text-sm font-bold text-navy-900">${item.title}</h3><p class="num text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</p></div>
             </article>
           ` : `
-            <div onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="cursor-pointer bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between shadow-xs">
+            <div onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="group cursor-pointer bg-white border border-navy-100 rounded-2xl overflow-hidden hover:border-clay-300 hover:shadow-lg transition-all flex flex-col justify-between shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
               <div class="h-36 sm:h-48 bg-slate-100 relative overflow-hidden flex items-center justify-center">
                 ${renderProductPhotoCarousel(item, `inventory-card-${item.id}`, 'w-full h-full')}
                 ${isItemSold(item)
-                  ? `<span class="absolute top-2 right-2 rounded-md bg-emerald-600 px-2 py-1 text-[11px] font-bold text-white shadow-xs">SOLD (Terjual)</span>`
+                  ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[11px] font-bold text-white shadow-xs">SOLD (Terjual)</span>`
                   : `<span class="absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-semibold ${item.sellable ? 'bg-navy-900 text-white shadow-xs' : 'bg-slate-200 text-slate-700'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span>`}
               </div>
               <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
                 <div>
-                  <span class="text-xs font-semibold text-brand-700 uppercase tracking-wider">${item.category}</span>
-                  <h3 class="font-bold text-slate-900 text-base leading-snug">${item.title}</h3>
-                  <p class="text-slate-600 text-xs line-clamp-2 mt-1">${item.description}</p>
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-[11px] font-bold text-clay-600 uppercase tracking-wider">${item.category}</span>
+                    ${item.condition ? `<span class="shrink-0 rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">${escapeHtml(item.condition)}</span>` : ''}
+                  </div>
+                  <h3 class="font-bold text-navy-900 text-base leading-snug mt-1">${item.title}</h3>
+                  <p class="text-slate-500 text-xs line-clamp-2 mt-1">${item.description || 'Tanpa deskripsi'}</p>
                 </div>
 
-                <div class="pt-3 border-t border-slate-100 text-xs space-y-1">
+                <div class="pt-3 border-t border-navy-100 text-xs space-y-1.5">
                   <div class="flex justify-between text-slate-500">
-                    <span>Lokasi Simpan:</span> <span class="font-medium text-slate-800">${item.storage_location || '-'}</span>
+                    <span>Lokasi Simpan:</span> <span class="font-medium text-navy-800">${item.storage_location || '-'}</span>
                   </div>
-                  <div class="flex justify-between text-slate-500">
-                    <span>Nilai Jual:</span> <span class="font-medium text-slate-800">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span>
+                  <div class="flex justify-between items-baseline text-slate-500">
+                    <span>Nilai Jual:</span> <span class="num text-base font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span>
                   </div>
-                  ${item.sellable ? `<div class="flex justify-between text-navy-900 font-bold text-sm">
-                    <span>Harga Buka:</span> <span>Rp ${(item.asking_price || 0).toLocaleString('id-ID')}</span>
+                  ${item.sellable ? `<div class="flex justify-between items-baseline text-navy-900 font-bold">
+                    <span>Harga Buka:</span> <span class="num text-base">Rp ${(item.asking_price || 0).toLocaleString('id-ID')}</span>
                   </div>` : ''}
-                  ${isItemSold(item) ? `<div class="flex justify-between font-bold text-sm text-emerald-700">
-                    <span>Terjual ke:</span> <span>${escapeHtml(item.buyer_name || 'Pembeli')} · Rp ${(item.final_price || 0).toLocaleString('id-ID')}</span>
+                  ${isItemSold(item) ? `<div class="flex justify-between font-bold text-sm text-brand-700">
+                    <span>Terjual ke:</span> <span class="num">${escapeHtml(item.buyer_name || 'Pembeli')} · Rp ${(item.final_price || 0).toLocaleString('id-ID')}</span>
                   </div>` : ''}
                 </div>
 
-                <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                <div class="flex items-center justify-between border-t border-navy-100 pt-3">
                   ${isItemSold(item)
-                    ? `<span class="text-xs font-bold text-emerald-700">✓ SOLD (Terjual)</span>${soldListingLink(item)}`
+                    ? `<span class="text-xs font-bold text-brand-700">✓ SOLD (Terjual)</span>${soldListingLink(item)}`
                     : `<span class="text-xs font-semibold text-slate-600">Marketplace</span>
-                  <button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" role="switch" aria-checked="${item.sellable}" aria-label="${item.sellable ? 'Sembunyikan dari marketplace' : 'Tampilkan di marketplace'}" class="relative h-6 w-11 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900 ${item.sellable ? 'bg-navy-900' : 'bg-slate-300 hover:bg-slate-400'}">
+                  <button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" role="switch" aria-checked="${item.sellable}" aria-label="${item.sellable ? 'Sembunyikan dari marketplace' : 'Tampilkan di marketplace'}" class="relative h-6 w-11 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay-500 ${item.sellable ? 'bg-brand-600' : 'bg-slate-300 hover:bg-slate-400'}">
                     <span class="sr-only">${item.sellable ? 'Sembunyikan dari marketplace' : 'Tampilkan di marketplace'}</span>
                     <span class="absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow-sm transition-transform ${item.sellable ? 'translate-x-5' : 'translate-x-0'}"></span>
                   </button>`}

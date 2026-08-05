@@ -3,13 +3,45 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    overflow-x: clip;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-900 antialiased selection:bg-navy-900 selection:text-white min-h-screen;
+    @apply min-h-screen bg-paper-50 text-navy-900 antialiased selection:bg-brand-500 selection:text-white;
+    font-feature-settings: 'cv02', 'cv03';
+  }
+
+  /* Money / prices line up cleanly everywhere */
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.brand.500');
+    outline-offset: 2px;
   }
 }
 
 @layer components {
   .page-heading {
-    @apply text-xl font-extrabold leading-7 tracking-tight text-navy-900;
+    @apply font-display text-2xl font-extrabold leading-8 tracking-tight text-navy-900 sm:text-3xl;
+  }
+
+  .font-display {
+    font-family: theme('fontFamily.display');
+  }
+
+  .card {
+    @apply rounded-2xl border border-navy-100 bg-white shadow-[0_1px_2px_rgba(15,30,25,0.04)];
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
