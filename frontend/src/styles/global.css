@@ -94,4 +94,68 @@
       transform: translateY(0.5rem) scale(0.97);
     }
   }
+
+  /* Reveal-on-scroll: subtle rise, applied to landing sections */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* Warm custom range slider (asset-value calculator) */
+  input[type='range'].slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 9999px;
+    background: theme('colors.navy.200');
+    outline-offset: 4px;
+  }
+
+  input[type='range'].slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background: theme('colors.clay.600');
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgb(15 30 25 / 0.35);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  input[type='range'].slider::-webkit-slider-thumb:hover {
+    transform: scale(1.12);
+  }
+
+  input[type='range'].slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background: theme('colors.clay.600');
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgb(15 30 25 / 0.35);
+    cursor: pointer;
+  }
+
+  input[type='range'].slider::-moz-range-track {
+    height: 6px;
+    border-radius: 9999px;
+    background: theme('colors.navy.200');
+  }
 }

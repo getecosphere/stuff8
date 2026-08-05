@@ -16,22 +16,22 @@ import Layout from '../layouts/Layout.astro';
         <div class="pointer-events-none absolute -bottom-24 -right-16 size-72 rounded-full bg-navy-200/30 blur-3xl" aria-hidden="true"></div>
 
         <div class="relative z-10 mx-auto max-w-3xl space-y-5">
-          <p class="mx-auto inline-flex items-center gap-2 rounded-full border border-navy-100 bg-white/80 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-clay-600">
+          <p data-reveal class="mx-auto inline-flex items-center gap-2 rounded-full border border-navy-100 bg-white/80 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-clay-600">
             <span class="size-1.5 rounded-full bg-clay-500" aria-hidden="true"></span>
             Inventaris pribadi · Pasar jual-beli
           </p>
-          <h1 class="font-display text-3xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl">
+          <h1 data-reveal style="--reveal-delay: 80ms" class="font-display text-3xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl">
             Catat Semua Barangmu.<br class="hidden sm:inline" />
             <span class="text-clay-600">
               Jual Kapan Saja Kamu Mau.
             </span>
           </h1>
-          <p class="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
+          <p data-reveal style="--reveal-delay: 160ms" class="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
             Sering banget kita punya barang berharga tapi nggak sadar, ujung-ujungnya cuma numpuk dan bertahun-tahun nggak kepakai. Makanya di <strong class="font-bold text-navy-900">Stuff8</strong>, catat-catat aja dulu barangmu—biar kamu tau berapa total nilai asetmu. Nanti kalau ada barang yang rasa-rasanya mau dijual, tinggal tandai aja biar langsung bisa ditawar orang!
           </p>
 
           <!-- Action CTAs -->
-          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <div data-reveal style="--reveal-delay: 240ms" class="flex flex-wrap items-center justify-center gap-3 pt-2">
             <button id="btn-hero-start" class="inline-flex items-center gap-2 rounded-full bg-navy-900 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-800 hover:shadow-md active:scale-[0.99]">
               <span>Mulai Catat Barang</span>
               <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -46,8 +46,46 @@ import Layout from '../layouts/Layout.astro';
             </button>
           </div>
 
+          <!-- Dua-wajah flow: barang privat -> 1 klik -> tayang di Pasar -->
+          <div data-reveal style="--reveal-delay: 320ms" class="mx-auto max-w-3xl pt-8" aria-label="Cara kerja Stuff8: simpan privat, lalu pajang di marketplace">
+            <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+              <div class="card overflow-hidden text-left">
+                <div class="relative aspect-[4/3] overflow-hidden bg-navy-100">
+                  <img src="/fujifilm-camera.jpg" alt="Kamera Fujifilm yang dicatat di inventaris pribadi" class="size-full object-cover" loading="lazy" />
+                  <span class="absolute left-2 top-2 rounded-md bg-white/95 px-2 py-0.5 text-[10px] font-bold text-navy-900 shadow-xs">Koleksi Pribadi</span>
+                </div>
+                <div class="space-y-1.5 p-3 text-left sm:p-4">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-clay-600">Inventaris · lokasi tercatat</p>
+                  <p class="truncate text-sm font-bold text-navy-900">Kamera Fujifilm X100V</p>
+                  <p class="num text-base font-extrabold text-clay-700">Rp 21.750.000</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center gap-1.5 px-1 text-navy-900" aria-hidden="true">
+                <span class="flex size-9 items-center justify-center rounded-full border border-navy-100 bg-white shadow-xs">
+                  <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </span>
+                <span class="whitespace-nowrap rounded-full border border-navy-100 bg-paper-100 px-2 py-0.5 text-[10px] font-bold text-navy-900">1 klik</span>
+              </div>
+
+              <div class="card overflow-hidden text-left ring-2 ring-brand-500/25">
+                <div class="relative aspect-[4/3] overflow-hidden bg-navy-100">
+                  <img src="/fujifilm-camera.jpg" alt="Kamera Fujifilm yang tayang di marketplace" class="size-full object-cover" loading="lazy" />
+                  <span class="num absolute right-2 top-2 rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-extrabold text-white shadow-xs">Rp 21.750.000</span>
+                  <span class="absolute left-2 top-2 rounded-md bg-white/95 px-2 py-0.5 text-[10px] font-bold text-brand-700 shadow-xs">OPEN · Bisa ditawar</span>
+                </div>
+                <div class="space-y-1.5 p-3 text-left sm:p-4">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-brand-600">Pasar Stuff8</p>
+                  <p class="truncate text-sm font-bold text-navy-900">Kamera Fujifilm X100V</p>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-brand-600 px-2.5 py-1 text-[10px] font-bold text-white">Lihat &amp; tawar →</span>
+                </div>
+              </div>
+            </div>
+            <p class="mt-4 text-center text-xs text-slate-500">Simpan dulu, jual kapan kamu mau — semua dari satu tempat.</p>
+          </div>
+
           <!-- Quick Stats Banner -->
-          <div class="grid grid-cols-2 gap-3 pt-8 text-left md:grid-cols-4">
+          <div data-reveal style="--reveal-delay: 400ms" class="grid grid-cols-2 gap-3 pt-6 text-left md:grid-cols-4">
             <div class="card p-4">
               <div class="text-xs font-semibold text-slate-500">Privasi Terjaga</div>
               <div class="mt-1 text-lg font-extrabold text-navy-900">100% Privat</div>
@@ -73,7 +111,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- UNLOCKED ASSET VALUE CALCULATOR -->
-      <section class="card space-y-8 p-8 sm:p-12">
+      <section data-reveal class="card space-y-8 p-8 sm:p-12">
         <div class="mx-auto max-w-2xl text-center space-y-2">
           <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
             Bayangkan Nilai Tumpukan Barangmu Saat Ini!
@@ -89,13 +127,13 @@ import Layout from '../layouts/Layout.astro';
               <span class="text-navy-900">Elektronik &amp; Gadget</span>
               <span id="calc-val-electronics" class="num text-clay-700">2 barang (Rp 15.000.000)</span>
             </div>
-            <input type="range" id="calc-range-electronics" min="0" max="10" value="2" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
+            <input type="range" id="calc-range-electronics" min="0" max="10" value="2" class="slider w-full cursor-pointer" />
 
             <div class="flex justify-between pt-2 text-xs font-semibold">
               <span class="text-navy-900">Peralatan Olahraga &amp; Outdoor</span>
               <span id="calc-val-sports" class="num text-clay-700">1 barang (Rp 5.250.000)</span>
             </div>
-            <input type="range" id="calc-range-sports" min="0" max="10" value="1" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
+            <input type="range" id="calc-range-sports" min="0" max="10" value="1" class="slider w-full cursor-pointer" />
           </div>
 
           <div class="space-y-4 rounded-2xl border border-navy-100 bg-paper-100 p-5">
@@ -103,13 +141,13 @@ import Layout from '../layouts/Layout.astro';
               <span class="text-navy-900">Alat Musik &amp; Audio</span>
               <span id="calc-val-music" class="num text-clay-700">1 barang (Rp 6.000.000)</span>
             </div>
-            <input type="range" id="calc-range-music" min="0" max="10" value="1" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
+            <input type="range" id="calc-range-music" min="0" max="10" value="1" class="slider w-full cursor-pointer" />
 
             <div class="flex justify-between pt-2 text-xs font-semibold">
               <span class="text-navy-900">Koleksi &amp; Furnitur</span>
               <span id="calc-val-other" class="num text-clay-700">3 barang (Rp 3.600.000)</span>
             </div>
-            <input type="range" id="calc-range-other" min="0" max="15" value="3" class="w-full cursor-pointer accent-clay-600 bg-navy-200/60" />
+            <input type="range" id="calc-range-other" min="0" max="15" value="3" class="slider w-full cursor-pointer" />
           </div>
         </div>
 
@@ -129,7 +167,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- THREE CORE PILLARS OF STUFF8 -->
-      <section class="space-y-8">
+      <section data-reveal class="space-y-8">
         <div class="mx-auto max-w-xl space-y-2 text-center">
           <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Cara Kerja Stuff8</h2>
           <p class="text-xs text-slate-600 sm:text-sm">Fokus rapiin inventaris pribadi dulu, baru jual santai kemudian.</p>
@@ -169,7 +207,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- INTERACTIVE DEMO SANDBOX -->
-      <section id="interactive-demo" class="space-y-6 scroll-mt-24">
+      <section id="interactive-demo" data-reveal class="space-y-6 scroll-mt-24">
         <div class="space-y-2 text-center">
           <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
             Cobain Gimana Cara Kerja Stuff8
@@ -250,7 +288,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- PUBLIC MARKETPLACE PREVIEW FOR VISITORS -->
-      <section class="space-y-6 pt-4">
+      <section data-reveal class="space-y-6 pt-4">
         <div class="border-b border-navy-100 pb-4">
           <div>
             <h2 class="font-display text-xl font-extrabold tracking-tight text-navy-900 sm:text-2xl">Barang Dijual Komunitas</h2>
@@ -281,6 +319,29 @@ import Layout from '../layouts/Layout.astro';
           <div id="visitor-approved-bids-container" class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <!-- Dynamic interactive cards rendered here -->
           </div>
+        </div>
+      </section>
+
+      <!-- CLOSING CTA -->
+      <section data-reveal class="rounded-3xl border border-navy-100 bg-paper-100 px-6 py-10 text-center sm:px-10">
+        <p class="mx-auto inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-clay-600">
+          <span class="size-1.5 rounded-full bg-clay-500" aria-hidden="true"></span>
+          Mulai hari ini
+        </p>
+        <h2 class="mx-auto mt-3 max-w-2xl font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
+          Barangmu berharga lebih dari yang kamu kira.
+        </h2>
+        <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-600">
+          Catat sekarang, tahu total nilainya, dan jual kapan kamu butuh — semua dari satu tempat yang hangat dan privat.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <button id="btn-cta-bottom" class="inline-flex items-center gap-2 rounded-full bg-navy-900 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-800 hover:shadow-md active:scale-[0.99]">
+            <span>Mulai Catat Barang</span>
+            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+          <a href="/marketplace/" class="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md active:scale-[0.99]">
+            <span>Lihat Pasar</span>
+          </a>
         </div>
       </section>
 
@@ -828,6 +889,42 @@ import Layout from '../layouts/Layout.astro';
       window.stuff8Toast?.(message, { variant: 'info', title: 'Perhatian' });
     }
 
+    // Reveal-on-scroll for landing sections (respects reduced motion).
+    const revealTargets = Array.from(document.querySelectorAll('[data-reveal]'));
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      revealTargets.forEach(el => revealObserver.observe(el));
+    } else {
+      revealTargets.forEach(el => el.classList.add('is-revealed'));
+    }
+
+    // Animate a number into a money-center stat (counts up once).
+    const countUpFrames = new Map<HTMLElement, number>();
+    function animateNumber(el: HTMLElement, target: number, format: (n: number) => string, duration = 700) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        el.textContent = format(target);
+        return;
+      }
+      const previous = countUpFrames.get(el);
+      if (previous) window.cancelAnimationFrame(previous);
+      const start = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = format(Math.round(target * eased));
+        if (progress < 1) countUpFrames.set(el, requestAnimationFrame(tick));
+        else countUpFrames.delete(el);
+      };
+      countUpFrames.set(el, requestAnimationFrame(tick));
+    }
+
     function categoryLabel(category: string) {
       const labels: Record<string, string> = {
         Electronics: 'Elektronik', Cameras: 'Kamera', Bicycles: 'Sepeda',
@@ -1054,6 +1151,7 @@ import Layout from '../layouts/Layout.astro';
 
     // Hero Section Event Handlers
     document.getElementById('btn-hero-start')?.addEventListener('click', () => openAuth());
+    document.getElementById('btn-cta-bottom')?.addEventListener('click', () => openAuth());
     document.getElementById('btn-hero-browse-mkt')?.addEventListener('click', () => {
       document.getElementById('public-marketplace-visitor-grid')?.scrollIntoView({ behavior: 'smooth' });
     });
@@ -1922,13 +2020,22 @@ import Layout from '../layouts/Layout.astro';
       if (bidCount) bidCount.textContent = bids.length.toString();
 
       const hasInventory = inventoryMeta.total > 0;
-      if (statTotalItems) statTotalItems.textContent = hasInventory ? inventoryMeta.total.toString() : 'Belum ada';
+      if (statTotalItems) {
+        if (hasInventory) animateNumber(statTotalItems, inventoryMeta.total, n => n.toLocaleString('id-ID'));
+        else statTotalItems.textContent = 'Belum ada';
+      }
       const totalVal = inventoryMeta.total_value;
-      if (statTotalValue) statTotalValue.textContent = hasInventory ? `Rp ${totalVal.toLocaleString('id-ID')}` : 'Belum ada';
+      if (statTotalValue) {
+        if (hasInventory) animateNumber(statTotalValue, totalVal, n => `Rp ${n.toLocaleString('id-ID')}`);
+        else statTotalValue.textContent = 'Belum ada';
+      }
       if (inventoryTotalValue) inventoryTotalValue.textContent = hasInventory ? `Rp ${totalVal.toLocaleString('id-ID')}` : 'Belum ada nilai inventaris';
       if (inventoryTotalCount) inventoryTotalCount.textContent = hasInventory ? `${inventoryMeta.total} barang` : 'Belum ada barang';
-      if (statSellableCount) statSellableCount.textContent = marketplaceListingTotal > 0 ? marketplaceListingTotal.toString() : 'Belum ada';
-      if (statBidsCount) statBidsCount.textContent = bids.length.toString();
+      if (statSellableCount) {
+        if (marketplaceListingTotal > 0) animateNumber(statSellableCount, marketplaceListingTotal, n => n.toLocaleString('id-ID'));
+        else statSellableCount.textContent = 'Belum ada';
+      }
+      if (statBidsCount) animateNumber(statBidsCount, bids.length, n => n.toLocaleString('id-ID'));
 
       renderCategoryTabs();
 
