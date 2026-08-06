@@ -140,6 +140,31 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
     const user = () => session()?.user;
     const authHeaders = () => ({ 'Content-Type': 'application/json', ...(session()?.token ? { 'Authorization': `Bearer ${session().token}` } : {}) });
 
+    // Photos are usually added in the photo step AFTER the item is created and
+    // already listed, so the marketplace projection must be re-synced whenever
+    // the photo set changes on a sellable item (otherwise the public listing
+    // keeps its old, photo-less state while the inventory shows the image).
+    const syncToMarketplace = (item: any) => {
+      if (!item?.id || !item.sellable) return Promise.resolve();
+      return fetch(`${MARKETPLACE_API}/sync-item`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          item_id: item.id,
+          seller_id: item.owner_id,
+          seller_name: user()?.name || user()?.username || 'Pemilik Stuff8',
+          title: item.title,
+          description: item.description,
+          category: item.category,
+          condition: item.condition,
+          photos: item.photos || [],
+          asking_price: item.asking_price ?? item.estimated_value ?? 0,
+          general_location: item.storage_location || 'Area Lokal',
+          sellable: true
+        })
+      }).catch(() => { /* best-effort; inventory save already succeeded */ });
+    };
+
     let editingItemId: string | null = itemId;
     let loadedItem: any | null = null;
     let deleteConfirmationArmed = false;
@@ -341,6 +366,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
           if (!updated.ok) throw new Error(await updated.text());
           photoUploadItem = await updated.json();
         }
+        await syncToMarketplace(photoUploadItem);
         photoUploadStatus!.textContent = `${selected.length} foto berhasil ditambahkan.`;
         renderItemPhotoCarousel();
       } catch (error) {
@@ -649,6 +675,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
         if (!response.ok) throw new Error(await response.text());
         photoUploadItem = await response.json();
         photoCarouselIndex = Math.min(photoCarouselIndex, Math.max(photos.length - 1, 0));
+        await syncToMarketplace(photoUploadItem);
         photoUploadStatus.textContent = 'Foto dihapus.';
         renderItemPhotoCarousel();
       } catch (error) {
