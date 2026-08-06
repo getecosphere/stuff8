@@ -5,6 +5,9 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   trailingSlash: 'always',
+  redirects: {
+    '/signin': '/auth/signin/'
+  },
   server: {
     port: Number(process.env.PORT) || 3000,
     host: true

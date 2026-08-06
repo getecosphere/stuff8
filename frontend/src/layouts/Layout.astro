@@ -300,7 +300,7 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
         document.getElementById('btn-logout')?.classList.remove('hidden');
       }
       document.getElementById('btn-sidebar-add-item')?.addEventListener('click', () => location.assign('/inventory/form/'));
-      document.getElementById('btn-sidebar-login')?.addEventListener('click', () => location.assign('/auth/signup/'));
+      document.getElementById('btn-sidebar-login')?.addEventListener('click', () => location.assign('/signin/'));
       document.getElementById('btn-sidebar-guide')?.addEventListener('click', () => location.assign('/?guide=1'));
       document.getElementById('btn-logout')?.addEventListener('click', () => { localStorage.removeItem('stuff8_session'); location.assign('/'); });
     }
