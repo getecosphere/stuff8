@@ -833,6 +833,7 @@ import Layout from '../layouts/Layout.astro';
 
   <script>
     import { inventoryDetailIdFromPath, marketplaceDetailIdFromPath, marketplaceDetailPath } from '../lib/slug';
+    import { can, fetchAccessRights } from '../lib/authorization';
 
     const deepLinkId = inventoryDetailIdFromPath(location.pathname);
     if (deepLinkId) {
@@ -1425,6 +1426,16 @@ import Layout from '../layouts/Layout.astro';
       const estVal = parseFloat((document.getElementById('w-item-est-value') as HTMLInputElement).value) || 0;
       const location = (document.getElementById('w-item-location') as HTMLInputElement).value;
       const isSellable = (document.getElementById('w-item-sellable') as HTMLInputElement).checked;
+
+      if (isSellable) {
+        const freshPermissions = await fetchAccessRights(AUTH_API, currentSession?.token || '');
+        const authorizedUser = { ...currentSession?.user, permissions: freshPermissions.length ? freshPermissions : (currentSession?.user?.permissions ?? []) };
+        if (!can(authorizedUser, 'marketplace:publish')) {
+          window.stuff8Toast?.('Verifikasi email kamu dulu untuk bisa menjual barang di Marketplace.', { variant: 'error', title: 'Belum bisa dijual' });
+          (document.getElementById('w-item-sellable') as HTMLInputElement).checked = false;
+          return;
+        }
+      }
 
       try {
         const res = await fetch(`${INVENTORY_API}/items`, {
@@ -2308,6 +2319,15 @@ import Layout from '../layouts/Layout.astro';
 
       const newSellable = !item.sellable;
       const askingPrice = newSellable ? (item.asking_price || item.estimated_value || 100000) : null;
+
+      if (newSellable) {
+        const freshPermissions = await fetchAccessRights(AUTH_API, currentSession?.token || '');
+        const authorizedUser = { ...currentSession?.user, permissions: freshPermissions.length ? freshPermissions : (currentSession?.user?.permissions ?? []) };
+        if (!can(authorizedUser, 'marketplace:publish')) {
+          window.stuff8Toast?.('Verifikasi email kamu dulu untuk bisa menjual barang di Marketplace.', { variant: 'error', title: 'Belum bisa dijual' });
+          return;
+        }
+      }
 
       try {
         await fetch(`${INVENTORY_API}/items/${id}`, {

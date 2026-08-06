@@ -130,9 +130,11 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
   </div>
 
   <script>
+    import { can, fetchAccessRights } from '../../../lib/authorization';
     const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const INVENTORY_API = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const MARKETPLACE_API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
+    const AUTH_API = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;
 
     const itemId = new URLSearchParams(location.search).get('id');
 
@@ -586,6 +588,18 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
       if (purchasePrice === null || purchasePrice < 0 || (estimatedValue !== null && estimatedValue < 0) || (askingPrice !== null && askingPrice < 0)) {
         showItemFormError('Masukkan nilai harga yang valid.');
         return;
+      }
+
+      if (isSellable) {
+        const sessionData = session();
+        const freshPermissions = await fetchAccessRights(AUTH_API, sessionData?.token || '');
+        const authorizedUser = { ...user(), permissions: freshPermissions.length ? freshPermissions : (user()?.permissions ?? []) };
+        if (!can(authorizedUser, 'marketplace:publish')) {
+          showItemFormError('Verifikasi email kamu dulu untuk bisa menjual barang di Marketplace. Periksa inbox atau klik "Kirim ulang email" di menu.');
+          inputSellable.checked = false;
+          askingPriceContainer?.classList.add('hidden');
+          return;
+        }
       }
 
       try {
