@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import SupportWidget from '../components/SupportWidget.astro';
+// Support widget disabled alongside the rag domain (see ecompose.yml).
+// import SupportWidget from '../components/SupportWidget.astro';
 
 interface Props {
   description?: string;
@@ -164,7 +165,8 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
       </div>
     </footer>}
     <div id="stuff8-toasts" class="pointer-events-none fixed inset-x-0 bottom-4 z-[120] flex flex-col items-center gap-2 px-4 pb-[env(safe-area-inset-bottom)] sm:bottom-5 sm:right-5 sm:items-end sm:px-0" aria-live="polite" aria-atomic="false"></div>
-    <SupportWidget />
+    <!-- SupportWidget disabled alongside the rag domain. -->
+    <!-- <SupportWidget /> -->
   </body>
   <script>
     // Global toast helper — used by every page for short, warm confirmations.
