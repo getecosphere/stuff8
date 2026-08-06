@@ -78,7 +78,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
 
         <section id="item-photo-step" class="hidden space-y-4" aria-labelledby="item-photo-step-title">
           <div class="rounded-xl border border-brand-100 bg-brand-50/50 p-4">
-            <p class="text-xs font-bold uppercase tracking-wider text-brand-700">Langkah 2 dari 2</p>
+            <p id="item-photo-wizard-badge" class="text-xs font-bold uppercase tracking-wider text-brand-700">Langkah 2 dari 2</p>
             <h4 id="item-photo-step-title" class="mt-1 text-base font-bold text-slate-900">Upload foto barang</h4>
             <p class="mt-1 text-xs leading-relaxed text-slate-600">Pilih satu atau beberapa foto. Storage akan mengubahnya ke WebP hanya jika hasilnya lebih kecil.</p>
           </div>
@@ -267,6 +267,21 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
       renderItemPhotoCarousel();
     }
 
+    // Edit mode keeps the details form visible and shows the photo section
+    // inline below it (no two-step wizard). Photos are saved immediately as
+    // they are added/removed via the item PATCH, same as the create flow.
+    function showEditPhotoSection(item: any) {
+      photoUploadItem = item;
+      photoCarouselIndex = 0;
+      document.getElementById('item-photo-wizard-badge')?.classList.add('hidden');
+      const title = document.getElementById('item-photo-step-title');
+      if (title) title.textContent = 'Foto barang';
+      photoStep?.classList.remove('hidden');
+      if (photosInput) photosInput.value = '';
+      photoUploadStatus?.classList.add('hidden');
+      renderItemPhotoCarousel();
+    }
+
     function renderItemPhotoCarousel() {
       if (!photoCarousel) return;
       const photos: string[] = photoUploadItem?.photos || [];
@@ -284,6 +299,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
         <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
           <div class="relative aspect-[4/3]">
             <img src="${active}" alt="Foto barang ${photoCarouselIndex + 1}" class="size-full object-contain" />
+            <button type="button" onclick="window.inventoryPhotoRemove(${photoCarouselIndex})" class="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm hover:bg-rose-700" aria-label="Hapus foto ini">Hapus</button>
             ${photos.length > 1 ? `<button type="button" onclick="window.inventoryPhotoPrevious()" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm" aria-label="Foto sebelumnya">←</button><button type="button" onclick="window.inventoryPhotoNext()" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm" aria-label="Foto berikutnya">→</button>` : ''}
           </div>
           <div class="flex gap-2 overflow-x-auto p-2">${photos.map((photo, index) => `<button type="button" onclick="window.inventoryPhotoSelect(${index})" class="size-12 shrink-0 overflow-hidden rounded-md border ${index === photoCarouselIndex ? 'border-navy-900 ring-2 ring-navy-900/15' : 'border-slate-200'}"><img src="${storagePhotoUrl(photo)}" alt="" class="size-full object-cover" /></button>`).join('')}</div>
@@ -403,7 +419,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
       if (formTitle) formTitle.textContent = 'Ubah Barang Inventaris';
       if (breadcrumbCurrent) breadcrumbCurrent.textContent = item.title || 'Ubah Barang';
       document.title = `${item.title || 'Ubah Barang'} - Stuff8`;
-      setItemPhotoStep(null);
+      showEditPhotoSection(item);
     }
 
     document.getElementById('input-category')?.addEventListener('input', event => {
@@ -574,6 +590,26 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
     (window as any).inventoryPhotoSelect = (index: number) => {
       photoCarouselIndex = index;
       renderItemPhotoCarousel();
+    };
+    (window as any).inventoryPhotoRemove = async (index: number) => {
+      if (!photoUploadItem?.photos?.length || !user()?.id) return;
+      const photos = photoUploadItem.photos.filter((_: string, i: number) => i !== index);
+      if (photos.length === photoUploadItem.photos.length) return;
+      photoUploadStatus?.classList.remove('hidden');
+      try {
+        const response = await fetch(`${INVENTORY_API}/items/${photoUploadItem.id}`, {
+          method: 'PATCH', headers: authHeaders(),
+          body: JSON.stringify({ owner_id: user().id, photos })
+        });
+        if (!response.ok) throw new Error(await response.text());
+        photoUploadItem = await response.json();
+        photoCarouselIndex = Math.min(photoCarouselIndex, Math.max(photos.length - 1, 0));
+        photoUploadStatus.textContent = 'Foto dihapus.';
+        renderItemPhotoCarousel();
+      } catch (error) {
+        console.error('Failed to remove inventory photo:', error);
+        photoUploadStatus.textContent = 'Foto belum dapat dihapus. Coba lagi.';
+      }
     };
 
     load();
