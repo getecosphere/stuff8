@@ -4,9 +4,9 @@
 // visitors see a sign-up/sign-in prompt (lead capture); signed-in users chat.
 const ragUrl = import.meta.env.PUBLIC_RAG_URL || '/api/rag';
 ---
-<script is:inline>
+<script is:inline data-rag-url={ragUrl}>
   window.SupportWidgetConfig = {
-    ragUrl: {json(ragUrl)},
+    ragUrl: document.currentScript.getAttribute('data-rag-url'),
     siteName: 'Stuff8',
     requireLogin: true,
     signInUrl: '/auth/signin/',

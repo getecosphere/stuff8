@@ -335,7 +335,10 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
         renderItemPhotoCarousel();
       } catch (error) {
         console.error('Failed to upload inventory photos:', error);
-        photoUploadStatus!.textContent = 'Foto belum dapat diunggah. Coba lagi.';
+        const detail = error instanceof Error ? error.message : '';
+        photoUploadStatus!.textContent = detail && !/^Failed to fetch/.test(detail)
+          ? `Foto belum dapat diunggah: ${detail}`
+          : 'Foto belum dapat diunggah. Periksa koneksi lalu coba lagi.';
       }
     }
 
