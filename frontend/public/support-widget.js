@@ -104,20 +104,18 @@
 
   var TEMPLATE = '\
 <div class="sw-root">\
-  <button type="button" class="sw-toggle" aria-expanded="false" aria-controls="sw-panel" aria-label="Buka pusat bantuan">\
-    <span class="sw-toggle-icon">? </span><span class="sw-toggle-label" part="toggle-label">Bantuan</span>\
-  </button>\
-  <div id="sw-panel" class="sw-panel" role="dialog" aria-label="Pusat bantuan">\
+  <button type="button" class="sw-toggle" aria-expanded="false" aria-controls="sw-panel" aria-label="Buka asisten bantuan">🤖</button>\
+  <div id="sw-panel" class="sw-panel" role="dialog" aria-label="Asisten bantuan">\
     <div class="sw-header">\
       <div class="sw-header-title">\
-        <span class="sw-header-icon">?</span>\
-        <span><strong class="sw-site">Pusat Bantuan</strong><span class="sw-sub">Balasan otomatis dari dokumentasi</span></span>\
+        <span class="sw-header-icon">🤖</span>\
+        <span><strong class="sw-site">Pusat Bantuan</strong><span class="sw-sub">Asisten cerdas kami akan membantumu</span></span>\
       </div>\
       <button type="button" class="sw-close" aria-label="Tutup">&#10005;</button>\
     </div>\
     <div class="sw-body">\
       <div class="sw-login" hidden>\
-        <span class="sw-login-icon">?</span>\
+        <span class="sw-login-icon">🤖</span>\
         <p class="sw-login-title">Halo!</p>\
         <p class="sw-login-text">Punya pertanyaan? Masuk dulu untuk mulai ngobrol dengan asisten bantuan kami.</p>\
         <a class="sw-btn sw-btn-primary" href="#SIGNUP_URL#">Daftar sekarang</a>\
@@ -137,22 +135,23 @@
   var STYLES = '\
 :host { all: initial; }\
 .sw-root { position: fixed; bottom: 1rem; right: 1rem; z-index: 2147483000; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }\
-.sw-toggle { display: inline-flex; align-items: center; gap: 0.5rem; height: 3.5rem; padding: 0 1.25rem; border-radius: 9999px; border: 0; cursor: pointer; background: #0f1e3d; color: #fff; font-size: 0.875rem; font-weight: 700; box-shadow: 0 10px 24px -8px rgba(15, 30, 61, 0.5); transition: background 0.15s ease, transform 0.15s ease; }\
+.sw-toggle { display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; padding: 0; border-radius: 9999px; border: 0; cursor: pointer; background: #0f1e3d; color: #fff; font-size: 1.75rem; line-height: 1; box-shadow: 0 10px 24px -8px rgba(15, 30, 61, 0.5); transition: background 0.15s ease, transform 0.15s ease; }\
 .sw-toggle:hover { background: #2563eb; transform: translateY(-1px); }\
 .sw-toggle:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }\
-.sw-toggle-icon { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 9999px; background: rgba(255,255,255,0.14); font-size: 0.85rem; }\
-.sw-panel { display: none; margin-top: 0.75rem; width: min(23rem, calc(100vw - 2rem)); border: 1px solid #e6eaf2; border-radius: 1rem; background: #fff; box-shadow: 0 24px 48px -16px rgba(15, 30, 61, 0.3); overflow: hidden; flex-direction: column; }\
+.sw-root.sw-open .sw-toggle { display: none; }\
+.sw-panel { display: none; margin-top: 0.75rem; width: min(23rem, calc(100vw - 2rem)); max-height: calc(100dvh - 6.5rem); border: 1px solid #e6eaf2; border-radius: 1rem; background: #fff; box-shadow: 0 24px 48px -16px rgba(15, 30, 61, 0.3); overflow: hidden; flex-direction: column; }\
 .sw-panel.sw-open { display: flex; }\
 .sw-header { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 1rem; background: #0f1e3d; color: #fff; }\
 .sw-header-title { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }\
-.sw-header-icon { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 9999px; background: rgba(255,255,255,0.1); font-weight: 700; }\
+.sw-header-icon { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 9999px; background: rgba(255,255,255,0.1); font-size: 1.1rem; }\
 .sw-site { display: block; font-size: 0.875rem; line-height: 1.2; }\
 .sw-sub { display: block; font-size: 0.6875rem; color: #dbe3f0; }\
 .sw-close { width: 2rem; height: 2rem; border: 0; border-radius: 9999px; background: transparent; color: #dbe3f0; font-size: 1rem; cursor: pointer; }\
 .sw-close:hover { background: rgba(255,255,255,0.1); color: #fff; }\
-.sw-body { min-height: 22rem; }\
-.sw-login { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 2.5rem 1.5rem; text-align: center; }\
-.sw-login-icon { display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; border-radius: 1rem; background: #eff6ff; color: #2563eb; font-size: 1.5rem; font-weight: 800; }\
+.sw-body { min-height: 0; overflow: hidden; }\
+.sw-login { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.5rem 1.25rem; text-align: center; }\
+.sw-login[hidden], .sw-chat[hidden] { display: none; }\
+.sw-login-icon { display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; border-radius: 1rem; background: #eff6ff; font-size: 1.75rem; }\
 .sw-login-title { margin: 0; font-size: 1rem; font-weight: 800; color: #0f1e3d; }\
 .sw-login-text { margin: 0; font-size: 0.8125rem; line-height: 1.5; color: #475569; }\
 .sw-btn { width: 100%; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8125rem; font-weight: 700; text-align: center; text-decoration: none; box-sizing: border-box; }\
@@ -160,7 +159,7 @@
 .sw-btn-primary:hover { background: #1d4ed8; }\
 .sw-btn-outline { border: 1px solid #e6eaf2; color: #0f1e3d; }\
 .sw-btn-outline:hover { background: #f8fafc; }\
-.sw-chat { display: flex; flex-direction: column; height: 28rem; }\
+.sw-chat { display: flex; flex-direction: column; height: min(28rem, calc(100dvh - 9.5rem)); min-height: 14rem; }\
 .sw-messages { flex: 1; overflow-y: auto; padding: 1rem; background: #f8fafc; display: flex; flex-direction: column; gap: 0.75rem; }\
 .sw-msg { max-width: 85%; padding: 0.625rem 0.875rem; border-radius: 1rem; font-size: 0.8125rem; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }\
 .sw-msg-user { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 0.25rem; }\
@@ -193,7 +192,6 @@
 
     var panel = root.getElementById('sw-panel');
     var toggle = root.querySelector('.sw-toggle');
-    var label = root.querySelector('.sw-toggle-label');
     var closeBtn = root.querySelector('.sw-close');
     var loginView = root.querySelector('.sw-login');
     var chatView = root.querySelector('.sw-chat');
@@ -205,9 +203,9 @@
     function scrollToBottom() { messages.scrollTop = messages.scrollHeight; }
 
     function setOpen(open) {
+      el.classList.toggle('sw-open', open);
       panel.classList.toggle('sw-open', open);
       toggle.setAttribute('aria-expanded', String(open));
-      label.textContent = open ? 'Tutup' : 'Bantuan';
       if (open) syncAuth();
     }
 
