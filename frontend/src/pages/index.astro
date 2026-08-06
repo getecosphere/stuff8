@@ -836,6 +836,14 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
+    import { inventoryDetailIdFromPath } from '../lib/slug';
+
+    const deepLinkId = inventoryDetailIdFromPath(location.pathname);
+    if (deepLinkId) {
+      location.replace(`/inventory/detail/?id=${encodeURIComponent(deepLinkId)}`);
+    } else if (/^\/inventory\/detail\/.+/.test(location.pathname)) {
+      location.replace('/inventory/');
+    }
     const AUTH_API = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;
     const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const PROFILE_API = import.meta.env.PUBLIC_PROFILE_URL || '/api';

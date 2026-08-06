@@ -32,6 +32,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
   </div>
   <script>
     import { openLightbox } from '../../../lib/lightbox';
+    import { inventoryDetailPath } from '../../../lib/slug';
 
     const INVENTORY = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const PHOTOS = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
@@ -54,6 +55,8 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
       const response = await fetch(`${INVENTORY}/items/${encodeURIComponent(id)}`, { headers: headers() });
       if (!response.ok) throw new Error('Barang tidak tersedia atau sudah dihapus.');
       const item = await response.json();
+      const prettyPath = inventoryDetailPath(item);
+      if (location.pathname !== prettyPath) history.replaceState(null, '', prettyPath);
       const sold = isSold(item);
       const breadcrumbCurrent = document.getElementById('breadcrumb-current');
       if (breadcrumbCurrent) breadcrumbCurrent.textContent = item.title || 'Detail Barang';
