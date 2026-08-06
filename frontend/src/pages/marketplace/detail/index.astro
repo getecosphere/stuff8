@@ -33,6 +33,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
   </div>
   <script>
     import { openLightbox } from '../../../lib/lightbox';
+    import { marketplaceDetailPath } from '../../../lib/slug';
 
     const API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
     const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
@@ -46,6 +47,8 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
       const response = await fetch(`${API}/listings/${encodeURIComponent(id)}`);
       if (!response.ok) throw new Error('Barang tidak tersedia atau sudah ditarik dari marketplace.');
       const item = await response.json();
+      const prettyPath = marketplaceDetailPath(item);
+      if (location.pathname !== prettyPath) history.replaceState(null, '', prettyPath);
       const breadcrumbCurrent = document.getElementById('breadcrumb-current');
       if (breadcrumbCurrent) breadcrumbCurrent.textContent = item.title || 'Detail Barang';
       document.title = `${item.title || 'Detail Barang'} - Stuff8`;

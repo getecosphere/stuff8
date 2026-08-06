@@ -32,7 +32,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
   </div>
   <script>
     import { openLightbox } from '../../../lib/lightbox';
-    import { inventoryDetailPath } from '../../../lib/slug';
+    import { inventoryDetailPath, marketplaceDetailPath } from '../../../lib/slug';
 
     const INVENTORY = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const PHOTOS = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
@@ -78,7 +78,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
             </div>
             <h1 class="font-display text-2xl font-extrabold tracking-tight text-navy-900">${escapeHtml(item.title || 'Tanpa judul')}</h1>
             <p class="whitespace-pre-line text-sm leading-relaxed text-slate-600">${escapeHtml(item.description || 'Tanpa deskripsi')}</p>
-            ${sold ? `<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-sm font-extrabold text-emerald-800">Terjual</p><p class="mt-1 text-sm leading-relaxed text-emerald-700">${escapeHtml(item.buyer_name ? `Terjual ke ${item.buyer_name}` : 'Barang sudah terjual')} seharga ${money(item.final_price || item.asking_price)}.</p><a href="/marketplace/detail/?id=${encodeURIComponent(item.id)}" class="mt-2 inline-block text-sm font-bold text-emerald-800 underline">Lihat listing marketplace →</a></div>` : ''}
+            ${sold ? `<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-sm font-extrabold text-emerald-800">Terjual</p><p class="mt-1 text-sm leading-relaxed text-emerald-700">${escapeHtml(item.buyer_name ? `Terjual ke ${item.buyer_name}` : 'Barang sudah terjual')} seharga ${money(item.final_price || item.asking_price)}.</p><a href="${marketplaceDetailPath(item)}" class="mt-2 inline-block text-sm font-bold text-emerald-800 underline">Lihat listing marketplace →</a></div>` : ''}
             <dl class="grid grid-cols-2 gap-3 border-y border-navy-100 py-4 text-sm">
               <div><dt class="text-xs text-slate-500">Harga beli</dt><dd class="num mt-0.5 font-bold text-navy-900">${money(item.purchase_price)}</dd></div>
               <div><dt class="text-xs text-slate-500">Nilai jual</dt><dd class="num mt-0.5 font-extrabold text-clay-700">${money(item.estimated_value)}</dd></div>

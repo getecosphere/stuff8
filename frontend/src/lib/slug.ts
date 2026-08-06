@@ -68,3 +68,18 @@ export const inventoryDetailIdFromPath = (pathname: string): string | null => {
   if (!token || token.length < 20) return null;
   return decodeItemToken(token);
 };
+
+export const marketplaceDetailPath = (item: { id: string; title?: string }): string => {
+  const token = encodeItemToken(item.id);
+  return `/marketplace/detail/${slugify(item.title || '')}-${token || item.id}`;
+};
+
+export const marketplaceDetailIdFromPath = (pathname: string): string | null => {
+  const path = pathname.replace(/\/+$/, '');
+  const match = path.match(/^\/marketplace\/detail\/(.+)$/);
+  if (!match) return null;
+  const parts = match[1].split('-');
+  const token = parts[parts.length - 1];
+  if (!token || token.length < 20) return null;
+  return decodeItemToken(token);
+};

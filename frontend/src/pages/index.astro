@@ -836,13 +836,19 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
-    import { inventoryDetailIdFromPath } from '../lib/slug';
+    import { inventoryDetailIdFromPath, marketplaceDetailIdFromPath, marketplaceDetailPath } from '../lib/slug';
 
     const deepLinkId = inventoryDetailIdFromPath(location.pathname);
     if (deepLinkId) {
       location.replace(`/inventory/detail/?id=${encodeURIComponent(deepLinkId)}`);
     } else if (/^\/inventory\/detail\/.+/.test(location.pathname)) {
       location.replace('/inventory/');
+    }
+    const marketplaceDeepLinkId = marketplaceDetailIdFromPath(location.pathname);
+    if (marketplaceDeepLinkId) {
+      location.replace(`/marketplace/detail/?id=${encodeURIComponent(marketplaceDeepLinkId)}`);
+    } else if (/^\/marketplace\/detail\/.+/.test(location.pathname)) {
+      location.replace('/marketplace/');
     }
     const AUTH_API = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;
     const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
@@ -1215,7 +1221,7 @@ import Layout from '../layouts/Layout.astro';
       item?.is_sold || item?.isSold
       || (typeof item?.status === 'string' && item.status.toLowerCase() === 'sold')
     );
-    const soldListingLink = (item: any) => `<a href="/marketplace/detail/?id=${encodeURIComponent(item.id)}" onclick="event.stopPropagation()" class="text-xs font-bold text-navy-900 underline hover:text-navy-700">Lihat listing</a>`;
+    const soldListingLink = (item: any) => `<a href="${marketplaceDetailPath(item)}" onclick="event.stopPropagation()" class="text-xs font-bold text-navy-900 underline hover:text-navy-700">Lihat listing</a>`;
 
     // Modal Triggers
     categoryTabs?.addEventListener('click', event => {
