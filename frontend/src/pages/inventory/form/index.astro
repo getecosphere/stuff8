@@ -141,6 +141,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
     const authHeaders = () => ({ 'Content-Type': 'application/json', ...(session()?.token ? { 'Authorization': `Bearer ${session().token}` } : {}) });
 
     let editingItemId: string | null = itemId;
+    let loadedItem: any | null = null;
     let deleteConfirmationArmed = false;
     let photoUploadItem: any | null = null;
     let photoCarouselIndex = 0;
@@ -411,6 +412,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
       }
 
       editingItemId = item.id;
+      loadedItem = item;
       (document.getElementById('input-title') as HTMLInputElement).value = item.title || '';
       (document.getElementById('input-category') as HTMLInputElement).value = categoryLabel(item.category || '');
       (document.getElementById('input-condition') as HTMLSelectElement).value = item.condition || '';
@@ -502,6 +504,27 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
       try {
         const response = await fetch(`${INVENTORY_API}/items/${editingItemId}?owner_id=${encodeURIComponent(user().id)}`, { method: 'DELETE' });
         if (!response.ok) throw new Error(await response.text());
+        // Remove the public marketplace listing (if any) so a deleted item
+        // doesn't stay up for sale.
+        if (loadedItem) {
+          await fetch(`${MARKETPLACE_API}/sync-item`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({
+              item_id: loadedItem.id,
+              seller_id: loadedItem.owner_id,
+              seller_name: user()?.name || user()?.username || 'Pemilik Stuff8',
+              title: loadedItem.title || '',
+              description: loadedItem.description || '',
+              category: loadedItem.category || '',
+              condition: loadedItem.condition || '',
+              photos: loadedItem.photos || [],
+              asking_price: loadedItem.asking_price ?? loadedItem.estimated_value ?? 0,
+              general_location: loadedItem.storage_location || 'Area Lokal',
+              sellable: false
+            })
+          }).catch(error => console.error('Failed to remove marketplace listing after delete:', error));
+        }
         location.assign('/inventory/');
       } catch (error) {
         console.error('Failed to delete inventory item:', error);
@@ -563,25 +586,26 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
         }
 
         const newItem = await response.json();
-        if (isSellable) {
-          await fetch(`${MARKETPLACE_API}/sync-item`, {
-            method: 'POST',
-            headers: authHeaders(),
-            body: JSON.stringify({
-              item_id: newItem.id,
-              seller_id: newItem.owner_id,
-              seller_name: user()?.name || user()?.username || 'Pemilik Stuff8',
-              title: newItem.title,
-              description: newItem.description,
-              category: newItem.category,
-              condition: newItem.condition,
-              photos: newItem.photos || [],
-              asking_price: askingPrice ?? purchasePrice,
-              general_location: storageLocation || 'Area Lokal',
-              sellable: true
-            })
-          });
-        }
+        // Always mirror to the marketplace: sellable upserts the listing,
+        // non-sellable removes it (so unchecking "Mau Dijual?" on edit pulls
+        // the listing from the public marketplace).
+        await fetch(`${MARKETPLACE_API}/sync-item`, {
+          method: 'POST',
+          headers: authHeaders(),
+          body: JSON.stringify({
+            item_id: newItem.id,
+            seller_id: newItem.owner_id,
+            seller_name: user()?.name || user()?.username || 'Pemilik Stuff8',
+            title: newItem.title,
+            description: newItem.description,
+            category: newItem.category,
+            condition: newItem.condition,
+            photos: newItem.photos || [],
+            asking_price: askingPrice ?? purchasePrice ?? 0,
+            general_location: storageLocation || 'Area Lokal',
+            sellable: isSellable
+          })
+        }).catch(() => { /* best-effort; inventory save already succeeded */ });
 
         if (editingItemId) {
           window.stuff8Toast?.('Perubahan barang sudah disimpan.', { variant: 'success', title: 'Inventaris diperbarui' });
