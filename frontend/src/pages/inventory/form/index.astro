@@ -464,7 +464,16 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
     });
 
     inputSellable?.addEventListener('change', () => {
-      askingPriceContainer?.classList.toggle('hidden', !inputSellable.checked);
+      const isChecked = inputSellable.checked;
+      askingPriceContainer?.classList.toggle('hidden', !isChecked);
+      if (isChecked) {
+        const askingPriceInput = document.getElementById('input-asking-price') as HTMLInputElement | null;
+        const estimatedValueInput = document.getElementById('input-estimated-value') as HTMLInputElement | null;
+        if (askingPriceInput && estimatedValueInput && !askingPriceInput.value.trim()) {
+          askingPriceInput.value = estimatedValueInput.value;
+          formatRupiahInput(askingPriceInput);
+        }
+      }
     });
 
     ['input-purchase-price', 'input-estimated-value', 'input-asking-price'].forEach(id => {
