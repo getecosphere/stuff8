@@ -865,7 +865,7 @@ import Layout from '../layouts/Layout.astro';
     let selectedInventoryCategory = 'all';
     let inventorySearch = '';
     let inventoryPage = 1;
-    let inventoryView: 'list' | 'thumbnail' | 'card' = 'card';
+    let inventoryView: 'list' | 'thumbnail' | 'card' = 'thumbnail';
     let inventoryMeta = { total: 0, total_value: 0, page: 1, limit: 12, total_pages: 1, category_counts: [] as Array<{ category: string; count: number }> };
     let customInventoryCategories: string[] = [];
     let categoryPreferenceOwnerId: string | null = null;
@@ -959,7 +959,7 @@ import Layout from '../layouts/Layout.astro';
 
       inventoryViewPreferenceOwnerId = ownerId;
       const savedView = localStorage.getItem(inventoryViewPreferenceKey());
-      inventoryView = savedView === 'list' || savedView === 'thumbnail' || savedView === 'card' ? savedView : 'card';
+      inventoryView = savedView === 'list' || savedView === 'thumbnail' || savedView === 'card' ? savedView : 'thumbnail';
     }
 
     function loadCategoryPreferences() {

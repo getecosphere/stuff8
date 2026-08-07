@@ -62,7 +62,7 @@ import Layout from '../../layouts/Layout.astro';
     const savedMarketplaceView = localStorage.getItem(marketplaceViewPreferenceKey());
     let view = savedMarketplaceView === 'list' || savedMarketplaceView === 'thumbnail' || savedMarketplaceView === 'card'
       ? savedMarketplaceView
-      : 'card';
+      : 'thumbnail';
     let meta: any = { listings: [], page: 1, limit: 12, total: 0, total_pages: 1 };
     let categories: Array<{ category: string; count: number }> = [];
     let bidSummaries = new Map<string, { bidder_count: number; highest_bid: number }>();
