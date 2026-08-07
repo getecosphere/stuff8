@@ -46,6 +46,9 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
     const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
     const photoUrl = (key?: string) => key ? `${PHOTOS}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}` : '/images/no-item-image.webp';
+    const thumbPhotoUrl = (key?: string) => key && !isVideoKey(key)
+      ? `${PHOTOS}/storage/content/${key.replace(/\.[a-z0-9]+$/i, '-thumb.webp').split('/').map(encodeURIComponent).join('/')}`
+      : photoUrl(key);
     const isSold = (item: any) => Boolean(item?.is_sold || item?.isSold || (typeof item?.status === 'string' && item.status.toLowerCase() === 'sold'));
 
     async function load() {
@@ -78,7 +81,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
               <span class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-navy-950/70 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-sm transition-colors group-hover:bg-navy-950"><svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v11m0 5 4.879-4.879m0 0a3 3 0 1 0 4.243-4.242 3 3 0 0 0-4.243 4.242Z"/></svg>Perbesar</span>
               ${photos.length > 1 ? `<button type="button" data-slide-prev class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Foto sebelumnya"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" /></svg></button><button type="button" data-slide-next class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Foto berikutnya"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" /></svg></button><span class="absolute bottom-2.5 right-2.5 rounded-full bg-navy-950/70 px-2 py-0.5 text-[11px] font-semibold text-white" data-slide-count>1/${photos.length}</span>` : ''}
             </div>
-            ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-slide-thumb="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-navy-100 transition hover:border-clay-400">${isVideoKey(photo) ? videoThumbMarkup(`Video ${index + 1}`) : `<img src="${photoUrl(photo)}" alt="Foto ${index + 1}" class="size-full object-cover" />`}</button>`).join('')}</div>` : ''}
+            ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-slide-thumb="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-navy-100 transition hover:border-clay-400">${isVideoKey(photo) ? videoThumbMarkup(`Video ${index + 1}`) : `<img src="${thumbPhotoUrl(photo)}" alt="Foto ${index + 1}" class="size-full object-cover" onerror="this.onerror=null;this.src='${photoUrl(photo)}'" />`}</button>`).join('')}</div>` : ''}
           </div>
           </div>
           <div class="min-w-0 space-y-4">

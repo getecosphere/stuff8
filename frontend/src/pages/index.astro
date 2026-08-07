@@ -834,7 +834,7 @@ import Layout from '../layouts/Layout.astro';
   <script>
     import { inventoryDetailIdFromPath, marketplaceDetailIdFromPath, marketplaceDetailPath } from '../lib/slug';
     import { can, fetchAccessRights } from '../lib/authorization';
-    import { applyMuteToAll, installVideoBehaviors, isVideoKey, videoMarkup } from '../lib/media';
+    import { applyMuteToAll, installVideoBehaviors, isVideoKey, videoMarkup, thumbImageSrc } from '../lib/media';
 
     const deepLinkId = inventoryDetailIdFromPath(location.pathname);
     if (deepLinkId) {
@@ -1194,7 +1194,7 @@ import Layout from '../layouts/Layout.astro';
             const label = escapeHtml(item.title || `Media barang ${index + 1}`);
             return isVideoKey(slide)
               ? videoMarkup({ src: storagePhotoUrl(slide), className: `${imageClass} object-cover shrink-0`, label, controls: true })
-              : `<img src="${storagePhotoUrl(slide)}" alt="${label}" class="${imageClass} object-cover shrink-0" />`;
+              : thumbImageSrc(PHOTOS_API, slide, label, `${imageClass} object-cover shrink-0`);
           }).join('')}
         </div>
         ${photos.length > 1 ? `

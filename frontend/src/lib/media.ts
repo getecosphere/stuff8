@@ -12,6 +12,35 @@ export function isVideoKey(key: string | null | undefined): boolean {
   return typeof key === 'string' && /\.(mp4|webm|m4v|ogv|mov|3gp)([?#].*)?$/i.test(key);
 }
 
+/**
+ * Storage URL for a content key, e.g. `inventory/<id>/<uuid>.webp`.
+ * Pass the photos API base (`.../api`) as `base`.
+ */
+export function storageContentUrl(base: string, key?: string | null): string {
+  if (!key) return '';
+  return `${base.replace(/\/+$/, '')}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}`;
+}
+
+/**
+ * Thumbnail storage URL for an image key. The photos backend stores a
+ * `-thumb.webp` sibling for every image; videos/documents have none, so for
+ * those this returns the original key URL (callers render video thumbs / files
+ * differently anyway). Images uploaded before thumbnails existed have no
+ * `-thumb.webp` object — callers should fall back to the full URL on error.
+ */
+export function thumbnailContentUrl(base: string, key?: string | null): string {
+  if (!key || isVideoKey(key)) return storageContentUrl(base, key);
+  const thumbKey = key.replace(/\.[a-z0-9]+$/i, '-thumb.webp');
+  return storageContentUrl(base, thumbKey);
+}
+
+/** `<img>` src with onerror fallback to the full image (for legacy items). */
+export function thumbImageSrc(base: string, key: string, alt: string, className = ''): string {
+  const thumb = thumbnailContentUrl(base, key);
+  const full = storageContentUrl(base, key);
+  return `<img src="${thumb}" onerror="this.onerror=null;this.src='${full}'" alt="${alt.replace(/"/g, '&quot;')}"${className ? ` class="${className}"` : ''} />`;
+}
+
 export function getVideoMuted(): boolean {
   return videoMuted;
 }

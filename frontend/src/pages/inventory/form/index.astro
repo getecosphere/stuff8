@@ -91,6 +91,10 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
           </label>
           <input id="input-item-photos" type="file" accept="image/*,video/*" multiple class="sr-only" />
           <div id="item-photo-carousel"></div>
+          <button type="button" id="btn-clear-item-photos" class="hidden items-center justify-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 transition-colors hover:bg-rose-100" aria-label="Hapus semua foto barang">
+            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+            Hapus semua foto
+          </button>
         </section>
 
         <p id="item-form-error" class="hidden rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700" role="alert"></p>
@@ -296,6 +300,11 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
       return photoKey ? `${PHOTOS_API}/storage/content/${photoKey.split('/').map(encodeURIComponent).join('/')}` : '/images/no-item-image.webp';
     }
 
+    function thumbStoragePhotoUrl(photoKey?: string) {
+      if (!photoKey || isVideoKey(photoKey)) return storagePhotoUrl(photoKey);
+      return `${PHOTOS_API}/storage/content/${photoKey.replace(/\.[a-z0-9]+$/i, '-thumb.webp').split('/').map(encodeURIComponent).join('/')}`;
+    }
+
     function setItemPhotoStep(item: any | null) {
       photoUploadItem = item;
       photoCarouselIndex = 0;
@@ -327,6 +336,12 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
     }
 
     function renderItemPhotoCarousel() {
+      const clearButton = document.getElementById('btn-clear-item-photos');
+      if (clearButton) {
+        const hasCommitted = Boolean(photoUploadItem && (photoUploadItem.photos || []).length > 0);
+        clearButton.classList.toggle('hidden', !hasCommitted);
+        clearButton.classList.toggle('inline-flex', hasCommitted);
+      }
       if (!photoCarousel) return;
       if (!photoUploadItem) {
         photoCarousel.innerHTML = '';
@@ -384,7 +399,7 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
         const source = slide.kind === 'photo'
           ? isVideoKey(slide.key)
             ? videoThumbMarkup(`Video ${index + 1}`)
-            : `<img src="${storagePhotoUrl(slide.key)}" alt="" class="size-full object-cover" />`
+            : `<img src="${thumbStoragePhotoUrl(slide.key)}" alt="" class="size-full object-cover" onerror="this.onerror=null;this.src='${storagePhotoUrl(slide.key)}'" />`
           : slide.entry.kind === 'video'
             ? videoThumbMarkup(`Video ${index + 1}`)
             : `<img src="${slide.entry.objectUrl}" alt="" class="size-full object-cover ${slide.entry.status === 'error' ? 'opacity-40' : 'opacity-80'}" />`;
@@ -491,6 +506,8 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
     async function uploadEntry(entry: UploadEntry) {
       if (!photoUploadItem || !user()?.id) return;
       entry.controller = new AbortController();
+      const timeoutMs = entry.kind === 'video' ? 5 * 60 * 1000 : 3 * 60 * 1000;
+      const timeoutTimer = window.setTimeout(() => entry.controller?.abort(), timeoutMs);
       try {
         const body = new FormData();
         body.append('file', entry.file);
@@ -502,17 +519,34 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
         });
         if (!uploaded.ok) throw new Error(await uploaded.text());
         const object = await uploaded.json();
-        await enqueuePhotoPatch(object.key);
+        let objectKey = object.key;
+        try {
+          await enqueuePhotoPatch(objectKey);
+        } catch (patchError) {
+          // The object is in storage but couldn't be linked to the item — drop
+          // it so we don't orphan bytes, then surface the real error.
+          fetch(`${PHOTOS_API}/storage/objects/${objectKey.split('/').map(encodeURIComponent).join('/')}?owner_id=${encodeURIComponent(user()!.id)}`, { method: 'DELETE' })
+            .catch(() => { /* best-effort cleanup */ });
+          throw patchError;
+        }
         entry.status = 'done';
         entry.controller = null;
+        window.clearTimeout(timeoutTimer);
         URL.revokeObjectURL(entry.objectUrl);
         pendingUploads = pendingUploads.filter(pending => pending.id !== entry.id);
         photoCarouselIndex = Math.max(currentSlides().length - 1, 0);
         renderItemPhotoCarousel();
         await syncToMarketplace(photoUploadItem);
       } catch (error) {
+        window.clearTimeout(timeoutTimer);
         if (error instanceof DOMException && error.name === 'AbortError') {
-          removePendingUpload(entry.id);
+          // A timed-out upload should be retryable, not silently dropped.
+          entry.status = 'error';
+          entry.controller = null;
+          entry.error = entry.kind === 'video'
+            ? 'Unggahan video terlalu lama. Coba video yang lebih pendek.'
+            : 'Unggahan foto terlalu lama. Periksa koneksi lalu coba lagi.';
+          renderItemPhotoCarousel();
           return;
         }
         console.error('Failed to upload inventory media:', error);
@@ -561,6 +595,11 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
       if (photos.length === (photoUploadItem.photos || []).length) return;
       (async () => {
         try {
+          // Drop the storage object (and its thumbnail sibling) first, then
+          // detach it from the item so we never orphan bytes in S3/MinIO.
+          const storageKey = slide.key!;
+          await fetch(`${PHOTOS_API}/storage/objects/${storageKey.split('/').map(encodeURIComponent).join('/')}?owner_id=${encodeURIComponent(user()!.id)}`, { method: 'DELETE' })
+            .catch(() => { /* best-effort; the PATCH below still detaches the key */ });
           const response = await fetch(`${INVENTORY_API}/items/${photoUploadItem!.id}`, {
             method: 'PATCH', headers: authHeaders(),
             body: JSON.stringify({ owner_id: user()!.id, photos })
@@ -572,6 +611,36 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
           renderItemPhotoCarousel();
         } catch (error) {
           console.error('Failed to remove inventory photo:', error);
+          window.stuff8Toast?.('Foto belum dapat dihapus. Coba lagi.', { variant: 'error', title: 'Gagal menghapus foto' });
+        }
+      })();
+    }
+
+    function clearAllPhotos() {
+      if (!photoUploadItem || !user()?.id) return;
+      const keys = (photoUploadItem.photos || []).filter(Boolean);
+      if (keys.length === 0) return;
+      (async () => {
+        try {
+          const owner = encodeURIComponent(user()!.id);
+          // Remove every storage object (each image + its thumbnail sibling)
+          // so clearing the form truly frees the bytes.
+          await Promise.all(keys.map(key =>
+            fetch(`${PHOTOS_API}/storage/objects/${key.split('/').map(encodeURIComponent).join('/')}?owner_id=${owner}`, { method: 'DELETE' })
+              .catch(() => { /* best-effort */ })
+          ));
+          const response = await fetch(`${INVENTORY_API}/items/${photoUploadItem!.id}`, {
+            method: 'PATCH', headers: authHeaders(),
+            body: JSON.stringify({ owner_id: user()!.id, photos: [] })
+          });
+          if (!response.ok) throw new Error(await response.text());
+          photoUploadItem = await response.json();
+          photoCarouselIndex = 0;
+          await syncToMarketplace(photoUploadItem);
+          renderItemPhotoCarousel();
+          window.stuff8Toast?.('Semua foto sudah dihapus.', { variant: 'success', title: 'Foto dihapus' });
+        } catch (error) {
+          console.error('Failed to clear inventory photos:', error);
           window.stuff8Toast?.('Foto belum dapat dihapus. Coba lagi.', { variant: 'error', title: 'Gagal menghapus foto' });
         }
       })();
@@ -711,6 +780,8 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
     photosInput?.addEventListener('change', () => {
       if (photosInput.files) addUploads(photosInput.files);
     });
+
+    document.getElementById('btn-clear-item-photos')?.addEventListener('click', clearAllPhotos);
 
     saveButton?.addEventListener('click', () => {
       if (!photoUploadItem) return;
