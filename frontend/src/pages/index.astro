@@ -1188,7 +1188,9 @@ import Layout from '../layouts/Layout.astro';
       const nextAction = escapeHtml(`event.stopPropagation(); window.changeProductPhoto(${JSON.stringify(carouselKey)}, 1, ${photos.length})`);
 
       return `
-        <img src="${storagePhotoUrl(photo)}" alt="${escapeHtml(item.title || `Foto barang ${currentIndex + 1}`)}" class="${imageClass} object-cover" />
+        <div data-slide-track="${carouselKey}" class="flex size-full" style="transition:transform .35s cubic-bezier(.4,0,.2,1)">
+          ${photos.map((slide, index) => `<img src="${storagePhotoUrl(slide)}" alt="${escapeHtml(item.title || `Foto barang ${index + 1}`)}" class="${imageClass} object-cover shrink-0" />`).join('')}
+        </div>
         ${photos.length > 1 ? `
           <button type="button" onclick="${previousAction}" class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto sebelumnya">
             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" /></svg>
@@ -1196,7 +1198,7 @@ import Layout from '../layouts/Layout.astro';
           <button type="button" onclick="${nextAction}" class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto berikutnya">
             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" /></svg>
           </button>
-          <span class="absolute bottom-2 right-2 rounded-full bg-navy-950/70 px-2 py-0.5 text-[11px] font-semibold text-white">${currentIndex + 1}/${photos.length}</span>
+          <span class="absolute bottom-2 right-2 rounded-full bg-navy-950/70 px-2 py-0.5 text-[11px] font-semibold text-white" data-slide-count="${carouselKey}">${currentIndex + 1}/${photos.length}</span>
         ` : ''}
       `;
     }
@@ -2304,8 +2306,12 @@ import Layout from '../layouts/Layout.astro';
     (window as any).changeProductPhoto = (carouselKey: string, direction: number, total: number) => {
       if (total < 2) return;
       const current = productPhotoIndexes.get(carouselKey) || 0;
-      productPhotoIndexes.set(carouselKey, (current + direction + total) % total);
-      render();
+      const next = (current + direction + total) % total;
+      productPhotoIndexes.set(carouselKey, next);
+      const track = document.querySelector<HTMLElement>(`[data-slide-track="${carouselKey}"]`);
+      if (track) track.style.transform = `translateX(-${next * 100}%)`;
+      const counter = document.querySelector(`[data-slide-count="${carouselKey}"]`);
+      if (counter) counter.textContent = `${next + 1}/${total}`;
     };
     (window as any).changeInventoryPage = (page: number) => {
       if (page < 1 || page > inventoryMeta.total_pages || page === inventoryPage) return;

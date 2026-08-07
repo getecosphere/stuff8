@@ -89,7 +89,6 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
             <span class="mt-1 text-xs text-slate-500">JPG, PNG, atau WebP · maksimal {maxPhotoMB} MB per foto</span>
           </label>
           <input id="input-item-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple class="sr-only" />
-          <p id="item-photo-upload-status" class="hidden text-xs font-medium text-slate-600" role="status"></p>
           <div id="item-photo-carousel"></div>
         </section>
 
@@ -132,6 +131,7 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
 
   <script>
     import { can, fetchAccessRights } from '../../../lib/authorization';
+    import { initSlider } from '../../../lib/slider';
     const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
     const INVENTORY_API = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const MARKETPLACE_API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
@@ -142,6 +142,15 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const user = () => session()?.user;
     const authHeaders = () => ({ 'Content-Type': 'application/json', ...(session()?.token ? { 'Authorization': `Bearer ${session().token}` } : {}) });
+
+    type UploadEntry = {
+      id: string;
+      file: File;
+      objectUrl: string;
+      status: 'uploading' | 'error' | 'done';
+      error?: string;
+      controller: AbortController | null;
+    };
 
     // Photos are usually added in the photo step AFTER the item is created and
     // already listed, so the marketplace projection must be re-synced whenever
@@ -175,6 +184,10 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
     let photoCarouselIndex = 0;
     let customInventoryCategories: string[] = [];
     let inventoryApiCategories: string[] = [];
+    let pendingUploads: UploadEntry[] = [];
+    let uploadIdCounter = 0;
+    let photoPatchChain: Promise<unknown> = Promise.resolve();
+    let carousel: { goTo: (index: number) => void; next: () => void; prev: () => void } | null = null;
 
     const DEFAULT_INVENTORY_CATEGORIES = ['Electronics', 'Cameras', 'Bicycles', 'Books', 'Musical Instruments', 'Furniture'];
     const CREATE_CATEGORY_LABEL = '+ Buat kategori baru';
@@ -187,7 +200,6 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
     const photoStep = document.getElementById('item-photo-step');
     const photosInput = document.getElementById('input-item-photos') as HTMLInputElement | null;
     const photoCarousel = document.getElementById('item-photo-carousel');
-    const photoUploadStatus = document.getElementById('item-photo-upload-status');
     const deleteButton = document.getElementById('btn-delete-item') as HTMLButtonElement | null;
     const saveButton = document.getElementById('btn-save-item') as HTMLButtonElement | null;
     const inputSellable = document.getElementById('input-sellable') as HTMLInputElement;
@@ -292,7 +304,7 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
         saveButton.textContent = uploadingPhotos ? 'Selesai' : (editingItemId ? 'Simpan Perubahan' : 'Simpan Barang');
       }
       if (photosInput) photosInput.value = '';
-      photoUploadStatus?.classList.add('hidden');
+      resetPendingUploads();
       renderItemPhotoCarousel();
     }
 
@@ -307,79 +319,238 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
       if (title) title.textContent = 'Foto barang';
       photoStep?.classList.remove('hidden');
       if (photosInput) photosInput.value = '';
-      photoUploadStatus?.classList.add('hidden');
+      resetPendingUploads();
       renderItemPhotoCarousel();
     }
 
     function renderItemPhotoCarousel() {
       if (!photoCarousel) return;
-      const photos: string[] = photoUploadItem?.photos || [];
       if (!photoUploadItem) {
         photoCarousel.innerHTML = '';
         return;
       }
-      if (photos.length === 0) {
+      const slides = currentSlides();
+      if (slides.length === 0) {
         photoCarousel.innerHTML = '<div class="rounded-xl border border-slate-200 bg-white p-4 text-center text-xs text-slate-500">Belum ada foto. Kamu dapat menambahkannya sekarang atau nanti dari detail barang.</div>';
         return;
       }
-      photoCarouselIndex = Math.min(photoCarouselIndex, photos.length - 1);
-      const active = storagePhotoUrl(photos[photoCarouselIndex]);
+      photoCarouselIndex = Math.min(photoCarouselIndex, slides.length - 1);
+      const main = slides.map((slide, index) => {
+        if (slide.kind === 'photo') {
+          return `<img src="${storagePhotoUrl(slide.key)}" alt="Foto barang ${index + 1}" class="size-full shrink-0 object-contain" />`;
+        }
+        const entry = slide.entry;
+        if (entry.status === 'uploading') {
+          return `
+            <div class="relative size-full shrink-0 bg-slate-50">
+              <img src="${entry.objectUrl}" alt="Mengunggah foto" class="size-full object-contain opacity-80" />
+              <div class="absolute inset-0 flex items-center justify-center bg-white/30">
+                <div class="flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 shadow-md">
+                  <svg class="size-4 animate-spin text-clay-600" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"></path></svg>
+                  <span class="text-xs font-semibold text-slate-600">Mengunggah…</span>
+                  <button type="button" data-cancel-upload="${entry.id}" class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-700 transition-colors hover:bg-slate-200">Batal</button>
+                </div>
+              </div>
+            </div>`;
+        }
+        return `
+          <div class="relative size-full shrink-0 bg-slate-50">
+            <img src="${entry.objectUrl}" alt="Foto gagal diunggah" class="size-full object-contain opacity-40" />
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/40 px-4 text-center">
+              <span class="rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700">Gagal diunggah${entry.error ? ` · ${escapeHtml(entry.error)}` : ''}</span>
+              <div class="flex gap-2">
+                <button type="button" data-retry-upload="${entry.id}" class="rounded-full bg-navy-900 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-navy-800">Coba lagi</button>
+                <button type="button" data-remove-upload="${entry.id}" class="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-100">Hapus</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      const arrows = slides.length > 1 ? `
+        <button type="button" data-slide-prev class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Foto sebelumnya"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" /></svg></button>
+        <button type="button" data-slide-next class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Foto berikutnya"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" /></svg></button>` : '';
+
+      const thumbs = slides.map((slide, index) => {
+        const active = index === photoCarouselIndex;
+        const source = slide.kind === 'photo'
+          ? `<img src="${storagePhotoUrl(slide.key)}" alt="" class="size-full object-cover" />`
+          : `<img src="${slide.entry.objectUrl}" alt="" class="size-full object-cover ${slide.entry.status === 'error' ? 'opacity-40' : 'opacity-80'}" />`;
+        const badge = slide.kind === 'upload' && slide.entry.status === 'uploading'
+          ? `<span class="absolute inset-0 flex items-center justify-center bg-white/50"><svg class="size-4 animate-spin text-clay-600" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"></path></svg></span>`
+          : '';
+        return `<button type="button" data-slide-thumb="${index}" class="relative size-12 shrink-0 overflow-hidden rounded-md border ${active ? 'border-navy-900 ring-2 ring-navy-900/15' : 'border-slate-200'}">${source}${badge}</button>`;
+      }).join('');
+
       photoCarousel.innerHTML = `
         <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
           <div class="relative aspect-[4/3]">
-            <img src="${active}" alt="Foto barang ${photoCarouselIndex + 1}" class="size-full object-contain" />
-            <button type="button" onclick="window.inventoryPhotoRemove(${photoCarouselIndex})" class="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm hover:bg-rose-700" aria-label="Hapus foto ini">Hapus</button>
-            ${photos.length > 1 ? `<button type="button" onclick="window.inventoryPhotoPrevious()" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm" aria-label="Foto sebelumnya">←</button><button type="button" onclick="window.inventoryPhotoNext()" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm" aria-label="Foto berikutnya">→</button>` : ''}
+            <div data-slide-track class="flex size-full" style="transition:transform .35s cubic-bezier(.4,0,.2,1)">${main}</div>
+            <button type="button" data-remove-slide class="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm transition hover:bg-rose-700" aria-label="Hapus foto ini">Hapus</button>
+            ${arrows}
           </div>
-          <div class="flex gap-2 overflow-x-auto p-2">${photos.map((photo, index) => `<button type="button" onclick="window.inventoryPhotoSelect(${index})" class="size-12 shrink-0 overflow-hidden rounded-md border ${index === photoCarouselIndex ? 'border-navy-900 ring-2 ring-navy-900/15' : 'border-slate-200'}"><img src="${storagePhotoUrl(photo)}" alt="" class="size-full object-cover" /></button>`).join('')}</div>
+          ${slides.length > 1 ? `<div class="flex gap-2 overflow-x-auto p-2">${thumbs}</div>` : ''}
         </div>`;
+
+      carousel = initSlider(photoCarousel, {
+        initialIndex: photoCarouselIndex,
+        onIndexChange: index => {
+          photoCarouselIndex = index;
+          photoCarousel?.querySelectorAll<HTMLElement>('[data-slide-thumb]').forEach(thumb => {
+            const active = Number(thumb.dataset.slideThumb) === index;
+            thumb.classList.toggle('border-navy-900', active);
+            thumb.classList.toggle('ring-2', active);
+            thumb.classList.toggle('ring-navy-900/15', active);
+            thumb.classList.toggle('border-slate-200', !active);
+          });
+        }
+      });
+
+      photoCarousel.querySelector('[data-remove-slide]')?.addEventListener('click', removeCurrentSlide);
+      photoCarousel.querySelectorAll<HTMLElement>('[data-cancel-upload]').forEach(button => button.addEventListener('click', () => cancelUpload(button.dataset.cancelUpload!)));
+      photoCarousel.querySelectorAll<HTMLElement>('[data-retry-upload]').forEach(button => button.addEventListener('click', () => retryUpload(button.dataset.retryUpload!)));
+      photoCarousel.querySelectorAll<HTMLElement>('[data-remove-upload]').forEach(button => button.addEventListener('click', () => removePendingUpload(button.dataset.removeUpload!)));
     }
 
     const MAX_PHOTO_MB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
     const MAX_PHOTO_BYTES = MAX_PHOTO_MB * 1024 * 1024;
 
-    async function uploadInventoryPhotos(files: FileList) {
+    function currentSlides(): { kind: 'photo' | 'upload'; key?: string; entry?: UploadEntry }[] {
+      const committed = (photoUploadItem?.photos || []).map(key => ({ kind: 'photo' as const, key }));
+      const pending = pendingUploads.map(entry => ({ kind: 'upload' as const, entry }));
+      return [...committed, ...pending];
+    }
+
+    function resetPendingUploads() {
+      pendingUploads.forEach(entry => entry.controller?.abort());
+      pendingUploads.forEach(entry => URL.revokeObjectURL(entry.objectUrl));
+      pendingUploads = [];
+      photoCarouselIndex = 0;
+    }
+
+    function addUploads(files: FileList) {
       if (!photoUploadItem || !user()?.id) return;
       const selected = Array.from(files);
       if (selected.length === 0) return;
-      const oversized = selected.find(file => file.size > MAX_PHOTO_BYTES);
-      if (oversized) {
-        photoUploadStatus?.classList.remove('hidden');
-        photoUploadStatus!.textContent = `Ukuran foto maksimal ${MAX_PHOTO_MB} MB. "${oversized.name}" terlalu besar (${(oversized.size / (1024 * 1024)).toFixed(1)} MB).`;
-        if (photosInput) photosInput.value = '';
+      const entries: UploadEntry[] = selected.map(file => {
+        const id = `upload-${++uploadIdCounter}`;
+        const oversized = file.size > MAX_PHOTO_BYTES;
+        return {
+          id,
+          file,
+          objectUrl: URL.createObjectURL(file),
+          status: oversized ? 'error' : 'uploading',
+          error: oversized ? `Terlalu besar (${(file.size / (1024 * 1024)).toFixed(1)} MB, maksimal ${MAX_PHOTO_MB} MB)` : undefined,
+          controller: null,
+        };
+      });
+      pendingUploads.push(...entries);
+      photoCarouselIndex = Math.max(currentSlides().length - 1, 0);
+      renderItemPhotoCarousel();
+      entries.forEach(entry => { if (entry.status === 'uploading') uploadEntry(entry); });
+    }
+
+    function enqueuePhotoPatch(key: string): Promise<void> {
+      const task = photoPatchChain.then(async () => {
+        if (!photoUploadItem || !user()?.id) return;
+        const photos = [...(photoUploadItem.photos || []), key];
+        const response = await fetch(`${INVENTORY_API}/items/${photoUploadItem.id}`, {
+          method: 'PATCH', headers: authHeaders(),
+          body: JSON.stringify({ owner_id: user().id, photos })
+        });
+        if (!response.ok) throw new Error(await response.text());
+        photoUploadItem = await response.json();
+      });
+      photoPatchChain = task.catch(() => {});
+      return task;
+    }
+
+    async function uploadEntry(entry: UploadEntry) {
+      if (!photoUploadItem || !user()?.id) return;
+      entry.controller = new AbortController();
+      try {
+        const body = new FormData();
+        body.append('file', entry.file);
+        body.append('owner_id', user().id);
+        body.append('namespace', 'inventory');
+        body.append('reference_id', photoUploadItem.id);
+        const uploaded = await fetch(`${PHOTOS_API}/storage/objects`, {
+          method: 'POST', body, signal: entry.controller.signal,
+        });
+        if (!uploaded.ok) throw new Error(await uploaded.text());
+        const object = await uploaded.json();
+        await enqueuePhotoPatch(object.key);
+        entry.status = 'done';
+        entry.controller = null;
+        URL.revokeObjectURL(entry.objectUrl);
+        pendingUploads = pendingUploads.filter(pending => pending.id !== entry.id);
+        photoCarouselIndex = Math.max(currentSlides().length - 1, 0);
+        renderItemPhotoCarousel();
+        await syncToMarketplace(photoUploadItem);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          removePendingUpload(entry.id);
+          return;
+        }
+        console.error('Failed to upload inventory photo:', error);
+        entry.status = 'error';
+        entry.controller = null;
+        const detail = error instanceof Error ? error.message : '';
+        entry.error = detail && !/^Failed to fetch/.test(detail) ? detail : 'Periksa koneksi lalu coba lagi.';
+        renderItemPhotoCarousel();
+      }
+    }
+
+    function cancelUpload(id: string) {
+      const entry = pendingUploads.find(pending => pending.id === id);
+      if (!entry) return;
+      entry.controller?.abort();
+      removePendingUpload(id);
+    }
+
+    function retryUpload(id: string) {
+      const entry = pendingUploads.find(pending => pending.id === id);
+      if (!entry || !photoUploadItem) return;
+      entry.status = 'uploading';
+      entry.error = undefined;
+      renderItemPhotoCarousel();
+      uploadEntry(entry);
+    }
+
+    function removePendingUpload(id: string) {
+      const entry = pendingUploads.find(pending => pending.id === id);
+      pendingUploads = pendingUploads.filter(pending => pending.id !== id);
+      if (entry) URL.revokeObjectURL(entry.objectUrl);
+      photoCarouselIndex = Math.min(photoCarouselIndex, Math.max(currentSlides().length - 1, 0));
+      renderItemPhotoCarousel();
+    }
+
+    function removeCurrentSlide() {
+      if (!photoUploadItem) return;
+      const slide = currentSlides()[photoCarouselIndex];
+      if (!slide) return;
+      if (slide.kind === 'upload') {
+        removePendingUpload(slide.entry!.id);
         return;
       }
-      photoUploadStatus?.classList.remove('hidden');
-      try {
-        for (let index = 0; index < selected.length; index += 1) {
-          const file = selected[index];
-          photoUploadStatus!.textContent = `Mengunggah foto ${index + 1} dari ${selected.length}…`;
-          const body = new FormData();
-          body.append('file', file);
-          body.append('owner_id', user().id);
-          body.append('namespace', 'inventory');
-          body.append('reference_id', photoUploadItem.id);
-          const uploaded = await fetch(`${PHOTOS_API}/storage/objects`, { method: 'POST', body });
-          if (!uploaded.ok) throw new Error(await uploaded.text());
-          const object = await uploaded.json();
-          const photos = [...(photoUploadItem.photos || []), object.key];
-          const updated = await fetch(`${INVENTORY_API}/items/${photoUploadItem.id}`, {
+      if (!user()?.id) return;
+      const photos = (photoUploadItem.photos || []).filter(key => key !== slide.key);
+      if (photos.length === (photoUploadItem.photos || []).length) return;
+      (async () => {
+        try {
+          const response = await fetch(`${INVENTORY_API}/items/${photoUploadItem!.id}`, {
             method: 'PATCH', headers: authHeaders(),
-            body: JSON.stringify({ owner_id: user().id, photos })
+            body: JSON.stringify({ owner_id: user()!.id, photos })
           });
-          if (!updated.ok) throw new Error(await updated.text());
-          photoUploadItem = await updated.json();
+          if (!response.ok) throw new Error(await response.text());
+          photoUploadItem = await response.json();
+          photoCarouselIndex = Math.min(photoCarouselIndex, Math.max(currentSlides().length - 1, 0));
+          await syncToMarketplace(photoUploadItem);
+          renderItemPhotoCarousel();
+        } catch (error) {
+          console.error('Failed to remove inventory photo:', error);
+          window.stuff8Toast?.('Foto belum dapat dihapus. Coba lagi.', { variant: 'error', title: 'Gagal menghapus foto' });
         }
-        await syncToMarketplace(photoUploadItem);
-        photoUploadStatus!.textContent = `${selected.length} foto berhasil ditambahkan.`;
-        renderItemPhotoCarousel();
-      } catch (error) {
-        console.error('Failed to upload inventory photos:', error);
-        const detail = error instanceof Error ? error.message : '';
-        photoUploadStatus!.textContent = detail && !/^Failed to fetch/.test(detail)
-          ? `Foto belum dapat diunggah: ${detail}`
-          : 'Foto belum dapat diunggah. Periksa koneksi lalu coba lagi.';
-      }
+      })();
     }
 
     function openCategoryModal() {
@@ -514,11 +685,12 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
     });
 
     photosInput?.addEventListener('change', () => {
-      if (photosInput.files) uploadInventoryPhotos(photosInput.files);
+      if (photosInput.files) addUploads(photosInput.files);
     });
 
     saveButton?.addEventListener('click', () => {
       if (!photoUploadItem) return;
+      resetPendingUploads();
       photoUploadItem = null;
       location.assign('/inventory/');
     });
@@ -664,41 +836,9 @@ const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
       }
     });
 
-    (window as any).inventoryPhotoPrevious = () => {
-      if (!photoUploadItem?.photos?.length) return;
-      photoCarouselIndex = (photoCarouselIndex - 1 + photoUploadItem.photos.length) % photoUploadItem.photos.length;
-      renderItemPhotoCarousel();
-    };
-    (window as any).inventoryPhotoNext = () => {
-      if (!photoUploadItem?.photos?.length) return;
-      photoCarouselIndex = (photoCarouselIndex + 1) % photoUploadItem.photos.length;
-      renderItemPhotoCarousel();
-    };
-    (window as any).inventoryPhotoSelect = (index: number) => {
-      photoCarouselIndex = index;
-      renderItemPhotoCarousel();
-    };
-    (window as any).inventoryPhotoRemove = async (index: number) => {
-      if (!photoUploadItem?.photos?.length || !user()?.id) return;
-      const photos = photoUploadItem.photos.filter((_: string, i: number) => i !== index);
-      if (photos.length === photoUploadItem.photos.length) return;
-      photoUploadStatus?.classList.remove('hidden');
-      try {
-        const response = await fetch(`${INVENTORY_API}/items/${photoUploadItem.id}`, {
-          method: 'PATCH', headers: authHeaders(),
-          body: JSON.stringify({ owner_id: user().id, photos })
-        });
-        if (!response.ok) throw new Error(await response.text());
-        photoUploadItem = await response.json();
-        photoCarouselIndex = Math.min(photoCarouselIndex, Math.max(photos.length - 1, 0));
-        await syncToMarketplace(photoUploadItem);
-        photoUploadStatus.textContent = 'Foto dihapus.';
-        renderItemPhotoCarousel();
-      } catch (error) {
-        console.error('Failed to remove inventory photo:', error);
-        photoUploadStatus.textContent = 'Foto belum dapat dihapus. Coba lagi.';
-      }
-    };
+    (window as any).inventoryPhotoPrevious = () => carousel?.prev();
+    (window as any).inventoryPhotoNext = () => carousel?.next();
+    (window as any).inventoryPhotoSelect = (index: number) => carousel?.goTo(index);
 
     load();
   </script>
