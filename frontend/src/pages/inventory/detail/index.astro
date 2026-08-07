@@ -69,8 +69,8 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
         : `<span class="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold ${item.sellable ? 'bg-navy-900 text-white' : 'bg-slate-200 text-slate-700'}">${item.sellable ? 'Dijual di Marketplace' : 'Koleksi Pribadi'}</span>`;
       root.innerHTML = `
         <div class="grid gap-6 md:grid-cols-2">
-          <div class="space-y-3">
-          <div data-photo-carousel class="space-y-3">
+          <div class="min-w-0 space-y-3">
+          <div data-photo-carousel class="min-w-0 space-y-3">
             <div data-main-photo role="button" tabindex="0" class="group relative aspect-square w-full cursor-zoom-in overflow-hidden rounded-xl bg-slate-100">
               <div data-slide-track class="flex size-full" style="transition:transform .35s cubic-bezier(.4,0,.2,1)">${photos.map((photo: string) => isVideoKey(photo)
                 ? videoMarkup({ src: photoUrl(photo), className: 'size-full shrink-0 object-cover', label: `${escapeHtml(item.title || 'Video barang')} — video` })
@@ -81,7 +81,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
             ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-slide-thumb="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-navy-100 transition hover:border-clay-400">${isVideoKey(photo) ? videoThumbMarkup(`Video ${index + 1}`) : `<img src="${photoUrl(photo)}" alt="Foto ${index + 1}" class="size-full object-cover" />`}</button>`).join('')}</div>` : ''}
           </div>
           </div>
-          <div class="space-y-4">
+          <div class="min-w-0 space-y-4">
             <div class="flex items-center justify-between gap-3">
               <p class="text-xs font-bold uppercase tracking-wider text-clay-600">${escapeHtml(item.category || '')} · ${escapeHtml(item.condition || '')}</p>
               ${statusBadge}

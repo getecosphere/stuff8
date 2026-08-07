@@ -4,11 +4,25 @@ import '../styles/global.css';
 // import SupportWidget from '../components/SupportWidget.astro';
 
 interface Props {
+  title?: string;
   description?: string;
+  image?: string;
+  type?: string;
+  url?: string;
+  structuredData?: Array<Record<string, unknown>>;
+  ogPrice?: number;
+  ogPriceCurrency?: string;
 }
 
-const { 
-  description = "Rapiin barang-barang kamu dalam inventaris digital. Ada barang nganggur? Tinggal sekali klik langsung pajang di marketplace!"
+const {
+  title = 'Stuff8',
+  description = "Rapiin barang-barang kamu dalam inventaris digital. Ada barang nganggur? Tinggal sekali klik langsung pajang di marketplace!",
+  image,
+  type = 'website',
+  url,
+  structuredData = [],
+  ogPrice,
+  ogPriceCurrency = 'IDR'
 } = Astro.props;
 const isInventory = Astro.url.pathname === '/inventory' || Astro.url.pathname === '/inventory/' || Astro.url.pathname.startsWith('/inventory/');
 const isMarketplace = Astro.url.pathname.startsWith('/marketplace');
@@ -16,9 +30,12 @@ const isEmailVerification = Astro.url.pathname.startsWith('/auth/verify-email');
 const isChat = Astro.url.pathname.startsWith('/chat');
 // The public origin is deliberately taken from stuff8_bootstrap/ecompose.yml
 // (`expose.hostname`), not from a browser-local URL or a hand-managed .env.
-const siteUrl = 'https://stuff8.arunikaswarna.my.id';
-const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const siteUrl = 'https://stuff8.com';
+const canonicalUrl = url ? new URL(url, siteUrl).toString() : new URL(Astro.url.pathname, siteUrl).toString();
 const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).toString();
+const pageImage = image ? new URL(image, siteUrl).toString() : socialImageUrl;
+const pageImageType = !image ? 'image/webp' : image.toLowerCase().endsWith('.jpg') || image.toLowerCase().endsWith('.jpeg') ? 'image/jpeg' : image.toLowerCase().endsWith('.png') ? 'image/png' : image.toLowerCase().endsWith('.webp') ? 'image/webp' : 'image/webp';
+const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
 ---
 
 <!doctype html>
@@ -28,28 +45,37 @@ const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).to
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Stuff8</title>
+    <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0f172a" />
     <link rel="canonical" href={canonicalUrl} />
-    <meta property="og:title" content="Stuff8" />
+    <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="Stuff8" />
     <meta property="og:locale" content="id_ID" />
-    <meta property="og:image" content={socialImageUrl} />
-    <meta property="og:image:secure_url" content={socialImageUrl} />
-    <meta property="og:image:type" content="image/webp" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content={pageImage} />
+    <meta property="og:image:secure_url" content={pageImage} />
+    <meta property="og:image:type" content={pageImageType} />
+    {!image && <>
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+    </>}
     <meta property="og:image:alt" content="Koleksi barang pribadi yang tertata rapi dengan Stuff8" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Stuff8" />
+    <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image" content={pageImage} />
     <meta name="twitter:image:alt" content="Koleksi barang pribadi yang tertata rapi dengan Stuff8" />
+    {ogPrice != null && ogPrice !== '' && <>
+      <meta property="og:price:amount" content={String(Number(ogPrice) || 0)} />
+      <meta property="og:price:currency" content={ogPriceCurrency} />
+      <meta property="product:price:amount" content={String(Number(ogPrice) || 0)} />
+      <meta property="product:price:currency" content={ogPriceCurrency} />
+    </>}
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
