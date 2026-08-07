@@ -4,6 +4,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
 
 const editing = Boolean(Astro.url.searchParams.get('id'));
 const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventaris';
+const maxPhotoMB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
 ---
 
 <Layout description={pageTitle}>
@@ -85,7 +86,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
           <label for="input-item-photos" class="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 text-center transition-colors hover:border-navy-900 hover:bg-slate-100">
             <svg class="size-7 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 16l4.6-4.6a2 2 0 012.8 0L14 14m-1-1l1.6-1.6a2 2 0 012.8 0L20 16M5 20h14a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
             <span class="mt-2 text-sm font-bold text-slate-800">Pilih foto</span>
-            <span class="mt-1 text-xs text-slate-500">JPG, PNG, atau WebP · maksimal 5 MB per foto</span>
+            <span class="mt-1 text-xs text-slate-500">JPG, PNG, atau WebP · maksimal {maxPhotoMB} MB per foto</span>
           </label>
           <input id="input-item-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple class="sr-only" />
           <p id="item-photo-upload-status" class="hidden text-xs font-medium text-slate-600" role="status"></p>
@@ -334,7 +335,8 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
         </div>`;
     }
 
-    const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+    const MAX_PHOTO_MB = Number(import.meta.env.PUBLIC_MAX_PHOTO_MB) || 10;
+    const MAX_PHOTO_BYTES = MAX_PHOTO_MB * 1024 * 1024;
 
     async function uploadInventoryPhotos(files: FileList) {
       if (!photoUploadItem || !user()?.id) return;
@@ -343,7 +345,7 @@ const pageTitle = editing ? 'Ubah Barang Inventaris' : 'Tambah Barang ke Inventa
       const oversized = selected.find(file => file.size > MAX_PHOTO_BYTES);
       if (oversized) {
         photoUploadStatus?.classList.remove('hidden');
-        photoUploadStatus!.textContent = `Ukuran foto maksimal 5 MB. "${oversized.name}" terlalu besar (${(oversized.size / (1024 * 1024)).toFixed(1)} MB).`;
+        photoUploadStatus!.textContent = `Ukuran foto maksimal ${MAX_PHOTO_MB} MB. "${oversized.name}" terlalu besar (${(oversized.size / (1024 * 1024)).toFixed(1)} MB).`;
         if (photosInput) photosInput.value = '';
         return;
       }
