@@ -1,9 +1,12 @@
+import { applyMuteToAll, getVideoMuted, isVideoKey } from './media';
+
 type LightboxPhoto = { src: string; alt: string };
 
 let activeIndex = 0;
 let photos: LightboxPhoto[] = [];
 let overlay: HTMLElement | null = null;
-let image: HTMLImageElement | null = null;
+let figure: HTMLElement | null = null;
+let media: HTMLImageElement | HTMLVideoElement | null = null;
 let counter: HTMLElement | null = null;
 let caption: HTMLElement | null = null;
 let restoreFocus: Element | null = null;
@@ -14,15 +17,36 @@ const prefersReducedMotion = () =>
 
 function render() {
   const photo = photos[activeIndex];
-  if (!photo || !image || !counter) return;
-  image.src = photo.src;
-  image.alt = photo.alt;
+  if (!photo || !counter) return;
+  const isVideo = isVideoKey(photo.src);
+  const needsVideo = isVideo !== (media instanceof HTMLVideoElement);
+  if (needsVideo) {
+    media?.remove();
+    media = isVideo ? document.createElement('video') : document.createElement('img');
+    media.className = 'lb-img';
+    figure?.append(media);
+  }
+  if (!media) return;
   counter.textContent = `${activeIndex + 1} / ${photos.length}`;
   if (caption) caption.textContent = photos.length > 1 ? photo.alt : '';
-  image.classList.remove('lb-img-swap');
+  media.classList.remove('lb-img-swap');
   if (!prefersReducedMotion()) {
-    void image.offsetWidth;
-    image.classList.add('lb-img-swap');
+    void media.offsetWidth;
+    media.classList.add('lb-img-swap');
+  }
+  if (isVideo) {
+    const video = media as HTMLVideoElement;
+    video.src = photo.src;
+    video.controls = true;
+    video.muted = getVideoMuted();
+    video.autoplay = true;
+    video.playsInline = true;
+    video.loop = true;
+    video.dataset.video = '';
+    applyMuteToAll();
+  } else {
+    (media as HTMLImageElement).src = photo.src;
+    (media as HTMLImageElement).alt = photo.alt;
   }
 }
 
@@ -30,6 +54,8 @@ function close() {
   if (!overlay) return;
   const toRemove = overlay;
   overlay = null;
+  figure = null;
+  media = null;
   toRemove.classList.add('lb-leave');
   toRemove.addEventListener('animationend', () => toRemove.remove(), { once: true });
   document.body.style.overflow = '';
@@ -61,12 +87,12 @@ export function openLightbox(source: LightboxPhoto[], startIndex = 0) {
   overlay.setAttribute('aria-modal', 'true');
   overlay.setAttribute('aria-label', 'Pratinjau foto barang');
 
-  const figure = document.createElement('figure');
+  figure = document.createElement('figure');
   figure.className = 'lb-figure';
-  image = document.createElement('img');
-  image.className = 'lb-img';
-  image.alt = '';
-  figure.append(image);
+  media = document.createElement('img');
+  media.className = 'lb-img';
+  media.alt = '';
+  figure.append(media);
 
   const closeButton = document.createElement('button');
   closeButton.type = 'button';
@@ -92,7 +118,7 @@ export function openLightbox(source: LightboxPhoto[], startIndex = 0) {
   caption = document.createElement('figcaption');
   caption.className = 'lb-caption';
 
-  overlay.append(closeButton, prevButton, figure, nextButton, counter, caption);
+  overlay.append(closeButton, prevButton, figure!, nextButton, counter, caption);
 
   const onCloseClick = (event: MouseEvent) => {
     if (event.target === overlay || event.target === figure) close();

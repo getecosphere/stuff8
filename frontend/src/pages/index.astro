@@ -834,6 +834,7 @@ import Layout from '../layouts/Layout.astro';
   <script>
     import { inventoryDetailIdFromPath, marketplaceDetailIdFromPath, marketplaceDetailPath } from '../lib/slug';
     import { can, fetchAccessRights } from '../lib/authorization';
+    import { applyMuteToAll, installVideoBehaviors, isVideoKey, videoMarkup } from '../lib/media';
 
     const deepLinkId = inventoryDetailIdFromPath(location.pathname);
     if (deepLinkId) {
@@ -1189,7 +1190,12 @@ import Layout from '../layouts/Layout.astro';
 
       return `
         <div data-slide-track="${carouselKey}" class="flex size-full" style="transition:transform .35s cubic-bezier(.4,0,.2,1)">
-          ${photos.map((slide, index) => `<img src="${storagePhotoUrl(slide)}" alt="${escapeHtml(item.title || `Foto barang ${index + 1}`)}" class="${imageClass} object-cover shrink-0" />`).join('')}
+          ${photos.map((slide, index) => {
+            const label = escapeHtml(item.title || `Media barang ${index + 1}`);
+            return isVideoKey(slide)
+              ? videoMarkup({ src: storagePhotoUrl(slide), className: `${imageClass} object-cover shrink-0`, label, controls: true })
+              : `<img src="${storagePhotoUrl(slide)}" alt="${label}" class="${imageClass} object-cover shrink-0" />`;
+          }).join('')}
         </div>
         ${photos.length > 1 ? `
           <button type="button" onclick="${previousAction}" class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto sebelumnya">
@@ -2023,6 +2029,8 @@ import Layout from '../layouts/Layout.astro';
           `;
         }).join('');
       }
+      installVideoBehaviors();
+      applyMuteToAll();
     }
 
     // Render Function
@@ -2297,6 +2305,9 @@ import Layout from '../layouts/Layout.astro';
           }).join('');
         }
       }
+
+      installVideoBehaviors();
+      applyMuteToAll();
     }
 
     // Attach Global Functions
