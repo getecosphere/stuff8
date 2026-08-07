@@ -56,7 +56,9 @@ export const decodeItemToken = (token: string): string | null => {
 
 export const inventoryDetailPath = (item: { id: string; title?: string }): string => {
   const token = encodeItemToken(item.id);
-  return `/inventory/detail/${slugify(item.title || '')}-${token || item.id}`;
+  // Trailing slash matches the site's `trailingSlash: 'always'` output so the
+  // pretty URL serves the pre-rendered directory index directly.
+  return `/inventory/detail/${slugify(item.title || '')}-${token || item.id}/`;
 };
 
 export const inventoryDetailIdFromPath = (pathname: string): string | null => {
@@ -71,7 +73,7 @@ export const inventoryDetailIdFromPath = (pathname: string): string | null => {
 
 export const marketplaceDetailPath = (item: { id: string; title?: string }): string => {
   const token = encodeItemToken(item.id);
-  return `/marketplace/detail/${slugify(item.title || '')}-${token || item.id}`;
+  return `/marketplace/detail/${slugify(item.title || '')}-${token || item.id}/`;
 };
 
 export const marketplaceDetailIdFromPath = (pathname: string): string | null => {
