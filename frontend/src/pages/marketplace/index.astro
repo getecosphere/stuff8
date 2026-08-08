@@ -5,8 +5,11 @@ import Layout from '../../layouts/Layout.astro';
 <Layout>
   <div class="mx-auto flex min-h-[calc(100dvh-10rem)] w-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
     <section class="flex min-h-0 flex-1 flex-col gap-3" aria-label="Marketplace">
-      <div class="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
-        <h1 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Pasar Stuff8</h1>
+      <div class="flex items-end justify-between gap-3">
+        <div class="min-w-0">
+          <h1 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Cari Barang Kesukaanmu</h1>
+          <p class="mt-1 text-xs text-slate-500">One man junk, is another one treasure</p>
+        </div>
       </div>
       <div id="marketplace-category-tabs" class="flex items-stretch gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori marketplace">
         <!-- Dynamic category showcase rendered here -->
