@@ -38,7 +38,7 @@ export function thumbnailContentUrl(base: string, key?: string | null): string {
 export function thumbImageSrc(base: string, key: string, alt: string, className = ''): string {
   const thumb = thumbnailContentUrl(base, key);
   const full = storageContentUrl(base, key);
-  return `<img src="${thumb}" onerror="this.onerror=null;this.src='${full}'" alt="${alt.replace(/"/g, '&quot;')}"${className ? ` class="${className}"` : ''} />`;
+  return `<img src="${thumb}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${full}'" alt="${alt.replace(/"/g, '&quot;')}"${className ? ` class="${className}"` : ''} />`;
 }
 
 export function getVideoMuted(): boolean {

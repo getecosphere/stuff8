@@ -233,7 +233,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="card relative mx-auto grid max-w-4xl grid-cols-1 gap-8 overflow-hidden p-6 sm:p-8 md:grid-cols-12">
           <!-- Image Column -->
           <div class="relative h-64 overflow-hidden rounded-xl border border-navy-100 bg-navy-100 md:col-span-5 md:h-full">
-            <img id="demo-card-img" src="/fujifilm-camera.jpg" alt="Contoh Barang" class="size-full object-cover transition-transform duration-500 group-hover:scale-102" />
+            <img id="demo-card-img" src="/fujifilm-camera.jpg" alt="Contoh Barang" loading="lazy" decoding="async" class="size-full object-cover transition-transform duration-500 group-hover:scale-102" />
             <span id="demo-card-badge" class="absolute right-3 top-3 rounded-md bg-navy-900/90 px-3 py-1 text-xs font-bold text-white shadow-xs backdrop-blur-xs transition-all">
               Simpanan Privat
             </span>
@@ -440,7 +440,7 @@ import Layout from '../layouts/Layout.astro';
       <!-- Header -->
       <div class="flex items-center justify-between text-xs font-semibold text-slate-500 border-b border-navy-100 pb-3">
         <div class="flex items-center gap-2">
-          <img src="/logo.png" alt="Stuff8" class="h-6 w-auto object-contain" />
+          <img src="/logo.png" alt="Stuff8" class="h-6 w-auto object-contain" loading="lazy" />
           <span class="text-navy-900 font-semibold">Panduan Pengguna Stuff8</span>
         </div>
         <div class="flex items-center gap-1.5 text-slate-500">
@@ -897,6 +897,12 @@ import Layout from '../layouts/Layout.astro';
       }[char] || char));
     }
 
+    function expandableDesc(text: string, fallback: string, maxLines: number, extraClasses = ''): string {
+      const safe = escapeHtml((text || fallback).trim());
+      if (safe.length < 100) return `<span class="${extraClasses}">${safe}</span>`;
+      return `<span class="desc-wrapper ${extraClasses}"><span class="desc-text line-clamp-${maxLines}">${safe}</span><button type="button" onclick="this.previousElementSibling.classList.contains('line-clamp-${maxLines}')?(this.previousElementSibling.classList.remove('line-clamp-${maxLines}'),this.textContent='Sembunyikan'):(this.previousElementSibling.classList.add('line-clamp-${maxLines}'),this.textContent='Selengkapnya')" class="desc-toggle ml-1 text-[11px] font-bold text-clay-600 hover:underline whitespace-nowrap">Selengkapnya</button></span>`;
+    }
+
     function showNotice(message: string) {
       window.stuff8Toast?.(message, { variant: 'info', title: 'Perhatian' });
     }
@@ -1128,6 +1134,8 @@ import Layout from '../layouts/Layout.astro';
             image.src = currentSession!.user.avatarUrl;
             image.alt = '';
             image.className = 'size-full object-cover';
+            image.loading = 'lazy';
+            image.decoding = 'async';
             image.addEventListener('error', () => {
               delete currentSession!.user.avatarUrl;
               localStorage.setItem('stuff8_session', JSON.stringify(currentSession));
@@ -1179,7 +1187,7 @@ import Layout from '../layouts/Layout.astro';
     function renderProductPhotoCarousel(item: any, carouselKey: string, imageClass: string) {
       const photos = Array.isArray(item.photos) ? item.photos.filter(Boolean) : [];
       if (photos.length === 0) {
-        return `<img src="${storagePhotoUrl()}" alt="Gambar barang belum tersedia" class="${imageClass} object-contain p-5" />`;
+        return `<img src="${storagePhotoUrl()}" alt="Gambar barang belum tersedia" loading="lazy" decoding="async" class="${imageClass} object-contain p-5" />`;
       }
 
       const currentIndex = ((productPhotoIndexes.get(carouselKey) || 0) + photos.length) % photos.length;
@@ -2003,7 +2011,7 @@ import Layout from '../layouts/Layout.astro';
                 <div>
                   <span class="text-xs font-bold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
                   <h3 class="font-bold text-navy-900 text-base leading-snug">${item.title}</h3>
-                  <p class="text-slate-600 text-xs line-clamp-2 mt-1">${item.description}</p>
+                  ${expandableDesc(item.description || '', 'Tanpa deskripsi', 2, 'text-xs text-slate-600 block mt-1')}
                 </div>
 
                 <div class="space-y-2 pt-1">
@@ -2094,7 +2102,7 @@ import Layout from '../layouts/Layout.astro';
             : `${marketplaceListingTotal.toLocaleString('id-ID')} barang sedang tersedia di Marketplace.`;
           gridInventory.innerHTML = `
             <div class="flex min-h-80 flex-1 flex-col items-center justify-center rounded-2xl border border-navy-100 bg-white p-6 text-center shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-              <img src="/images/no-item-image.webp" alt="Inventaris masih kosong" class="mb-4 size-36 object-contain sm:size-40" />
+              <img src="/images/no-item-image.webp" alt="Inventaris masih kosong" class="mb-4 size-36 object-contain sm:size-40" loading="lazy" decoding="async" />
               <div class="space-y-1">
                 <h3 class="text-sm font-bold text-navy-900">${hasSelectedCategory ? `Belum ada barang di ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'Belum ada barang'}</h3>
                 <p class="mx-auto max-w-sm text-xs leading-relaxed text-slate-600">Tambahkan barang untuk mulai mengatur inventarismu.</p>
@@ -2119,7 +2127,7 @@ import Layout from '../layouts/Layout.astro';
               <div class="card-img-zoom relative size-20 shrink-0 overflow-hidden rounded-xl bg-navy-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
               <div class="min-w-0 flex-1">
                 <div class="flex items-start justify-between gap-3"><div class="min-w-0"><p class="truncate text-[11px] font-bold uppercase tracking-wider text-clay-600">${item.category}</p><h3 class="truncate text-sm font-bold text-navy-900">${item.title}</h3></div><span class="num shrink-0 text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span></div>
-                <p class="mt-1 line-clamp-1 text-xs text-slate-500">${item.description || 'Tanpa deskripsi'}</p>
+                ${expandableDesc(item.description || '', 'Tanpa deskripsi', 1, 'text-xs text-slate-500 block mt-1')}
                 ${isItemSold(item)
                   ? `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-bold text-brand-700">✓ SOLD (Terjual)</span>${soldListingLink(item)}</div>`
                   : `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-semibold ${item.sellable ? 'text-navy-900' : 'text-slate-500'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span><button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" class="text-xs font-bold text-clay-700 hover:underline">${item.sellable ? 'Sembunyikan' : 'Jual'}</button></div>`}
@@ -2145,7 +2153,7 @@ import Layout from '../layouts/Layout.astro';
                     ${item.condition ? `<span class="shrink-0 rounded-md bg-navy-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">${escapeHtml(item.condition)}</span>` : ''}
                   </div>
                   <h3 class="font-bold text-navy-900 text-base leading-snug mt-1">${item.title}</h3>
-                  <p class="text-slate-500 text-xs line-clamp-2 mt-1">${item.description || 'Tanpa deskripsi'}</p>
+                  ${expandableDesc(item.description || '', 'Tanpa deskripsi', 2, 'text-xs text-slate-500 block mt-1')}
                 </div>
 
                 <div class="pt-3 border-t border-navy-100 text-xs space-y-1.5">
@@ -2239,7 +2247,7 @@ import Layout from '../layouts/Layout.astro';
                   <div>
                     <span class="text-xs font-semibold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
                     <h3 class="font-bold text-navy-900 text-base leading-snug">${item.title}</h3>
-                    <p class="text-slate-600 text-xs line-clamp-2 mt-1">${item.description}</p>
+                  ${expandableDesc(item.description || '', 'Tanpa deskripsi', 2, 'text-xs text-slate-600')}
                   </div>
 
                   <div class="space-y-2 pt-1">

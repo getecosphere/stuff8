@@ -356,12 +356,12 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
       const uploadPreview = (entry: UploadEntry, opacityClass: string) =>
         entry.kind === 'video'
           ? `<video src="${entry.objectUrl}" muted autoplay playsinline loop preload="metadata" class="size-full object-contain ${opacityClass}" data-video></video>`
-          : `<img src="${entry.objectUrl}" alt="Media sedang diunggah" class="size-full object-contain ${opacityClass}" />`;
+          : `<img src="${entry.objectUrl}" alt="Media sedang diunggah" loading="lazy" decoding="async" class="size-full object-contain ${opacityClass}" />`;
       const main = slides.map((slide, index) => {
         if (slide.kind === 'photo') {
           return isVideoKey(slide.key)
             ? videoMarkup({ src: storagePhotoUrl(slide.key), className: 'size-full shrink-0 object-contain', label: `Video barang ${index + 1}` })
-            : `<img src="${storagePhotoUrl(slide.key)}" alt="Foto barang ${index + 1}" class="size-full shrink-0 object-contain" />`;
+            : `<img src="${storagePhotoUrl(slide.key)}" alt="Foto barang ${index + 1}" loading="lazy" decoding="async" class="size-full shrink-0 object-contain" />`;
         }
         const entry = slide.entry;
         if (entry.status === 'uploading') {
@@ -399,10 +399,10 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
         const source = slide.kind === 'photo'
           ? isVideoKey(slide.key)
             ? videoThumbMarkup(`Video ${index + 1}`)
-            : `<img src="${thumbStoragePhotoUrl(slide.key)}" alt="" class="size-full object-cover" onerror="this.onerror=null;this.src='${storagePhotoUrl(slide.key)}'" />`
+            : `<img src="${thumbStoragePhotoUrl(slide.key)}" alt="" class="size-full object-cover" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${storagePhotoUrl(slide.key)}'" />`
           : slide.entry.kind === 'video'
             ? videoThumbMarkup(`Video ${index + 1}`)
-            : `<img src="${slide.entry.objectUrl}" alt="" class="size-full object-cover ${slide.entry.status === 'error' ? 'opacity-40' : 'opacity-80'}" />`;
+            : `<img src="${slide.entry.objectUrl}" alt="" class="size-full object-cover ${slide.entry.status === 'error' ? 'opacity-40' : 'opacity-80'}" loading="lazy" decoding="async" />`;
         const badge = slide.kind === 'upload' && slide.entry.status === 'uploading'
           ? `<span class="absolute inset-0 flex items-center justify-center bg-white/50"><svg class="size-4 animate-spin text-clay-600" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"></path></svg></span>`
           : '';
