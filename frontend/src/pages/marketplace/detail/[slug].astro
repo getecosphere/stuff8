@@ -12,7 +12,7 @@ import { slugify, encodeItemToken, marketplaceDetailPath } from '../../../lib/sl
 // (e.g. a cold-start deploy), we emit no pages instead of failing the deploy.
 
 const SITE_URL = 'https://stuff8.com';
-const PHOTOS_URL = 'https://photos.stuff8.com/api';
+const PHOTOS_URL = (import.meta.env.PUBLIC_PHOTOS_URL || 'https://photos.stuff8.com/api').replace(/\/+$/, '');
 
 interface Listing {
   id: string;
@@ -25,7 +25,11 @@ interface Listing {
 }
 
 const isVideoKey = (key?: string) => typeof key === 'string' && /\.(mp4|webm|m4v|ogv|mov|3gp)([?#].*)?$/i.test(key);
-const photoUrl = (key?: string) => key ? `${PHOTOS_URL}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}` : '';
+const storageUrl = (key?: string) => key ? `${PHOTOS_URL}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}` : '';
+const thumbUrl = (key?: string) => {
+  if (!key || isVideoKey(key)) return storageUrl(key);
+  return storageUrl(key.replace(/\.[a-z0-9]+$/i, '-thumb.webp'));
+};
 const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
 const cleanDescription = (value: string) => String(value || '').replace(/\s+/g, ' ').trim();
 const itemCondition = (condition?: string) =>
@@ -64,7 +68,7 @@ const { listing } = Astro.props;
 const title = listing.title || 'Barang di Stuff8';
 const description = cleanDescription(listing.description) || `Cek ${title} di Stuff8 Marketplace.`;
 const ogImage = (listing.photos || []).find((key) => !isVideoKey(key)) || (listing.photos || [])[0] || '';
-const imageUrl = photoUrl(ogImage) || new URL('/images/stuff8-social-preview.webp', SITE_URL).toString();
+const imageUrl = thumbUrl(ogImage) || new URL('/images/stuff8-social-preview.webp', SITE_URL).toString();
 const price = Number(listing.asking_price) || 0;
 const prettyPath = marketplaceDetailPath(listing);
 const prettyUrl = `${SITE_URL}${prettyPath}`;
