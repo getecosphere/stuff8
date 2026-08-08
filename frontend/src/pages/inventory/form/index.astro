@@ -335,6 +335,33 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
       renderItemPhotoCarousel();
     }
 
+    async function reorderPhotos(fromIndex: number, toIndex: number) {
+      if (!photoUploadItem || !user()?.id) return;
+      const photos = [...(photoUploadItem.photos || [])];
+      if (fromIndex < 0 || fromIndex >= photos.length || toIndex < 0 || toIndex >= photos.length || fromIndex === toIndex) return;
+      const [moved] = photos.splice(fromIndex, 1);
+      photos.splice(toIndex, 0, moved);
+      try {
+        const response = await fetch(`${INVENTORY_API}/items/${photoUploadItem.id}`, {
+          method: 'PATCH', headers: authHeaders(),
+          body: JSON.stringify({ owner_id: user().id, photos })
+        });
+        if (!response.ok) throw new Error(await response.text());
+        photoUploadItem = await response.json();
+        photoCarouselIndex = toIndex;
+        await syncToMarketplace(photoUploadItem);
+        renderItemPhotoCarousel();
+      } catch (error) {
+        console.error('Failed to reorder photos:', error);
+        window.stuff8Toast?.('Gagal mengubah urutan foto. Coba lagi.', { variant: 'error', title: 'Gagal' });
+      }
+    }
+
+    async function movePhotoToFirst(index: number) {
+      if (index <= 0) return;
+      await reorderPhotos(index, 0);
+    }
+
     function renderItemPhotoCarousel() {
       const clearButton = document.getElementById('btn-clear-item-photos');
       if (clearButton) {
@@ -396,6 +423,8 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
 
       const thumbs = slides.map((slide, index) => {
         const active = index === photoCarouselIndex;
+        const isCommitted = slide.kind === 'photo';
+        const isCover = index === 0;
         const source = slide.kind === 'photo'
           ? isVideoKey(slide.key)
             ? videoThumbMarkup(`Video ${index + 1}`)
@@ -406,7 +435,13 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
         const badge = slide.kind === 'upload' && slide.entry.status === 'uploading'
           ? `<span class="absolute inset-0 flex items-center justify-center bg-white/50"><svg class="size-4 animate-spin text-clay-600" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"></path></svg></span>`
           : '';
-        return `<button type="button" data-slide-thumb="${index}" class="relative size-12 shrink-0 overflow-hidden rounded-md border ${active ? 'border-navy-900 ring-2 ring-navy-900/15' : 'border-slate-200'}">${source}${badge}</button>`;
+        const coverBtn = isCommitted && !isCover
+          ? `<button type="button" data-cover-photo="${index}" class="absolute left-0.5 top-0.5 z-10 flex size-[18px] cursor-pointer items-center justify-center rounded-full bg-white/95 text-[10px] leading-none text-amber-500 shadow-sm transition hover:bg-amber-100 hover:text-amber-600" title="Jadikan foto utama" aria-label="Jadikan foto utama">&starf;</button>`
+          : '';
+        const coverBadge = isCommitted && isCover
+          ? `<span class="absolute left-0.5 top-0.5 z-10 flex size-[18px] items-center justify-center rounded-full bg-amber-400 text-[9px] font-bold text-white shadow-sm" title="Foto utama">&starf;</span>`
+          : '';
+        return `<button type="button" data-slide-thumb="${index}" data-photo-idx="${isCommitted ? index : ''}" ${isCommitted ? 'draggable="true"' : ''} class="relative size-12 shrink-0 overflow-hidden rounded-md border transition ${active ? 'border-navy-900 ring-2 ring-navy-900/15' : 'border-slate-200'}">${source}${badge}${coverBtn}${coverBadge}</button>`;
       }).join('');
 
       photoCarousel.innerHTML = `
@@ -416,7 +451,7 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
             <button type="button" data-remove-slide class="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm transition hover:bg-rose-700" aria-label="Hapus foto ini">Hapus</button>
             ${arrows}
           </div>
-          ${slides.length > 1 ? `<div class="flex gap-2 overflow-x-auto p-2">${thumbs}</div>` : ''}
+          ${slides.length > 1 ? `<div class="flex gap-2 overflow-x-auto p-2" data-thumb-strip>${thumbs}</div>` : ''}
         </div>`;
 
       carousel = initSlider(photoCarousel, {
@@ -437,6 +472,51 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
       photoCarousel.querySelectorAll<HTMLElement>('[data-cancel-upload]').forEach(button => button.addEventListener('click', () => cancelUpload(button.dataset.cancelUpload!)));
       photoCarousel.querySelectorAll<HTMLElement>('[data-retry-upload]').forEach(button => button.addEventListener('click', () => retryUpload(button.dataset.retryUpload!)));
       photoCarousel.querySelectorAll<HTMLElement>('[data-remove-upload]').forEach(button => button.addEventListener('click', () => removePendingUpload(button.dataset.removeUpload!)));
+      const thumbStrip = photoCarousel.querySelector<HTMLElement>('[data-thumb-strip]');
+      if (thumbStrip) {
+        let dragSourceIdx = -1;
+        thumbStrip.querySelectorAll<HTMLElement>('[draggable]').forEach(thumb => {
+          thumb.addEventListener('dragstart', (e) => {
+            dragSourceIdx = parseInt((thumb as HTMLElement).dataset.photoIdx!);
+            e.dataTransfer!.effectAllowed = 'move';
+            (thumb as HTMLElement).classList.add('opacity-30');
+          });
+          thumb.addEventListener('dragend', () => {
+            (thumb as HTMLElement).classList.remove('opacity-30');
+            dragSourceIdx = -1;
+            thumbStrip.querySelectorAll('[data-drag-over]').forEach(el => { delete el.dataset.dragOver; el.classList.remove('ring-2', 'ring-amber-400'); });
+          });
+          thumb.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer!.dropEffect = 'move';
+            if (dragSourceIdx >= 0 && dragSourceIdx !== parseInt((thumb as HTMLElement).dataset.photoIdx!)) {
+              (thumb as HTMLElement).dataset.dragOver = '1';
+              thumb.classList.add('ring-2', 'ring-amber-400');
+            }
+          });
+          thumb.addEventListener('dragleave', () => {
+            delete (thumb as HTMLElement).dataset.dragOver;
+            thumb.classList.remove('ring-2', 'ring-amber-400');
+          });
+          thumb.addEventListener('drop', (e) => {
+            e.preventDefault();
+            delete (thumb as HTMLElement).dataset.dragOver;
+            thumb.classList.remove('ring-2', 'ring-amber-400');
+            const toIdx = parseInt((thumb as HTMLElement).dataset.photoIdx!);
+            if (dragSourceIdx >= 0 && dragSourceIdx !== toIdx) {
+              reorderPhotos(dragSourceIdx, toIdx);
+            }
+            dragSourceIdx = -1;
+          });
+        });
+        thumbStrip.querySelectorAll<HTMLElement>('[data-cover-photo]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.dataset.coverPhoto!);
+            movePhotoToFirst(idx);
+          });
+        });
+      }
       installVideoBehaviors();
       applyMuteToAll();
     }
