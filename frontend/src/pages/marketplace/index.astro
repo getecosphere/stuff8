@@ -338,6 +338,12 @@ import Layout from '../../layouts/Layout.astro';
 
       closeBtn.addEventListener('click', dismiss);
       dismissBtn.addEventListener('click', dismiss);
+
+      list.addEventListener('click', (event) => {
+        const anchor = (event.target as HTMLElement).closest('a');
+        if (!anchor) return;
+        dismiss();
+      });
     })();
   </script>
 </Layout>
