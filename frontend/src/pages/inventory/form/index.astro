@@ -475,7 +475,21 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
       const thumbStrip = photoCarousel.querySelector<HTMLElement>('[data-thumb-strip]');
       if (thumbStrip) {
         let dragSourceIdx = -1;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        const getThumbAtTouch = (x: number, y: number) => {
+          const thumbs = thumbStrip.querySelectorAll<HTMLElement>('[draggable]');
+          for (const t of thumbs) {
+            const r = t.getBoundingClientRect();
+            if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return t;
+          }
+          return null;
+        };
+
         thumbStrip.querySelectorAll<HTMLElement>('[draggable]').forEach(thumb => {
+          thumb.style.touchAction = 'none';
+
           thumb.addEventListener('dragstart', (e) => {
             dragSourceIdx = parseInt((thumb as HTMLElement).dataset.photoIdx!);
             e.dataTransfer!.effectAllowed = 'move';
@@ -507,6 +521,45 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
               reorderPhotos(dragSourceIdx, toIdx);
             }
             dragSourceIdx = -1;
+          });
+
+          thumb.addEventListener('touchstart', (e) => {
+            const t = e.touches[0];
+            touchStartX = t.clientX;
+            touchStartY = t.clientY;
+            dragSourceIdx = parseInt((thumb as HTMLElement).dataset.photoIdx!);
+            (thumb as HTMLElement).classList.add('opacity-30');
+          }, { passive: true });
+
+          thumb.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const t = e.touches[0];
+            thumbStrip.querySelectorAll('[data-drag-over]').forEach(el => { delete el.dataset.dragOver; el.classList.remove('ring-2', 'ring-amber-400'); });
+            const target = getThumbAtTouch(t.clientX, t.clientY);
+            if (target && dragSourceIdx >= 0 && dragSourceIdx !== parseInt(target.dataset.photoIdx!)) {
+              target.dataset.dragOver = '1';
+              target.classList.add('ring-2', 'ring-amber-400');
+            }
+          }, { passive: false });
+
+          thumb.addEventListener('touchend', (e) => {
+            (thumb as HTMLElement).classList.remove('opacity-30');
+            thumbStrip.querySelectorAll('[data-drag-over]').forEach(el => { delete el.dataset.dragOver; el.classList.remove('ring-2', 'ring-amber-400'); });
+            const t = e.changedTouches[0];
+            const target = getThumbAtTouch(t.clientX, t.clientY);
+            if (target && dragSourceIdx >= 0) {
+              const toIdx = parseInt(target.dataset.photoIdx!);
+              if (dragSourceIdx !== toIdx) {
+                reorderPhotos(dragSourceIdx, toIdx);
+              }
+            }
+            dragSourceIdx = -1;
+          });
+
+          thumb.addEventListener('touchcancel', () => {
+            (thumb as HTMLElement).classList.remove('opacity-30');
+            dragSourceIdx = -1;
+            thumbStrip.querySelectorAll('[data-drag-over]').forEach(el => { delete el.dataset.dragOver; el.classList.remove('ring-2', 'ring-amber-400'); });
           });
         });
         thumbStrip.querySelectorAll<HTMLElement>('[data-cover-photo]').forEach(btn => {
