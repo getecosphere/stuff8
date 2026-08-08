@@ -296,7 +296,9 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
       event.preventDefault();
       const input = document.getElementById('global-search-input') as HTMLInputElement | null;
       const q = input?.value.trim() || '';
-      location.assign(q ? `/marketplace/?q=${encodeURIComponent(q)}` : '/marketplace/');
+      if (!q) return;
+      const onMarketplace = location.pathname.startsWith('/marketplace');
+      location.assign(q ? `${onMarketplace ? '/marketplace/' : '/inventory/'}?q=${encodeURIComponent(q)}` : (onMarketplace ? '/marketplace/' : '/inventory/'));
     });
     if (location.pathname !== '/') {
       const session = readStuff8Session();

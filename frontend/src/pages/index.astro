@@ -400,6 +400,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="hidden overflow-hidden rounded-2xl border border-navy-100 bg-white md:block"><div class="skeleton h-36 rounded-none sm:h-48"></div><div class="space-y-2 p-4"><div class="skeleton h-3 w-1/3"></div><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div></div></div>
         </div>
         <nav id="inventory-pagination" class="hidden items-center justify-between gap-3" aria-label="Navigasi halaman inventaris"></nav>
+        <div id="inventory-load-sentinel" class="hidden h-px"></div>
       </section>
 
     </div>
@@ -841,6 +842,9 @@ import Layout from '../layouts/Layout.astro';
     let selectedInventoryCategory = 'all';
     let inventorySearch = '';
     let inventoryPage = 1;
+    let allInventoryItems: any[] = [];
+    let hasMoreInventory = false;
+    let isLoadingMoreInventory = false;
     let inventoryView: 'list' | 'thumbnail' | 'card' = 'thumbnail';
     let inventoryMeta = { total: 0, total_value: 0, page: 1, limit: 12, total_pages: 1, category_counts: [] as Array<{ category: string; count: number }> };
     let customInventoryCategories: string[] = [];
@@ -862,7 +866,7 @@ import Layout from '../layouts/Layout.astro';
     const inventorySearchInput = document.getElementById('inventory-search') as HTMLInputElement | null;
     const inventoryViewMenu = document.getElementById('inventory-view-menu') as HTMLDetailsElement | null;
     const inventoryViewTrigger = document.getElementById('inventory-view-trigger');
-    const inventoryPagination = document.getElementById('inventory-pagination');
+    const inventorySentinel = document.getElementById('inventory-load-sentinel');
 
     const modalBid = document.getElementById('modal-bid');
     const modalWizard = document.getElementById('modal-wizard');
@@ -1213,19 +1217,18 @@ import Layout from '../layouts/Layout.astro';
     const soldListingLink = (item: any) => `<a href="${marketplaceDetailPath(item)}" onclick="event.stopPropagation()" class="text-xs font-bold text-navy-900 underline hover:text-navy-700">Lihat listing</a>`;
 
     // Modal Triggers
+    async function resetInventory() { inventoryPage = 1; allInventoryItems = []; hasMoreInventory = false; await loadData(false); render(); }
     categoryTabs?.addEventListener('click', event => {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-category]');
       if (!button) return;
       selectedInventoryCategory = button.dataset.category || 'all';
-      inventoryPage = 1;
-      loadData();
+      resetInventory();
     });
     let inventorySearchTimeout: number | undefined;
     inventorySearchInput?.addEventListener('input', () => {
       inventorySearch = inventorySearchInput.value.trim();
-      inventoryPage = 1;
       if (inventorySearchTimeout) window.clearTimeout(inventorySearchTimeout);
-      inventorySearchTimeout = window.setTimeout(() => loadData(), 250);
+      inventorySearchTimeout = window.setTimeout(resetInventory, 250);
     });
     document.querySelectorAll<HTMLButtonElement>('[data-inventory-view]').forEach(button => {
       button.addEventListener('click', () => {
@@ -1647,8 +1650,9 @@ import Layout from '../layouts/Layout.astro';
     // =================================================================
     // DATA LOADING & RENDERING
     // =================================================================
-    async function loadData() {
+    async function loadData(append = false) {
       try {
+        if (!append) { inventoryPage = 1; allInventoryItems = []; }
         loadCategoryPreferences();
         loadInventoryViewPreference();
         const ownerId = currentSession && currentSession.user ? currentSession.user.id : null;
@@ -1660,14 +1664,19 @@ import Layout from '../layouts/Layout.astro';
         if (selectedInventoryCategory !== 'all') inventoryParams.set('category', selectedInventoryCategory);
         if (inventorySearch) inventoryParams.set('search', inventorySearch);
         
-        const [resItems, resMarketplace, resBids] = await Promise.all([
-          ownerId ? fetch(`${INVENTORY_API}/items?${inventoryParams}`).then(r => r.ok ? r.json() : null) : Promise.resolve(null),
-          fetch(`${MARKETPLACE_API}/listings`).then(r => r.ok ? r.json() : []),
-          fetch(`${BIDDING_API}/bids`).then(r => r.ok ? r.json() : [])
-        ]);
+        const fetchPromises: Promise<any>[] = [ownerId ? fetch(`${INVENTORY_API}/items?${inventoryParams}`).then(r => r.ok ? r.json() : null) : Promise.resolve(null)];
+        if (!append) {
+          fetchPromises.push(
+            fetch(`${MARKETPLACE_API}/listings`).then(r => r.ok ? r.json() : []),
+            fetch(`${BIDDING_API}/bids`).then(r => r.ok ? r.json() : [])
+          );
+        }
+        const results = await Promise.all(fetchPromises);
+        const resItems = results[0];
+        const resMarketplace = append ? marketplaceListings : results[1];
+        const resBids = append ? bids : (append ? null : results[2]);
 
         if (Array.isArray(resItems)) {
-          // Compatibility with an inventory service that has not restarted yet.
           items = resItems;
           const categoryMap = new Map<string, number>();
           items.forEach(item => categoryMap.set(item.category, (categoryMap.get(item.category) || 0) + 1));
@@ -1691,16 +1700,26 @@ import Layout from '../layouts/Layout.astro';
           } : { total: 0, total_value: 0, page: 1, limit: inventoryMeta.limit, total_pages: 1, category_counts: [] };
         }
         inventoryPage = inventoryMeta.page;
-        marketplaceListings = Array.isArray(resMarketplace) ? resMarketplace : (resMarketplace?.listings || []);
-        marketplaceListingTotal = Array.isArray(resMarketplace)
-          ? marketplaceListings.length
-          : Number.isFinite(resMarketplace?.total) ? resMarketplace.total : marketplaceListings.length;
-        bids = resBids;
+        if (append) {
+          allInventoryItems = [...allInventoryItems, ...items];
+        } else {
+          allInventoryItems = items;
+          marketplaceListings = Array.isArray(resMarketplace) ? resMarketplace : (resMarketplace?.listings || []);
+          marketplaceListingTotal = Array.isArray(resMarketplace)
+            ? marketplaceListings.length
+            : Number.isFinite(resMarketplace?.total) ? resMarketplace.total : marketplaceListings.length;
+          bids = resBids;
+        }
+        hasMoreInventory = inventoryMeta.page < inventoryMeta.total_pages;
+      } catch (error) {
+        console.error('Failed to load data:', error);
+        if (!append) {
+          items = []; allInventoryItems = [];
+        }
+      }
+    }
 
-        render();
-
-        // The inventory detail page's Edit button lands here (?edit=<id>);
-        // forward the visitor to the full-page editor for that item.
+    function afterLoad() {
         const editParam = new URLSearchParams(location.search).get('edit');
         if (editParam && currentSession?.user) {
           const editable = items.find((entry: any) => entry.id === editParam && entry.owner_id === currentSession.user.id);
@@ -1712,10 +1731,6 @@ import Layout from '../layouts/Layout.astro';
           history.replaceState(null, '', '/inventory/');
         }
 
-        // Re-sync sellable items whose photos in the marketplace listing are
-        // stale or missing. This fixes listings published before photo upload
-        // or before a re-deploy that changed the storage URL configuration.
-        // Runs once per session (keyed to the user) to avoid hammering the API.
         if (currentSession?.user?.id) {
           const resyncKey = `stuff8_marketplace_resynced_${currentSession.user.id}`;
           if (!sessionStorage.getItem(resyncKey)) {
@@ -1725,7 +1740,6 @@ import Layout from '../layouts/Layout.astro';
               if (!item.sellable || !item.photos?.length) return false;
               const listing = listingMap.get(item.id);
               if (!listing) return false;
-              // Re-sync if the listing has no photos or its first photo differs.
               return !listing.photos?.length || listing.photos[0] !== item.photos[0];
             });
             if (stale.length > 0) {
@@ -1746,14 +1760,11 @@ import Layout from '../layouts/Layout.astro';
                     general_location: item.storage_location || 'Area Lokal',
                     sellable: true
                   })
-                }).catch(() => { /* best-effort, ignore failures */ });
+                }).catch(() => {});
               });
             }
           }
         }
-      } catch (err) {
-        console.error('Error fetching domain service data:', err);
-      }
     }
 
     const INDONESIAN_NAMES = [
@@ -2048,7 +2059,7 @@ import Layout from '../layouts/Layout.astro';
 
       // Render Inventory Cards
       if (gridInventory) {
-        const visibleItems = items;
+        const visibleItems = allInventoryItems;
         gridInventory.className = inventoryView === 'list'
           ? 'space-y-3'
           : inventoryView === 'thumbnail'
@@ -2156,15 +2167,8 @@ import Layout from '../layouts/Layout.astro';
         };
         inventoryViewTrigger.innerHTML = icons[inventoryView];
       }
-      if (inventoryPagination) {
-        const showPagination = inventoryMeta.total_pages > 1;
-        inventoryPagination.classList.toggle('hidden', !showPagination);
-        inventoryPagination.classList.toggle('flex', showPagination);
-        inventoryPagination.innerHTML = showPagination ? `
-          <button type="button" onclick="changeInventoryPage(${inventoryMeta.page - 1})" ${inventoryMeta.page === 1 ? 'disabled' : ''} class="min-h-9 rounded-lg border border-navy-100 px-3 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Sebelumnya</button>
-          <span class="text-xs font-semibold text-slate-500">Halaman ${inventoryMeta.page} dari ${inventoryMeta.total_pages}</span>
-          <button type="button" onclick="changeInventoryPage(${inventoryMeta.page + 1})" ${inventoryMeta.page === inventoryMeta.total_pages ? 'disabled' : ''} class="min-h-9 rounded-lg border border-navy-100 px-3 text-xs font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40">Berikutnya</button>
-        ` : '';
+      if (inventorySentinel) {
+        inventorySentinel.className = hasMoreInventory && allInventoryItems.length > 0 ? 'h-px' : 'hidden';
       }
 
       // Render Marketplace Cards
@@ -2294,10 +2298,16 @@ import Layout from '../layouts/Layout.astro';
       const counter = document.querySelector(`[data-slide-count="${carouselKey}"]`);
       if (counter) counter.textContent = `${next + 1}/${total}`;
     };
-    (window as any).changeInventoryPage = (page: number) => {
-      if (page < 1 || page > inventoryMeta.total_pages || page === inventoryPage) return;
-      inventoryPage = page;
-      loadData();
+    (window as any).loadMoreInventory = () => {
+      if (isLoadingMoreInventory || !hasMoreInventory) return;
+      isLoadingMoreInventory = true;
+      inventoryPage = inventoryMeta.page + 1;
+      loadData(true).then(() => {
+        render();
+        isLoadingMoreInventory = false;
+      }).catch(() => {
+        isLoadingMoreInventory = false;
+      });
     };
 
     (window as any).toggleSellable = async (id: string) => {
@@ -3300,7 +3310,18 @@ import Layout from '../layouts/Layout.astro';
       if (currentSession?.user && new URLSearchParams(location.search).get('add-item') === '1') location.assign('/inventory/form/');
       renderDemoSandbox();
       updateCalculator();
-      loadData();
+      loadData(false).then(() => {
+        render();
+        afterLoad();
+        if (inventorySentinel) {
+          const obs = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMoreInventory && !isLoadingMoreInventory) {
+              (window as any).loadMoreInventory();
+            }
+          }, { rootMargin: '200px' });
+          obs.observe(inventorySentinel);
+        }
+      });
     }
   </script>
 </Layout>
