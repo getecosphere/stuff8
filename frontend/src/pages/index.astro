@@ -1340,6 +1340,7 @@ import Layout from '../layouts/Layout.astro';
         const data = await res.json();
         if (res.ok && data.token) {
           currentSession = data;
+          data.expires_at = Date.now() + (Number(data.expires_in) || 86400) * 1000;
           localStorage.setItem('stuff8_session', JSON.stringify(data));
           updateAuthUIState();
           closeWizard();
@@ -1385,6 +1386,7 @@ import Layout from '../layouts/Layout.astro';
         }
         if (res.ok && data.token) {
           currentSession = data;
+          data.expires_at = Date.now() + (Number(data.expires_in) || 86400) * 1000;
           localStorage.setItem('stuff8_session', JSON.stringify(data));
           updateAuthUIState();
           const returnTo = new URLSearchParams(location.search).get('return_to');

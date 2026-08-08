@@ -71,6 +71,7 @@ import Layout from '../../layouts/Layout.astro';
     const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
     const parseMoney = (value: string) => Number(value.replace(/[^0-9]/g, '')) || 0;
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
+    const isSessionValid = () => { const s = session(); return s?.token && (!s.expires_at || Date.now() < s.expires_at); };
     const user = () => session()?.user;
     const chatHeaders = () => ({ 'Authorization': `Bearer ${session()?.token}` });
     const attachmentUrl = (key: string) => `${STORAGE}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}`;
@@ -361,6 +362,7 @@ import Layout from '../../layouts/Layout.astro';
     // CLOSING or CLOSED state" error, and an unexpected close reconnects with
     // exponential backoff instead of leaving the chat silently dead.
     function openSocket() {
+      if (!isSessionValid()) { localStorage.removeItem('stuff8_session'); return; }
       if (!activeConversation || !user()?.id) return;
       window.clearTimeout(socketReconnectTimer);
       const targetId = activeConversation.conversation_id;
