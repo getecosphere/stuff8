@@ -2,12 +2,13 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import cloudflare from '@astrojs/cloudflare';
 
-// https://astro.build/config
+const isDev = process.env.ECO_DEPLOY_MODE !== 'prod' && !process.env.CF_PAGES;
+
 export default defineConfig({
   integrations: [tailwind()],
   trailingSlash: 'always',
-  output: 'hybrid',
-  adapter: cloudflare(),
+  output: isDev ? 'static' : 'hybrid',
+  adapter: isDev ? undefined : cloudflare(),
   redirects: {
     '/signin': '/auth/signin/'
   },
