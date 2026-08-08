@@ -349,30 +349,6 @@ import Layout from '../layouts/Layout.astro';
     <!-- ================================================================= -->
     <div id="signed-in-dashboard" class="hidden min-h-[calc(100dvh-10rem)] flex flex-col gap-4 transition-all duration-300">
       
-      <!-- Money-center stats: the personal pulse of the inventory -->
-      <div class="hidden grid-cols-2 gap-3 md:grid md:grid-cols-4">
-        <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-          <span class="text-xs font-medium text-slate-500">Total Barang</span>
-          <div id="stat-total-items" class="num mt-1 text-2xl font-bold text-navy-900"><span class="skeleton inline-block h-7 w-16 align-middle"></span></div>
-          <span class="mt-1 block text-[11px] text-slate-400">koleksi pribadimu</span>
-        </div>
-        <div class="rounded-2xl border border-clay-200 bg-gradient-to-br from-clay-50 to-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-          <span class="text-xs font-medium text-clay-700">Est. Total Nilai</span>
-          <div id="stat-total-value" class="num mt-1 text-2xl font-extrabold text-clay-700"><span class="skeleton inline-block h-7 w-24 align-middle"></span></div>
-          <span class="mt-1 block text-[11px] text-clay-500">apa yang kamu punya</span>
-        </div>
-        <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-          <span class="text-xs font-medium text-slate-500">Barang Dipajang</span>
-          <div id="stat-sellable-count" class="num mt-1 text-2xl font-bold text-brand-700"><span class="skeleton inline-block h-7 w-16 align-middle"></span></div>
-          <span class="mt-1 block text-[11px] text-slate-400">tampil di Pasar</span>
-        </div>
-        <div class="rounded-2xl border border-navy-100 bg-white p-4 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-          <span class="text-xs font-medium text-slate-500">Penawaran Masuk</span>
-          <div id="stat-bids-count" class="num mt-1 text-2xl font-bold text-navy-900"><span class="skeleton inline-block h-7 w-16 align-middle"></span></div>
-          <span class="mt-1 block text-[11px] text-slate-400">dari pembeli</span>
-        </div>
-      </div>
-
       <!-- Widget: Penawaran Disetujui & Chat Real-Time dengan Bidder Pilihan -->
       <div id="approved-bids-widget" class="hidden space-y-4 rounded-2xl border border-navy-100 bg-white p-6 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
         <div class="border-b border-navy-100 pb-3">
@@ -2047,10 +2023,6 @@ import Layout from '../layouts/Layout.astro';
       const mktCount = document.getElementById('marketplace-count');
       const bidCount = document.getElementById('bids-count');
 
-      const statTotalItems = document.getElementById('stat-total-items');
-      const statTotalValue = document.getElementById('stat-total-value');
-      const statSellableCount = document.getElementById('stat-sellable-count');
-      const statBidsCount = document.getElementById('stat-bids-count');
       const inventoryTotalValue = document.getElementById('inventory-total-value');
       const inventoryTotalCount = document.getElementById('inventory-total-count');
 
@@ -2059,22 +2031,12 @@ import Layout from '../layouts/Layout.astro';
       if (bidCount) bidCount.textContent = bids.length.toString();
 
       const hasInventory = inventoryMeta.total > 0;
-      if (statTotalItems) {
-        if (hasInventory) animateNumber(statTotalItems, inventoryMeta.total, n => n.toLocaleString('id-ID'));
-        else statTotalItems.textContent = 'Belum ada';
-      }
       const totalVal = inventoryMeta.total_value;
-      if (statTotalValue) {
-        if (hasInventory) animateNumber(statTotalValue, totalVal, n => `Rp ${n.toLocaleString('id-ID')}`);
-        else statTotalValue.textContent = 'Belum ada';
+      if (inventoryTotalValue) {
+        if (hasInventory) animateNumber(inventoryTotalValue, totalVal, n => `Rp ${n.toLocaleString('id-ID')}`);
+        else inventoryTotalValue.textContent = 'Belum ada nilai inventaris';
       }
-      if (inventoryTotalValue) inventoryTotalValue.textContent = hasInventory ? `Rp ${totalVal.toLocaleString('id-ID')}` : 'Belum ada nilai inventaris';
       if (inventoryTotalCount) inventoryTotalCount.textContent = hasInventory ? `${inventoryMeta.total} barang` : 'Belum ada barang';
-      if (statSellableCount) {
-        if (marketplaceListingTotal > 0) animateNumber(statSellableCount, marketplaceListingTotal, n => n.toLocaleString('id-ID'));
-        else statSellableCount.textContent = 'Belum ada';
-      }
-      if (statBidsCount) animateNumber(statBidsCount, bids.length, n => n.toLocaleString('id-ID'));
 
       renderCategoryTabs();
 
