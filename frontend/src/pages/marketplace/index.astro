@@ -36,6 +36,22 @@ import Layout from '../../layouts/Layout.astro';
         <div class="hidden overflow-hidden rounded-2xl border border-navy-100 bg-white md:block"><div class="skeleton h-40 rounded-none"></div><div class="space-y-2 p-4"><div class="skeleton h-3 w-1/3"></div><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-2/3"></div></div></div>
       </div>
       <nav id="marketplace-pagination" class="hidden items-center justify-center gap-1 pt-2" aria-label="Navigasi halaman marketplace"></nav>
+
+      <div id="marketplace-featured-overlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-navy-950/50 p-4 backdrop-blur-xs" role="dialog" aria-modal="true" aria-label="Barang unggulan">
+        <div class="w-full max-w-md rounded-2xl border border-navy-100 bg-white shadow-xl max-h-[calc(100dvh-2rem)] overflow-y-auto">
+          <div class="sticky top-0 z-10 flex items-start justify-between rounded-t-2xl border-b border-brand-100 bg-brand-50/80 px-5 py-4 backdrop-blur-sm">
+            <div>
+              <h2 class="font-display text-lg font-bold text-navy-900">Barang Unggulan</h2>
+              <p class="text-xs text-slate-500">Barang pilihan yang mungkin kamu suka</p>
+            </div>
+            <button id="featured-close" type="button" class="text-xl font-bold text-slate-400 hover:text-slate-700" aria-label="Tutup">&times;</button>
+          </div>
+          <div id="marketplace-featured-list" class="divide-y divide-navy-100 px-5 py-3"></div>
+          <div class="sticky bottom-0 rounded-b-2xl border-t border-navy-100 bg-white px-5 py-4">
+            <button id="featured-dismiss" type="button" class="w-full rounded-full bg-brand-600 px-4 py-3 text-sm font-bold text-white shadow-xs hover:bg-brand-700">Keren, lihat marketplace</button>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 
@@ -271,5 +287,57 @@ import Layout from '../../layouts/Layout.astro';
     renderViewTrigger();
     searchInput.value = search;
     goToPage(1);
+
+    // Featured products popup — shown once per listing ID, never again after dismissal
+    (async function showFeaturedPopup() {
+      const overlay = document.getElementById('marketplace-featured-overlay')!;
+      const list = document.getElementById('marketplace-featured-list')!;
+      const closeBtn = document.getElementById('featured-close')!;
+      const dismissBtn = document.getElementById('featured-dismiss')!;
+      const KEY = 'stuff8_featured_seen';
+      const getSeen = () => {
+        try { return new Set<string>(JSON.parse(localStorage.getItem(KEY) || '[]')); }
+        catch { return new Set<string>(); }
+      };
+
+      const featured: any[] = await fetch(`${API}/featured`).then(r => r.ok ? r.json() : []).catch(() => []);
+      const seen = getSeen();
+      const unseen = featured.filter((item: any) => !seen.has(item.id));
+      if (!unseen.length) return;
+
+      const renderFeaturedItem = (item: any) => {
+        const img = item.photos?.[0]
+          ? (isVideoKey(item.photos[0])
+            ? videoMarkup({ src: photoUrl(item.photos[0]), className: 'size-full object-cover', label: escapeHtml(item.title) })
+            : thumbImageSrc(STORAGE, item.photos[0], escapeHtml(item.title), 'size-full object-cover'))
+          : '<div class="flex size-full items-center justify-center bg-brand-50"><svg class="size-8 text-brand-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z"/></svg></div>';
+        const href = marketplaceDetailPath(item);
+        return `<a href="${href}" class="flex gap-3 py-3 group/item">
+          <div class="size-16 shrink-0 overflow-hidden rounded-xl bg-slate-100">${img}</div>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-xs font-bold uppercase tracking-wider text-brand-700">${escapeHtml(item.category)}</p>
+            <h3 class="truncate text-sm font-bold text-navy-900 group-hover/item:text-brand-700">${escapeHtml(item.title)}</h3>
+            <p class="num mt-0.5 text-sm font-extrabold text-brand-700">${money(item.asking_price)}</p>
+            <p class="mt-1 text-xs text-slate-500 line-clamp-2">${escapeHtml((item.description || '').slice(0, 120))}</p>
+          </div>
+          <div class="flex shrink-0 items-center"><svg class="size-4 text-slate-300 group-hover/item:text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg></div>
+        </a>`;
+      };
+
+      list.innerHTML = unseen.map(renderFeaturedItem).join('');
+      installVideoBehaviors();
+      applyMuteToAll();
+      overlay.classList.replace('hidden', 'flex');
+
+      const dismiss = () => {
+        const newSeen = new Set(seen);
+        featured.forEach((item: any) => newSeen.add(item.id));
+        localStorage.setItem(KEY, JSON.stringify([...newSeen]));
+        overlay.classList.replace('flex', 'hidden');
+      };
+
+      closeBtn.addEventListener('click', dismiss);
+      dismissBtn.addEventListener('click', dismiss);
+    })();
   </script>
 </Layout>
