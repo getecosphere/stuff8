@@ -47,7 +47,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     const detailDesc = (text: string, fallback: string) => {
       const safe = escapeHtml((text || fallback).trim());
       if (safe.length < 200) return `<p class="whitespace-pre-line text-sm leading-relaxed text-slate-600">${safe}</p>`;
-      return `<div class="desc-detail-wrapper"><p class="desc-detail-text whitespace-pre-line text-sm leading-relaxed text-slate-600" style="max-height:4.5rem;overflow:hidden">${safe}</p><button type="button" onclick="const p=this.previousElementSibling;p.style.maxHeight==='4.5rem'?(p.style.maxHeight='none',this.textContent='Sembunyikan'):(p.style.maxHeight='4.5rem',this.textContent='Selengkapnya')" class="desc-toggle mt-1 text-xs font-bold text-clay-600 hover:underline">Selengkapnya</button></div>`;
+      return `<div class="max-h-32 overflow-y-auto rounded-lg border border-navy-100 bg-paper-50 p-3"><p class="whitespace-pre-line text-sm leading-relaxed text-slate-600">${safe}</p></div>`;
     };
     const money = (amount: number) => `Rp ${Number(amount || 0).toLocaleString('id-ID')}`;
     const photoUrl = (key?: string) => key ? `${PHOTOS}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}` : '/images/no-item-image.webp';
