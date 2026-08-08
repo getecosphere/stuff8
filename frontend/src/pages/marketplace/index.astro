@@ -48,7 +48,7 @@ import Layout from '../../layouts/Layout.astro';
           </div>
           <div id="marketplace-featured-list" class="divide-y divide-navy-100 px-5 py-3"></div>
           <div class="sticky bottom-0 rounded-b-2xl border-t border-navy-100 bg-white px-5 py-4">
-            <button id="featured-dismiss" type="button" class="w-full rounded-full bg-brand-600 px-4 py-3 text-sm font-bold text-white shadow-xs hover:bg-brand-700">Keren, lihat marketplace</button>
+            <button id="featured-dismiss" type="button" class="w-full rounded-full bg-brand-600 px-4 py-3 text-sm font-bold text-white shadow-xs hover:bg-brand-700">Keren, lihat di Marketplace</button>
           </div>
         </div>
       </div>
@@ -337,7 +337,12 @@ import Layout from '../../layouts/Layout.astro';
       };
 
       closeBtn.addEventListener('click', dismiss);
-      dismissBtn.addEventListener('click', dismiss);
+      dismissBtn.addEventListener('click', () => {
+        const firstFeatured = unseen[0];
+        const href = marketplaceDetailPath(firstFeatured);
+        dismiss();
+        location.assign(href);
+      });
 
       list.addEventListener('click', (event) => {
         const anchor = (event.target as HTMLElement).closest('a');
