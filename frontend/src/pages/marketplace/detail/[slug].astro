@@ -52,8 +52,7 @@ export async function getStaticPaths() {
       page += 1;
     } while (page <= totalPages && page <= 25);
   } catch {
-    // No marketplace data at build time — the SPA fallback still serves the
-    // interactive page (with client-side meta) for every listing.
+    // API unreachable at build time — SSR fallback handles it at request time.
   }
   const seen = new Set<string>();
   return listings
@@ -64,7 +63,19 @@ export async function getStaticPaths() {
     }));
 }
 
-const { listing } = Astro.props;
+let listing = (Astro.props as { listing?: Listing }).listing;
+if (!listing) {
+  const api = (import.meta.env.PUBLIC_MARKETPLACE_URL || 'https://stuff8.com/api/marketplace').replace(/\/+$/, '');
+  const { slug } = Astro.params;
+  const encodedId = slug.split('-').pop() || slug;
+  try {
+    const response = await fetch(`${api}/listings/${encodeURIComponent(encodedId)}`, { signal: AbortSignal.timeout(8000) });
+    if (response.ok) listing = await response.json() as Listing;
+  } catch {}
+}
+if (!listing) {
+  return Astro.redirect('/marketplace/');
+}
 const title = listing.title || 'Barang di Stuff8';
 const description = (cleanDescription(listing.description) || `Cek ${title} di Stuff8 Marketplace.`).slice(0, 160);
 const ogImage = (listing.photos || []).find((key) => !isVideoKey(key)) || (listing.photos || [])[0] || '';
