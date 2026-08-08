@@ -222,6 +222,7 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
 
     const readStuff8Session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };
     const isSessionValid = () => { const s = readStuff8Session(); return s?.token && (!s.expires_at || Date.now() < s.expires_at); };
+    if (readStuff8Session()?.user && !isSessionValid()) { localStorage.removeItem('stuff8_session'); location.assign(`/auth/signin/?return_to=${encodeURIComponent(location.pathname + location.search)}`); }
     const logoLink = document.getElementById('stuff8-logo-link');
     if (readStuff8Session()?.user && logoLink) logoLink.setAttribute('href', '/inventory/');
     const authApi = import.meta.env.PUBLIC_AUTH_URL || '/auth-api';
