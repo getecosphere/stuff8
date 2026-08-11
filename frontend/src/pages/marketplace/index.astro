@@ -60,7 +60,7 @@ import Layout from '../../layouts/Layout.astro';
     import { applyMuteToAll, installVideoBehaviors, isVideoKey, videoMarkup, thumbImageSrc } from '../../lib/media';
     const API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
     const BIDDING_API = import.meta.env.PUBLIC_BIDDING_URL || '/api/bidding';
-    const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
+    const STORAGE = import.meta.env.PUBLIC_STORAGE_URL || '/api';
     let currentPage = 1;
     let allListings: any[] = [];
     let meta: any = { listings: [], page: 1, limit: 12, total: 0, total_pages: 1 };

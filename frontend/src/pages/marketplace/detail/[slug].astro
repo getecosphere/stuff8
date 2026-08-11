@@ -12,7 +12,7 @@ import { slugify, encodeItemToken, marketplaceDetailPath } from '../../../lib/sl
 // (e.g. a cold-start deploy), we emit no pages instead of failing the deploy.
 
 const SITE_URL = 'https://stuff8.com';
-const PHOTOS_URL = (import.meta.env.PUBLIC_PHOTOS_URL || 'https://photos.stuff8.com/api').replace(/\/+$/, '');
+const PHOTOS_URL = (import.meta.env.PUBLIC_STORAGE_URL || 'https://storage.stuff8.com/api').replace(/\/+$/, '');
 
 interface Listing {
   id: string;

@@ -138,7 +138,7 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
     import { can, fetchAccessRights } from '../../../lib/authorization';
     import { initSlider } from '../../../lib/slider';
     import { applyMuteToAll, installVideoBehaviors, isVideoKey, videoMarkup, videoThumbMarkup } from '../../../lib/media';
-    const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
+    const PHOTOS_API = import.meta.env.PUBLIC_STORAGE_URL || '/api';
     const INVENTORY_API = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const MARKETPLACE_API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
     const AUTH_API = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;

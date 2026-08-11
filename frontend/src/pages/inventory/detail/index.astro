@@ -37,7 +37,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     import { applyMuteToAll, installVideoBehaviors, isVideoKey, videoMarkup, videoThumbMarkup } from '../../../lib/media';
 
     const INVENTORY = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
-    const PHOTOS = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
+    const PHOTOS = import.meta.env.PUBLIC_STORAGE_URL || '/api';
     const root = document.getElementById('inventory-detail')!;
     const id = new URLSearchParams(location.search).get('id');
     const session = () => { try { return JSON.parse(localStorage.getItem('stuff8_session') || 'null'); } catch { return null; } };

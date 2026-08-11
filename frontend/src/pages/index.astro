@@ -825,7 +825,7 @@ import Layout from '../layouts/Layout.astro';
       location.replace('/marketplace/');
     }
     const AUTH_API = `${import.meta.env.PUBLIC_AUTH_URL || '/auth-api'}/auth`;
-    const PHOTOS_API = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
+    const PHOTOS_API = import.meta.env.PUBLIC_STORAGE_URL || '/api';
     const PROFILE_API = import.meta.env.PUBLIC_PROFILE_URL || '/api';
     const INVENTORY_API = import.meta.env.PUBLIC_INVENTORY_URL || '/api/inventory';
     const MARKETPLACE_API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';

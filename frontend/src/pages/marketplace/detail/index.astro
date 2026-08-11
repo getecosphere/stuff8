@@ -38,7 +38,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     import { applyMuteToAll, installVideoBehaviors, isVideoKey, videoMarkup, videoThumbMarkup } from '../../../lib/media';
 
     const API = import.meta.env.PUBLIC_MARKETPLACE_URL || '/api/marketplace';
-    const STORAGE = import.meta.env.PUBLIC_PHOTOS_URL || '/api';
+    const STORAGE = import.meta.env.PUBLIC_STORAGE_URL || '/api';
     const root = document.getElementById('product-detail')!;
     const id = new URLSearchParams(location.search).get('id');
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
