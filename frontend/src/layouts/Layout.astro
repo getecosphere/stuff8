@@ -28,8 +28,9 @@ const isInventory = Astro.url.pathname === '/inventory' || Astro.url.pathname ==
 const isMarketplace = Astro.url.pathname.startsWith('/marketplace');
 const isEmailVerification = Astro.url.pathname.startsWith('/auth/verify-email');
 const isChat = Astro.url.pathname.startsWith('/chat');
-// The public origin is deliberately taken from stuff8_bootstrap/ecompose.yml
-// (`expose.hostname`), not from a browser-local URL or a hand-managed .env.
+// The public origin is deliberately taken from ecompose.yml (`expose.hostname`),
+// owned by the stuff8_core estate repo, not from a browser-local URL or a
+// hand-managed .env.
 const siteUrl = 'https://stuff8.com';
 const canonicalUrl = url ? new URL(url, siteUrl).toString() : new URL(Astro.url.pathname, siteUrl).toString();
 const socialImageUrl = new URL('/images/stuff8-social-preview.webp', siteUrl).toString();
