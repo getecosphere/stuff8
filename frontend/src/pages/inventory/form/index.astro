@@ -233,6 +233,8 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
       if (!formError) return;
       formError.textContent = message;
       formError.classList.remove('hidden');
+      formError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      window.stuff8Toast?.(message, { variant: 'error', title: 'Save blocked' });
     }
 
     function parseRupiah(value: string) {
