@@ -920,7 +920,6 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
 
     saveButton?.addEventListener('click', () => {
       if (!photoUploadItem) return;
-      if (editingItemId) return;
       resetPendingUploads();
       photoUploadItem = null;
       location.assign('/inventory/');
