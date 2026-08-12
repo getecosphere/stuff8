@@ -16,7 +16,7 @@ interface Props {
 
 const {
   title = 'Stuff8',
-  description = "Rapiin barang-barang kamu dalam inventaris digital. Ada barang nganggur? Tinggal sekali klik langsung pajang di marketplace!",
+  description = "Organize your items in a digital inventory. Have idle items? One click and they go straight to the marketplace!",
   image,
   type = 'website',
   url,
@@ -39,7 +39,7 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
 ---
 
 <!doctype html>
-<html lang="id">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,7 +55,7 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="Stuff8" />
-    <meta property="og:locale" content="id_ID" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:image" content={pageImage} />
     <meta property="og:image:secure_url" content={pageImage} />
     <meta property="og:image:type" content={pageImageType} />
@@ -63,12 +63,12 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
     </>}
-    <meta property="og:image:alt" content="Koleksi barang pribadi yang tertata rapi dengan Stuff8" />
+    <meta property="og:image:alt" content="A neatly organized personal item collection with Stuff8" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={pageImage} />
-    <meta name="twitter:image:alt" content="Koleksi barang pribadi yang tertata rapi dengan Stuff8" />
+    <meta name="twitter:image:alt" content="A neatly organized personal item collection with Stuff8" />
     {ogPrice != null && ogPrice !== '' && <>
       <meta property="og:price:amount" content={String(Number(ogPrice) || 0)} />
       <meta property="og:price:currency" content={ogPriceCurrency} />
@@ -91,28 +91,28 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
         <a id="stuff8-logo-link" href="/" class="flex items-center gap-2.5 shrink-0 group">
           <img src="/logo.png" alt="Stuff8 Logo" class="h-7 sm:h-8 w-auto object-contain group-hover:opacity-90 transition-opacity" />
-          <span class="sr-only">Stuff8 - Manajemen Barang & Pasar Jual Beli</span>
+          <span class="sr-only">Stuff8 - Item management & buy and sell marketplace</span>
         </a>
 
-        <form id="global-search" class="hidden min-w-0 flex-1 max-w-md md:block" role="search" aria-label="Cari barang">
+        <form id="global-search" class="hidden min-w-0 flex-1 max-w-md md:block" role="search" aria-label="Search items">
           <label class="relative block">
-            <span class="sr-only">Cari barang di Marketplace</span>
+            <span class="sr-only">Search items in the Marketplace</span>
             <svg class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m16 16 4 4"/></svg>
-            <input id="global-search-input" type="search" autocomplete="off" placeholder="Cari barang di Pasar…" class="h-10 w-full rounded-full border border-navy-100 bg-paper-50 pl-9 pr-4 text-sm text-navy-900 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20" />
+            <input id="global-search-input" type="search" autocomplete="off" placeholder="Search items in the Marketplace…" class="h-10 w-full rounded-full border border-navy-100 bg-paper-50 pl-9 pr-4 text-sm text-navy-900 outline-none transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20" />
           </label>
         </form>
 
         <div class="flex items-center gap-2">
-          <nav class="inline-flex min-h-10 items-center rounded-full border border-navy-100 bg-white p-1 text-xs font-bold shadow-xs" aria-label="Navigasi utama">
-            <a href="/inventory/" title="Inventaris" aria-label="Inventaris" aria-current={isInventory ? 'page' : undefined} class:list={['inline-flex h-8 items-center justify-center gap-1.5 rounded-full px-2.5 transition-colors lg:px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500', isInventory ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
+          <nav class="inline-flex min-h-10 items-center rounded-full border border-navy-100 bg-white p-1 text-xs font-bold shadow-xs" aria-label="Main navigation">
+            <a href="/inventory/" title="Inventory" aria-label="Inventory" aria-current={isInventory ? 'page' : undefined} class:list={['inline-flex h-8 items-center justify-center gap-1.5 rounded-full px-2.5 transition-colors lg:px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500', isInventory ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
               <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M8 9l8-4" /></svg>
-              <span class="hidden lg:inline">Inventaris</span>
-              <span class="sr-only lg:hidden">Inventaris</span>
+              <span class="hidden lg:inline">Inventory</span>
+              <span class="sr-only lg:hidden">Inventory</span>
             </a>
             <a href="/marketplace/" title="Marketplace" aria-label="Marketplace" aria-current={isMarketplace ? 'page' : undefined} class:list={['inline-flex h-8 items-center justify-center gap-1.5 rounded-full px-2.5 transition-colors lg:px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500', isMarketplace ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
               <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M5 10l1-5h12l1 5m-14 0v9h14v-9m-10 4h6" /></svg>
-              <span class="hidden lg:inline">Pasar</span>
-              <span class="sr-only lg:hidden">Pasar</span>
+              <span class="hidden lg:inline">Marketplace</span>
+              <span class="sr-only lg:hidden">Marketplace</span>
             </a>
             <a href="/chat/" title="Inbox" aria-label="Inbox" aria-current={Astro.url.pathname.startsWith('/chat') ? 'page' : undefined} class:list={['inline-flex h-8 items-center justify-center gap-1.5 rounded-full px-2.5 transition-colors lg:px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500', Astro.url.pathname.startsWith('/chat') ? 'bg-navy-900 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900']}>
               <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.278-3.833A7.72 7.72 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
@@ -121,19 +121,19 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
             </a>
           </nav>
           <div class="relative" id="notifications-bell-wrap">
-            <button id="btn-notifications" type="button" aria-label="Notifikasi" aria-expanded="false" aria-controls="notifications-panel" class="relative hidden size-10 items-center justify-center rounded-full border border-navy-100 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
+            <button id="btn-notifications" type="button" aria-label="Notifications" aria-expanded="false" aria-controls="notifications-panel" class="relative hidden size-10 items-center justify-center rounded-full border border-navy-100 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
               <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
               <span id="notifications-badge" class="absolute -right-1 -top-1 hidden min-w-[1.125rem] rounded-full bg-brand-600 px-1 py-px text-center text-[10px] font-bold leading-4 text-white shadow-xs">0</span>
             </button>
             <div id="notifications-panel" class="absolute right-0 top-12 z-50 hidden w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-2xl">
               <div class="flex items-center justify-between border-b border-navy-100 px-4 py-3">
-                <p class="text-sm font-bold text-navy-900">Notifikasi</p>
-                <button id="btn-notifications-read-all" type="button" class="text-xs font-bold text-brand-700 hover:underline">Tandai semua dibaca</button>
+                <p class="text-sm font-bold text-navy-900">Notifications</p>
+                <button id="btn-notifications-read-all" type="button" class="text-xs font-bold text-brand-700 hover:underline">Mark all as read</button>
               </div>
               <div id="notifications-list" class="max-h-96 overflow-y-auto"></div>
             </div>
           </div>
-          <button id="btn-sidebar-toggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="app-sidebar" class="inline-flex size-10 items-center justify-center rounded-full border border-navy-100 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
+          <button id="btn-sidebar-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="app-sidebar" class="inline-flex size-10 items-center justify-center rounded-full border border-navy-100 bg-white text-slate-700 shadow-xs transition-colors hover:bg-slate-50 hover:text-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
             <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16" /></svg>
           </button>
         </div>
@@ -141,36 +141,36 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
     </header>
 
     <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-slate-950/35 backdrop-blur-[1px]" aria-hidden="true"></div>
-    <aside id="app-sidebar" class="fixed inset-y-0 right-0 z-50 flex w-[min(20rem,calc(100vw-2rem))] translate-x-full flex-col border-l border-slate-200 bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl transition-transform duration-200 ease-out" aria-label="Menu utama">
+    <aside id="app-sidebar" class="fixed inset-y-0 right-0 z-50 flex w-[min(20rem,calc(100vw-2rem))] translate-x-full flex-col border-l border-slate-200 bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl transition-transform duration-200 ease-out" aria-label="Main menu">
       <div class="flex items-center justify-between border-b border-slate-200 pb-4">
         <img src="/logo.png" alt="Stuff8" class="h-7 w-auto object-contain" />
-        <button id="btn-sidebar-close" type="button" aria-label="Tutup menu" class="inline-flex size-9 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">×</button>
+        <button id="btn-sidebar-close" type="button" aria-label="Close menu" class="inline-flex size-9 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">×</button>
       </div>
 
       <a id="sidebar-user-summary" href="/profile/" class="mt-5 hidden items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">
         <div id="sidebar-user-avatar-wrap" class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-navy-900 text-sm font-bold text-white"><span id="sidebar-user-avatar">?</span></div>
-        <div class="min-w-0"><p id="sidebar-user-name" class="truncate text-sm font-bold text-slate-900">Pengguna Stuff8</p><p class="text-xs text-slate-500">Inventaris pribadi</p></div>
+        <div class="min-w-0"><p id="sidebar-user-name" class="truncate text-sm font-bold text-slate-900">Stuff8 user</p><p class="text-xs text-slate-500">Personal inventory</p></div>
       </a>
 
-      <nav class="mt-5 space-y-2" aria-label="Navigasi dan aksi akun">
-        <a href="/inventory/" aria-current={isInventory ? 'page' : undefined} class:list={['flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isInventory ? 'bg-navy-900 text-white' : 'text-slate-700 hover:bg-slate-100']}><span>Inventaris</span><span aria-hidden="true">→</span></a>
+      <nav class="mt-5 space-y-2" aria-label="Navigation and account actions">
+        <a href="/inventory/" aria-current={isInventory ? 'page' : undefined} class:list={['flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isInventory ? 'bg-navy-900 text-white' : 'text-slate-700 hover:bg-slate-100']}><span>Inventory</span><span aria-hidden="true">→</span></a>
         <a href="/marketplace/" aria-current={isMarketplace ? 'page' : undefined} class:list={['flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', isMarketplace ? 'bg-navy-900 text-white' : 'text-slate-700 hover:bg-slate-100']}><span>Marketplace</span><span aria-hidden="true">→</span></a>
         <a href="/chat/" aria-current={Astro.url.pathname.startsWith('/chat') ? 'page' : undefined} class:list={['flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900', Astro.url.pathname.startsWith('/chat') ? 'bg-navy-900 text-white' : 'text-slate-700 hover:bg-slate-100']}><span>Inbox</span><span aria-hidden="true">→</span></a>
         <div class="my-2 border-t border-slate-200"></div>
-        <button id="btn-sidebar-add-item" type="button" class="hidden w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-navy-900 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Tambah Barang</span><span aria-hidden="true">+</span></button>
-        <a id="btn-sidebar-profile" href="/profile/" class="hidden w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Profil &amp; Keamanan</span><span aria-hidden="true">→</span></a>
-        <button id="btn-sidebar-guide" type="button" class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Panduan Stuff8</span><span aria-hidden="true">→</span></button>
-        <button id="btn-sidebar-login" type="button" class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Masuk / Daftar</span><span aria-hidden="true">→</span></button>
+        <button id="btn-sidebar-add-item" type="button" class="hidden w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-navy-900 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Add Item</span><span aria-hidden="true">+</span></button>
+        <a id="btn-sidebar-profile" href="/profile/" class="hidden w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Profile &amp; Security</span><span aria-hidden="true">→</span></a>
+        <button id="btn-sidebar-guide" type="button" class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Stuff8 Guide</span><span aria-hidden="true">→</span></button>
+        <button id="btn-sidebar-login" type="button" class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"><span>Sign in / Sign up</span><span aria-hidden="true">→</span></button>
       </nav>
 
-      <button id="btn-logout" type="button" class="mt-auto hidden w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">Keluar</button>
+      <button id="btn-logout" type="button" class="mt-auto hidden w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900">Sign out</button>
     </aside>
 
     <main class="min-h-0 flex-1">
       {!isEmailVerification && <div id="email-verification-banner" class="hidden border-b border-amber-200 bg-amber-50">
         <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-3 text-sm text-amber-950 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p><strong>Email belum diverifikasi.</strong> Inventaris pribadi tetap dapat digunakan, tetapi Marketplace dan negosiasi baru aktif setelah verifikasi. Tautan berlaku 24 jam.</p>
-          <button id="resend-verification" type="button" class="shrink-0 font-bold text-amber-900 underline decoration-amber-400 underline-offset-4 hover:text-navy-900">Kirim ulang email</button>
+          <p><strong>Email not verified.</strong> Your personal inventory still works, but Marketplace and negotiations only activate after verification. The link is valid for 24 hours.</p>
+          <button id="resend-verification" type="button" class="shrink-0 font-bold text-amber-900 underline decoration-amber-400 underline-offset-4 hover:text-navy-900">Resend email</button>
         </div>
         <p id="email-verification-status" class="mx-auto hidden max-w-7xl px-4 pb-3 text-xs sm:px-6 lg:px-8" aria-live="polite"></p>
       </div>}
@@ -180,7 +180,7 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
     {!isChat && <footer class="border-t border-navy-100 bg-white py-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
-          <p class="text-xs text-slate-500">Rapiin barang, tahu nilai &amp; lokasinya, jual saat kamu butuh.</p>
+          <p class="text-xs text-slate-500">Organize your items, know their value &amp; location, and sell when you need to.</p>
           <p class="text-xs text-slate-400">© 2026 Stuff8</p>
         </div>
       </div>
@@ -206,7 +206,7 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
         const toast = document.createElement('div');
         toast.className = `stuff8-toast pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-2xl border border-navy-100 border-l-4 bg-white p-3.5 pr-3 shadow-lg shadow-navy-900/10 ${tone.accent}`;
         toast.setAttribute('role', variant === 'error' ? 'alert' : 'status');
-        toast.innerHTML = `<span class="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full ${tone.chip}" aria-hidden="true">${tone.icon}</span><div class="min-w-0 flex-1"><p class="text-sm font-bold leading-snug text-navy-900">${options.title || (variant === 'error' ? 'Terjadi kendala' : variant === 'success' ? 'Berhasil' : 'Info')}</p>${message ? `<p class="mt-0.5 text-xs leading-relaxed text-slate-600">${message}</p>` : ''}</div><button type="button" class="stuff8-toast-close inline-flex size-6 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-navy-900" aria-label="Tutup notifikasi">×</button>`;
+        toast.innerHTML = `<span class="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full ${tone.chip}" aria-hidden="true">${tone.icon}</span><div class="min-w-0 flex-1"><p class="text-sm font-bold leading-snug text-navy-900">${options.title || (variant === 'error' ? 'Something went wrong' : variant === 'success' ? 'Success' : 'Info')}</p>${message ? `<p class="mt-0.5 text-xs leading-relaxed text-slate-600">${message}</p>` : ''}</div><button type="button" class="stuff8-toast-close inline-flex size-6 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-navy-900" aria-label="Close notification">×</button>`;
         container.append(toast);
         const dismiss = () => {
           if (toast.dataset.gone) return;
@@ -280,15 +280,15 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
       const session = readStuff8Session();
       if (!session?.token || !verificationStatus) return;
       verificationStatus.classList.remove('hidden');
-      verificationStatus.textContent = 'Mengirim email verifikasi…';
+      verificationStatus.textContent = 'Sending verification email…';
       try {
         const response = await fetch(`${authApi}/auth/resend-verification`, { method: 'POST', headers: { Authorization: `Bearer ${session.token}` } });
         const ok = response.ok;
-        verificationStatus.textContent = ok ? 'Permintaan email verifikasi diterima oleh Brevo. Periksa inbox dan folder spam; tautan berlaku 24 jam.' : 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
-        window.stuff8Toast?.(ok ? 'Cek inbox dan folder spam — tautan berlaku 24 jam.' : 'Email belum dapat dikirim, coba lagi nanti.', { variant: ok ? 'success' : 'error', title: ok ? 'Email verifikasi terkirim' : 'Gagal mengirim' });
+        verificationStatus.textContent = ok ? 'Your verification email request was received by Brevo. Check your inbox and spam folder; the link is valid for 24 hours.' : 'The email could not be sent yet. Try again in a few moments.';
+        window.stuff8Toast?.(ok ? 'Check your inbox and spam folder — the link is valid for 24 hours.' : 'The email could not be sent, try again later.', { variant: ok ? 'success' : 'error', title: ok ? 'Verification email sent' : 'Failed to send' });
       } catch {
-        verificationStatus.textContent = 'Email belum dapat dikirim. Coba lagi beberapa saat lagi.';
-        window.stuff8Toast?.('Email belum dapat dikirim, coba lagi nanti.', { variant: 'error', title: 'Gagal mengirim' });
+        verificationStatus.textContent = 'The email could not be sent yet. Try again in a few moments.';
+        window.stuff8Toast?.('The email could not be sent, try again later.', { variant: 'error', title: 'Failed to send' });
       }
     });
 
@@ -347,10 +347,10 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
       const date = new Date(value || 0);
       if (Number.isNaN(date.getTime())) return '';
       const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
-      if (seconds < 60) return 'Baru saja';
-      if (seconds < 3600) return `${Math.floor(seconds / 60)} menit lalu`;
-      if (seconds < 86400) return `${Math.floor(seconds / 3600)} jam lalu`;
-      return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+      if (seconds < 60) return 'Just now';
+      if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
     };
     const renderNotificationBadge = () => {
       if (!notificationsBadge) return;
@@ -364,14 +364,14 @@ const jsonLd = structuredData.map(data => JSON.stringify(data)).join('');
     const renderNotificationsList = () => {
       if (!notificationsList) return;
       if (!recentNotifications.length) {
-        notificationsList.innerHTML = '<p class="p-6 text-center text-xs text-slate-500">Belum ada notifikasi. Aktivitas offer dan marketplace akan muncul di sini.</p>';
+        notificationsList.innerHTML = '<p class="p-6 text-center text-xs text-slate-500">No notifications yet. Offer and marketplace activity will appear here.</p>';
         return;
       }
       notificationsList.innerHTML = recentNotifications.map(notification => `
         <a href="${escapeNotification(notification.link || '#')}" data-notification-id="${escapeNotification(notification.id || '')}" class="flex gap-3 border-b border-slate-100 px-4 py-3 transition-colors hover:bg-slate-50 ${notification.read ? '' : 'bg-brand-50/40'}">
           <span class="mt-1.5 size-2 shrink-0 rounded-full ${notification.read ? 'bg-transparent' : 'bg-brand-600'}" aria-hidden="true"></span>
           <span class="min-w-0">
-            <span class="block truncate text-xs font-bold text-slate-900">${escapeNotification(notification.title || 'Notifikasi')}</span>
+            <span class="block truncate text-xs font-bold text-slate-900">${escapeNotification(notification.title || 'Notification')}</span>
             <span class="mt-0.5 line-clamp-2 block text-xs leading-relaxed text-slate-600">${escapeNotification(notification.body || '')}</span>
             <span class="mt-1 block text-[10px] text-slate-400">${notificationTime(notification.createdAt)}</span>
           </span>

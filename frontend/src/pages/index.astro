@@ -17,42 +17,42 @@ import Layout from '../layouts/Layout.astro';
 
         <div class="relative z-10 mx-auto max-w-3xl space-y-5">
           <h1 data-reveal style="--reveal-delay: 80ms" class="font-display text-3xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl">
-            Catat Semua Barangmu.<br class="hidden sm:inline" />
+            Track every item you own.<br class="hidden sm:inline" />
             <span class="text-clay-600">
-              Jual Kapan Saja Kamu Mau.
+              Sell whenever you want.
             </span>
           </h1>
           <p data-reveal style="--reveal-delay: 160ms" class="mx-auto max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Sering banget kita punya barang berharga tapi nggak sadar, ujung-ujungnya cuma numpuk dan bertahun-tahun nggak kepakai. Makanya di <strong class="font-bold text-navy-900">Stuff8</strong>, catat-catat aja dulu barangmu—biar kamu tau berapa total nilai asetmu. Nanti kalau ada barang yang rasa-rasanya mau dijual, tinggal tandai aja biar langsung bisa ditawar orang!
+            We all have valuable items we don't realize we own — they just pile up unused for years. That's why on <strong class="font-bold text-navy-900">Stuff8</strong>, you simply log your items first, so you know the total value of your assets. Then when you feel like selling something, just flag it and people can start bidding on it!
           </p>
 
           <!-- Action CTAs -->
           <div data-reveal style="--reveal-delay: 240ms" class="flex flex-wrap items-center justify-center gap-3 pt-2">
             <button id="btn-hero-start" class="inline-flex items-center gap-2 rounded-full bg-navy-900 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-800 hover:shadow-md active:scale-[0.99]">
-              <span>Mulai Catat Barang</span>
+              <span>Start Tracking Items</span>
               <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
 
             <a href="#interactive-demo" class="inline-flex items-center gap-2 rounded-full border border-navy-100 bg-white px-6 py-3 text-sm font-bold text-navy-900 shadow-sm transition-all hover:bg-paper-100">
-              <span>Coba Demo Interaktif</span>
+              <span>Try the Interactive Demo</span>
             </a>
 
             <button id="btn-hero-browse-mkt" class="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md active:scale-[0.99]">
-              <span>Lihat Marketplace</span>
+              <span>View Marketplace</span>
             </button>
           </div>
 
           <!-- Dua-wajah flow: barang privat -> 1 klik -> tayang di Pasar -->
-          <div data-reveal style="--reveal-delay: 320ms" class="mx-auto max-w-3xl pt-8" aria-label="Cara kerja Stuff8: simpan privat, lalu pajang di marketplace">
+          <div data-reveal style="--reveal-delay: 320ms" class="mx-auto max-w-3xl pt-8" aria-label="How Stuff8 works: keep items private, then list them in the marketplace">
             <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
               <div class="card overflow-hidden text-left">
                 <div class="relative aspect-[4/3] overflow-hidden bg-navy-100">
-                  <img src="/fujifilm-camera.jpg" alt="Kamera Fujifilm yang dicatat di inventaris pribadi" class="size-full object-cover" loading="lazy" />
-                  <span class="absolute left-2 top-2 rounded-md bg-white/95 px-2 py-0.5 text-[10px] font-bold text-navy-900 shadow-xs">Koleksi Pribadi</span>
+                  <img src="/fujifilm-camera.jpg" alt="Fujifilm camera logged in a private inventory" class="size-full object-cover" loading="lazy" />
+                  <span class="absolute left-2 top-2 rounded-md bg-white/95 px-2 py-0.5 text-[10px] font-bold text-navy-900 shadow-xs">Private Collection</span>
                 </div>
                 <div class="space-y-1.5 p-3 text-left sm:p-4">
-                  <p class="text-[10px] font-bold uppercase tracking-wider text-clay-600">Inventaris · lokasi tercatat</p>
-                  <p class="truncate text-sm font-bold text-navy-900">Kamera Fujifilm X100V</p>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-clay-600">Inventory · location recorded</p>
+                  <p class="truncate text-sm font-bold text-navy-900">Fujifilm X100V Camera</p>
                   <p class="num text-base font-extrabold text-clay-700">Rp 21.750.000</p>
                 </div>
               </div>
@@ -61,46 +61,46 @@ import Layout from '../layouts/Layout.astro';
                 <span class="flex size-9 items-center justify-center rounded-full border border-navy-100 bg-white shadow-xs">
                   <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </span>
-                <span class="whitespace-nowrap rounded-full border border-navy-100 bg-paper-100 px-2 py-0.5 text-[10px] font-bold text-navy-900">1 klik</span>
+                <span class="whitespace-nowrap rounded-full border border-navy-100 bg-paper-100 px-2 py-0.5 text-[10px] font-bold text-navy-900">1 click</span>
               </div>
 
               <div class="card overflow-hidden text-left ring-2 ring-brand-500/25">
                 <div class="relative aspect-[4/3] overflow-hidden bg-navy-100">
-                  <img src="/fujifilm-camera.jpg" alt="Kamera Fujifilm yang tayang di marketplace" class="size-full object-cover" loading="lazy" />
+                  <img src="/fujifilm-camera.jpg" alt="Fujifilm camera listed in the marketplace" class="size-full object-cover" loading="lazy" />
                   <span class="num absolute right-2 top-2 rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-extrabold text-white shadow-xs">Rp 21.750.000</span>
-                  <span class="absolute left-2 top-2 rounded-md bg-white/95 px-2 py-0.5 text-[10px] font-bold text-brand-700 shadow-xs">OPEN · Bisa ditawar</span>
+                  <span class="absolute left-2 top-2 rounded-md bg-white/95 px-2 py-0.5 text-[10px] font-bold text-brand-700 shadow-xs">OPEN · Open to offers</span>
                 </div>
                 <div class="space-y-1.5 p-3 text-left sm:p-4">
-                  <p class="text-[10px] font-bold uppercase tracking-wider text-brand-600">Pasar Stuff8</p>
-                  <p class="truncate text-sm font-bold text-navy-900">Kamera Fujifilm X100V</p>
-                  <span class="inline-flex items-center gap-1 rounded-full bg-brand-600 px-2.5 py-1 text-[10px] font-bold text-white">Lihat &amp; tawar →</span>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-brand-600">Stuff8 Marketplace</p>
+                  <p class="truncate text-sm font-bold text-navy-900">Fujifilm X100V Camera</p>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-brand-600 px-2.5 py-1 text-[10px] font-bold text-white">View &amp; make an offer →</span>
                 </div>
               </div>
             </div>
-            <p class="mt-4 text-center text-xs text-slate-500">Simpan dulu, jual kapan kamu mau — semua dari satu tempat.</p>
+            <p class="mt-4 text-center text-xs text-slate-500">Keep it first, sell it whenever you want — all from one place.</p>
           </div>
 
           <!-- Quick Stats Banner -->
           <div data-reveal style="--reveal-delay: 400ms" class="grid grid-cols-2 gap-3 pt-6 text-left md:grid-cols-4">
             <div class="card p-4">
-              <div class="text-xs font-semibold text-slate-500">Privasi Terjaga</div>
-              <div class="mt-1 text-lg font-extrabold text-navy-900">100% Privat</div>
-              <p class="mt-0.5 text-[11px] text-slate-500">Barangmu cuma kamu yang tau</p>
+              <div class="text-xs font-semibold text-slate-500">Privacy Protected</div>
+              <div class="mt-1 text-lg font-extrabold text-navy-900">100% Private</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">Only you know about your items</p>
             </div>
             <div class="card p-4">
-              <div class="text-xs font-semibold text-slate-500">Pajang Barang</div>
-              <div class="mt-1 text-lg font-extrabold text-clay-700">1-Klik Tayang</div>
-              <p class="mt-0.5 text-[11px] text-slate-500">Langsung masuk marketplace</p>
+              <div class="text-xs font-semibold text-slate-500">List Items</div>
+              <div class="mt-1 text-lg font-extrabold text-clay-700">1-Click Listing</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">Goes straight to the marketplace</p>
             </div>
             <div class="card p-4">
-              <div class="text-xs font-semibold text-slate-500">Nego Santai</div>
-              <div class="mt-1 text-lg font-extrabold text-brand-700">Bisa Ditawar</div>
-              <p class="mt-0.5 text-[11px] text-slate-500">Cek penawaran tunai dari pembeli</p>
+              <div class="text-xs font-semibold text-slate-500">Easy Negotiation</div>
+              <div class="mt-1 text-lg font-extrabold text-brand-700">Open to Offers</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">Review cash offers from buyers</p>
             </div>
             <div class="card p-4">
-              <div class="text-xs font-semibold text-slate-500">Bebas Biaya</div>
-              <div class="mt-1 text-lg font-extrabold text-navy-900">Tanpa Komisi</div>
-              <p class="mt-0.5 text-[11px] text-slate-500">100% hasil jual buat kamu</p>
+              <div class="text-xs font-semibold text-slate-500">No Fees</div>
+              <div class="mt-1 text-lg font-extrabold text-navy-900">No Commission</div>
+              <p class="mt-0.5 text-[11px] text-slate-500">100% of the sale stays with you</p>
             </div>
           </div>
         </div>
@@ -110,38 +110,38 @@ import Layout from '../layouts/Layout.astro';
       <section data-reveal class="card space-y-8 p-8 sm:p-12">
         <div class="mx-auto max-w-2xl text-center space-y-2">
           <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
-            Bayangkan Nilai Tumpukan Barangmu Saat Ini!
+            Imagine the Value of Everything You Own!
           </h2>
           <p class="text-xs text-slate-600 sm:text-sm">
-            Geser slider di bawah buat meraba berapa perkiraan aset barang yang selama ini cuma ngetem di gudang/lemari.
+            Move the sliders below to estimate the assets that have been sitting in your garage or closet.
           </p>
         </div>
 
         <div class="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
           <div class="space-y-4 rounded-2xl border border-navy-100 bg-paper-100 p-5">
             <div class="flex justify-between text-xs font-semibold">
-              <span class="text-navy-900">Elektronik &amp; Gadget</span>
-              <span id="calc-val-electronics" class="num text-clay-700">2 barang (Rp 15.000.000)</span>
+              <span class="text-navy-900">Electronics &amp; Gadgets</span>
+              <span id="calc-val-electronics" class="num text-clay-700">2 items (Rp 15.000.000)</span>
             </div>
             <input type="range" id="calc-range-electronics" min="0" max="10" value="2" class="slider w-full cursor-pointer" />
 
             <div class="flex justify-between pt-2 text-xs font-semibold">
-              <span class="text-navy-900">Peralatan Olahraga &amp; Outdoor</span>
-              <span id="calc-val-sports" class="num text-clay-700">1 barang (Rp 5.250.000)</span>
+              <span class="text-navy-900">Sports &amp; Outdoor Gear</span>
+              <span id="calc-val-sports" class="num text-clay-700">1 item (Rp 5.250.000)</span>
             </div>
             <input type="range" id="calc-range-sports" min="0" max="10" value="1" class="slider w-full cursor-pointer" />
           </div>
 
           <div class="space-y-4 rounded-2xl border border-navy-100 bg-paper-100 p-5">
             <div class="flex justify-between text-xs font-semibold">
-              <span class="text-navy-900">Alat Musik &amp; Audio</span>
-              <span id="calc-val-music" class="num text-clay-700">1 barang (Rp 6.000.000)</span>
+              <span class="text-navy-900">Music &amp; Audio Gear</span>
+              <span id="calc-val-music" class="num text-clay-700">1 item (Rp 6.000.000)</span>
             </div>
             <input type="range" id="calc-range-music" min="0" max="10" value="1" class="slider w-full cursor-pointer" />
 
             <div class="flex justify-between pt-2 text-xs font-semibold">
-              <span class="text-navy-900">Koleksi &amp; Furnitur</span>
-              <span id="calc-val-other" class="num text-clay-700">3 barang (Rp 3.600.000)</span>
+              <span class="text-navy-900">Collectibles &amp; Furniture</span>
+              <span id="calc-val-other" class="num text-clay-700">3 items (Rp 3.600.000)</span>
             </div>
             <input type="range" id="calc-range-other" min="0" max="15" value="3" class="slider w-full cursor-pointer" />
           </div>
@@ -149,15 +149,15 @@ import Layout from '../layouts/Layout.astro';
 
         <!-- Calculator Result Card -->
         <div class="mx-auto max-w-md space-y-3 rounded-2xl bg-navy-900 p-6 text-center text-white shadow-lg">
-          <span class="text-xs font-bold uppercase tracking-wider text-navy-200">Total Perkiraan Nilai Simpanan</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-navy-200">Total Estimated Value of Your Stored Items</span>
           <div id="calc-total-display" class="num font-display text-3xl font-extrabold text-white sm:text-4xl">
             Rp 29.850.000
           </div>
           <p class="text-xs text-navy-200">
-            Mulai catat barang-barangmu sekarang biar tau aset simpananmu dan siap dijual kapan aja.
+            Start logging your items now to know your stored assets and be ready to sell anytime.
           </p>
           <button id="btn-calc-cta" class="w-full rounded-full bg-brand-600 py-3 text-xs font-bold text-white shadow-xs transition-all hover:bg-brand-500">
-            Mulai Catat Barangku
+            Start Tracking My Items
           </button>
         </div>
       </section>
@@ -165,38 +165,38 @@ import Layout from '../layouts/Layout.astro';
       <!-- THREE CORE PILLARS OF STUFF8 -->
       <section data-reveal class="space-y-8">
         <div class="mx-auto max-w-xl space-y-2 text-center">
-          <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Cara Kerja Stuff8</h2>
-          <p class="text-xs text-slate-600 sm:text-sm">Fokus rapiin inventaris pribadi dulu, baru jual santai kemudian.</p>
+          <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">How Stuff8 Works</h2>
+          <p class="text-xs text-slate-600 sm:text-sm">Focus on organizing your personal inventory first, then sell at your own pace later.</p>
         </div>
 
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div class="card space-y-3 p-6 transition-all hover:border-clay-300 hover:shadow-md">
             <div class="flex items-center gap-3">
               <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-clay-600 text-sm font-bold text-white">1</div>
-              <h3 class="font-display text-base font-bold text-navy-900">Galeri Simpanan Privat</h3>
+              <h3 class="font-display text-base font-bold text-navy-900">Private Storage Gallery</h3>
             </div>
             <p class="text-xs leading-relaxed text-slate-600">
-              Catat harga beli, kondisi, perkiraan nilai, sampai posisi simpan barang. Katalogmu 100% rahasia dan aman.
+              Log the purchase price, condition, estimated value, and where it's stored. Your catalog is 100% private and secure.
             </p>
           </div>
 
           <div class="card space-y-3 p-6 transition-all hover:border-brand-300 hover:shadow-md">
             <div class="flex items-center gap-3">
               <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-navy-900 text-sm font-bold text-white">2</div>
-              <h3 class="font-display text-base font-bold text-navy-900">Sekali klik .. ke Marketplace!</h3>
+              <h3 class="font-display text-base font-bold text-navy-900">One click .. to the Marketplace!</h3>
             </div>
             <p class="text-xs leading-relaxed text-slate-600">
-              Nggak perlu ribet ketik ulang deskripsi. Cukup aktifkan status "Dijual", barang langsung tayang di marketplace.
+              No need to retype descriptions. Just flip the "For Sale" toggle and your item goes live on the marketplace.
             </p>
           </div>
 
           <div class="card space-y-3 p-6 transition-all hover:border-brand-300 hover:shadow-md">
             <div class="flex items-center gap-3">
               <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">3</div>
-              <h3 class="font-display text-base font-bold text-navy-900">Penawaran Langsung</h3>
+              <h3 class="font-display text-base font-bold text-navy-900">Direct Offers</h3>
             </div>
             <p class="text-xs leading-relaxed text-slate-600">
-              Pembeli bisa langsung ngirim penawaran harga. Kamu tinggal cek penawaran di dashboard dan tentukan pilihan.
+              Buyers can send price offers directly. Just review the offers on your dashboard and pick your favorite.
             </p>
           </div>
         </div>
@@ -206,26 +206,26 @@ import Layout from '../layouts/Layout.astro';
       <section id="interactive-demo" data-reveal class="space-y-6 scroll-mt-24">
         <div class="space-y-2 text-center">
           <h2 class="font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
-            Cobain Gimana Cara Kerja Stuff8
+            See How Stuff8 Works
           </h2>
           <p class="mx-auto max-w-xl text-xs text-slate-600 sm:text-sm">
-            Pilih contoh barang di bawah, geser tombol jualnya, dan lihat gimana mulusnya barang berpindah dari galeri pribadi ke marketplace publik.
+            Pick a sample item below, flip the sell toggle, and watch how smoothly it moves from your private gallery to the public marketplace.
           </p>
         </div>
 
         <!-- Sample Item Selector Tabs -->
         <div class="flex flex-wrap justify-center gap-2 text-xs font-semibold">
           <button id="demo-tab-camera" class="demo-item-btn active rounded-full bg-navy-900 px-4 py-2 font-bold text-white shadow-xs transition-all">
-            Kamera Fujifilm (Rp 21,7 Jt)
+            Fujifilm Camera (Rp 21.7M)
           </button>
           <button id="demo-tab-bike" class="demo-item-btn rounded-full border border-navy-100 bg-white px-4 py-2 text-slate-600 transition-all hover:bg-paper-100 hover:text-navy-900">
-            Sepeda Balap (Rp 10,2 Jt)
+            Road Bike (Rp 10.2M)
           </button>
           <button id="demo-tab-macbook" class="demo-item-btn rounded-full border border-navy-100 bg-white px-4 py-2 text-slate-600 transition-all hover:bg-paper-100 hover:text-navy-900">
-            MacBook Pro M2 (Rp 27 Jt)
+            MacBook Pro M2 (Rp 27M)
           </button>
           <button id="demo-tab-guitar" class="demo-item-btn rounded-full border border-navy-100 bg-white px-4 py-2 text-slate-600 transition-all hover:bg-paper-100 hover:text-navy-900">
-            Gitar Akustik (Rp 6,3 Jt)
+            Acoustic Guitar (Rp 6.3M)
           </button>
         </div>
 
@@ -233,9 +233,9 @@ import Layout from '../layouts/Layout.astro';
         <div class="card relative mx-auto grid max-w-4xl grid-cols-1 gap-8 overflow-hidden p-6 sm:p-8 md:grid-cols-12">
           <!-- Image Column -->
           <div class="relative h-64 overflow-hidden rounded-xl border border-navy-100 bg-navy-100 md:col-span-5 md:h-full">
-            <img id="demo-card-img" src="/fujifilm-camera.jpg" alt="Contoh Barang" loading="lazy" decoding="async" class="size-full object-cover transition-transform duration-500 group-hover:scale-102" />
+            <img id="demo-card-img" src="/fujifilm-camera.jpg" alt="Sample item" loading="lazy" decoding="async" class="size-full object-cover transition-transform duration-500 group-hover:scale-102" />
             <span id="demo-card-badge" class="absolute right-3 top-3 rounded-md bg-navy-900/90 px-3 py-1 text-xs font-bold text-white shadow-xs backdrop-blur-xs transition-all">
-              Simpanan Privat
+              Private Collection
             </span>
           </div>
 
@@ -243,12 +243,12 @@ import Layout from '../layouts/Layout.astro';
           <div class="flex flex-col justify-between space-y-6 md:col-span-7">
             <div class="space-y-3">
               <div class="flex items-center justify-between">
-                <span id="demo-card-category" class="text-xs font-bold uppercase tracking-wider text-clay-600">Kamera &amp; Fotografi</span>
-                <span id="demo-card-location" class="rounded-md border border-navy-100 bg-paper-100 px-2.5 py-1 text-xs text-slate-500">Lokasi: Lemari Rak B</span>
+                <span id="demo-card-category" class="text-xs font-bold uppercase tracking-wider text-clay-600">Camera &amp; Photography</span>
+                <span id="demo-card-location" class="rounded-md border border-navy-100 bg-paper-100 px-2.5 py-1 text-xs text-slate-500">Location: Closet Shelf B</span>
               </div>
-              <h3 id="demo-card-title" class="font-display text-xl font-bold text-navy-900 sm:text-2xl">Kamera Compact Fujifilm X100V</h3>
+              <h3 id="demo-card-title" class="font-display text-xl font-bold text-navy-900 sm:text-2xl">Fujifilm X100V Compact Camera</h3>
               <p id="demo-card-desc" class="text-xs leading-relaxed text-slate-600 sm:text-sm">
-                Kondisi mulus banget, lensa fix 23mm F2, shutter count di bawah 2.500. Lengkap dus ori dan strap kulit.
+                Flawless condition, fixed 23mm F2 lens, shutter count under 2,500. Comes with original box and leather strap.
               </p>
             </div>
 
@@ -256,23 +256,23 @@ import Layout from '../layouts/Layout.astro';
             <div class="space-y-4 rounded-2xl border border-navy-100 bg-paper-100 p-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <span class="text-xs font-medium text-slate-500">Perkiraan Nilai Barang:</span>
+                  <span class="text-xs font-medium text-slate-500">Estimated Item Value:</span>
                   <div id="demo-card-val" class="num text-xl font-extrabold text-clay-700">Rp 21.750.000</div>
                 </div>
                 <div class="text-right">
-                  <span class="text-xs font-medium text-slate-500">Kondisi:</span>
-                  <div id="demo-card-condition" class="text-sm font-semibold text-navy-900">Mulus Beli Baru</div>
+                  <span class="text-xs font-medium text-slate-500">Condition:</span>
+                  <div id="demo-card-condition" class="text-sm font-semibold text-navy-900">Like New</div>
                 </div>
               </div>
 
               <!-- Interactive Toggle Switch -->
               <div class="flex items-center justify-between gap-4 border-t border-navy-100 pt-3">
                 <div>
-                  <span class="block text-xs font-bold text-navy-900">Status di Marketplace Publik</span>
-                  <span id="demo-toggle-label" class="block text-[11px] text-slate-500">Status: Cuma Disimpan Privat</span>
+                  <span class="block text-xs font-bold text-navy-900">Status on the Public Marketplace</span>
+                  <span id="demo-toggle-label" class="block text-[11px] text-slate-500">Status: Private Only</span>
                 </div>
                 <button id="btn-demo-toggle-sellable" class="inline-flex items-center gap-2 rounded-full bg-navy-900 px-4 py-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-navy-800">
-                  <span>Aktifkan Status Dijual</span>
+                  <span>Activate For Sale</span>
                 </button>
               </div>
             </div>
@@ -287,8 +287,8 @@ import Layout from '../layouts/Layout.astro';
       <section data-reveal class="space-y-6 pt-4">
         <div class="border-b border-navy-100 pb-4">
           <div>
-            <h2 class="font-display text-xl font-extrabold tracking-tight text-navy-900 sm:text-2xl">Barang Dijual Komunitas</h2>
-            <p class="text-xs text-slate-600">Daftar barang yang lagi dipajang oleh pengguna lain</p>
+            <h2 class="font-display text-xl font-extrabold tracking-tight text-navy-900 sm:text-2xl">Community Items For Sale</h2>
+            <p class="text-xs text-slate-600">Items currently listed by other users</p>
           </div>
         </div>
 
@@ -301,9 +301,9 @@ import Layout from '../layouts/Layout.astro';
       <section id="demo-approved-bids-section" class="space-y-6 border-t border-navy-100 pt-6 scroll-mt-24 hidden">
         <div class="card space-y-6 p-6 sm:p-8">
           <div class="border-b border-navy-100 pb-4">
-            <h2 class="font-display text-xl font-extrabold tracking-tight text-navy-900 sm:text-2xl">Simulasi Alur: Negosiasi &amp; Chat Real-Time dengan Bidder Pilihan</h2>
+            <h2 class="font-display text-xl font-extrabold tracking-tight text-navy-900 sm:text-2xl">Flow Demo: Negotiation &amp; Real-Time Chat with a Chosen Bidder</h2>
             <p class="mt-1 text-xs text-slate-600 sm:text-sm">
-              Alur obrolan ini muncul setelah ada penawaran pada barang di marketplace. Pilih tab produk di bawah untuk melihat obrolan realtime tiap produk!
+              This chat flow appears after an offer is placed on a marketplace item. Pick a product tab below to see real-time chat for each product!
             </p>
           </div>
 
@@ -322,21 +322,21 @@ import Layout from '../layouts/Layout.astro';
       <section data-reveal class="rounded-3xl border border-navy-100 bg-paper-100 px-6 py-10 text-center sm:px-10">
         <p class="mx-auto inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-clay-600">
           <span class="size-1.5 rounded-full bg-clay-500" aria-hidden="true"></span>
-          Mulai hari ini
+          Start today
         </p>
         <h2 class="mx-auto mt-3 max-w-2xl font-display text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
-          Barangmu berharga lebih dari yang kamu kira.
+          Your stuff is worth more than you think.
         </h2>
         <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-600">
-          Catat sekarang, tahu total nilainya, dan jual kapan kamu butuh — semua dari satu tempat yang hangat dan privat.
+          Log it now, know its total value, and sell whenever you need — all from one warm, private place.
         </p>
         <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
           <button id="btn-cta-bottom" class="inline-flex items-center gap-2 rounded-full bg-navy-900 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-800 hover:shadow-md active:scale-[0.99]">
-            <span>Mulai Catat Barang</span>
+            <span>Start Tracking Items</span>
             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
           </button>
           <a href="/marketplace/" class="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md active:scale-[0.99]">
-            <span>Lihat Pasar</span>
+            <span>View Marketplace</span>
           </a>
         </div>
       </section>
@@ -352,7 +352,7 @@ import Layout from '../layouts/Layout.astro';
       <!-- Widget: Penawaran Disetujui & Chat Real-Time dengan Bidder Pilihan -->
       <div id="approved-bids-widget" class="hidden space-y-4 rounded-2xl border border-navy-100 bg-white p-6 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
         <div class="border-b border-navy-100 pb-3">
-          <h3 class="font-display text-lg font-bold tracking-tight text-navy-900">Negosiasi &amp; Chat Real-Time dengan Bidder Pilihan</h3>
+          <h3 class="font-display text-lg font-bold tracking-tight text-navy-900">Negotiation &amp; Real-Time Chat with a Chosen Bidder</h3>
         </div>
 
         <div id="approved-bids-container" class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -361,31 +361,31 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <!-- Inventory-first category picker -->
-      <section id="inventory-category-section" class="space-y-3" aria-label="Ringkasan dan filter inventaris">
+      <section id="inventory-category-section" class="space-y-3" aria-label="Inventory summary and filters">
         <div class="flex items-end justify-between gap-3">
           <div class="min-w-0">
-            <h1 id="inventory-total-value" class="font-display truncate text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">Belum ada nilai inventaris</h1>
-            <p class="mt-1 text-xs text-slate-500">Koleksimu · tahu apa yang kamu punya, di mana, dan berapa nilainya.</p>
+            <h1 id="inventory-total-value" class="font-display truncate text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">No inventory value yet</h1>
+            <p class="mt-1 text-xs text-slate-500">Your collection · know what you own, where, and what it's worth.</p>
           </div>
-          <p id="inventory-total-count" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">Belum ada barang</p>
+          <p id="inventory-total-count" class="shrink-0 pb-0.5 text-xs font-semibold text-slate-500">No items yet</p>
         </div>
-        <div id="inventory-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Kategori inventaris">
+        <div id="inventory-category-tabs" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="tablist" aria-label="Inventory categories">
           <!-- Dynamic category tabs rendered here -->
         </div>
         <div class="flex items-center gap-2">
           <label class="relative min-w-0 flex-1">
-            <span class="sr-only">Cari barang inventaris</span>
+            <span class="sr-only">Search inventory items</span>
             <svg class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m16 16 4 4"/></svg>
-            <input id="inventory-search" type="search" autocomplete="off" placeholder="Cari barang" class="min-h-10 w-full rounded-full border border-navy-100 bg-white py-2 pl-9 pr-3 text-sm text-navy-900 outline-none transition-colors placeholder:text-slate-400 focus:border-clay-500 focus:ring-2 focus:ring-clay-500/20" />
+            <input id="inventory-search" type="search" autocomplete="off" placeholder="Search items" class="min-h-10 w-full rounded-full border border-navy-100 bg-white py-2 pl-9 pr-3 text-sm text-navy-900 outline-none transition-colors placeholder:text-slate-400 focus:border-clay-500 focus:ring-2 focus:ring-clay-500/20" />
           </label>
           <details id="inventory-view-menu" class="relative shrink-0">
-            <summary id="inventory-view-trigger" aria-label="Pilih mode tampilan inventaris" class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full border border-navy-100 bg-white text-slate-700 marker:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-500/20 [&::-webkit-details-marker]:hidden">
+            <summary id="inventory-view-trigger" aria-label="Choose inventory view mode" class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full border border-navy-100 bg-white text-slate-700 marker:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-500/20 [&::-webkit-details-marker]:hidden">
               <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg>
             </summary>
-            <div class="absolute right-0 z-20 mt-2 flex w-36 justify-around rounded-full border border-navy-100 bg-white p-1.5 shadow-lg" role="group" aria-label="Mode tampilan inventaris">
-              <button type="button" data-inventory-view="list" aria-label="Tampilan daftar" title="Tampilan daftar" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
-              <button type="button" data-inventory-view="thumbnail" aria-label="Tampilan thumbnail" title="Tampilan thumbnail" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1" stroke-width="2"/></svg></button>
-              <button type="button" data-inventory-view="card" aria-label="Tampilan kartu" title="Tampilan kartu" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg></button>
+            <div class="absolute right-0 z-20 mt-2 flex w-36 justify-around rounded-full border border-navy-100 bg-white p-1.5 shadow-lg" role="group" aria-label="Inventory view mode">
+              <button type="button" data-inventory-view="list" aria-label="List view" title="List view" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-width="2" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
+              <button type="button" data-inventory-view="thumbnail" aria-label="Thumbnail view" title="Thumbnail view" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1" stroke-width="2"/></svg></button>
+              <button type="button" data-inventory-view="card" aria-label="Card view" title="Card view" class="rounded-full p-2 text-slate-600 hover:bg-clay-50 hover:text-clay-700"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M3 15h18M8 9h.01"/></svg></button>
             </div>
           </details>
         </div>
@@ -399,7 +399,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="hidden overflow-hidden rounded-2xl border border-navy-100 bg-white md:block"><div class="skeleton h-36 rounded-none sm:h-48"></div><div class="space-y-2 p-4"><div class="skeleton h-3 w-1/3"></div><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div></div></div>
           <div class="hidden overflow-hidden rounded-2xl border border-navy-100 bg-white md:block"><div class="skeleton h-36 rounded-none sm:h-48"></div><div class="space-y-2 p-4"><div class="skeleton h-3 w-1/3"></div><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div></div></div>
         </div>
-        <nav id="inventory-pagination" class="hidden items-center justify-center gap-1 pt-2" aria-label="Navigasi halaman inventaris"></nav>
+        <nav id="inventory-pagination" class="hidden items-center justify-center gap-1 pt-2" aria-label="Inventory page navigation"></nav>
       </section>
 
     </div>
@@ -417,10 +417,10 @@ import Layout from '../layouts/Layout.astro';
       <div class="flex items-center justify-between text-xs font-semibold text-slate-500 border-b border-navy-100 pb-3">
         <div class="flex items-center gap-2">
           <img src="/logo.png" alt="Stuff8" class="h-6 w-auto object-contain" loading="lazy" />
-          <span class="text-navy-900 font-semibold">Panduan Pengguna Stuff8</span>
+          <span class="text-navy-900 font-semibold">Stuff8 User Guide</span>
         </div>
         <div class="flex items-center gap-1.5 text-slate-500">
-          <span id="wizard-step-indicator" class="text-navy-900 font-mono text-[11px]">Langkah 1 dari 2</span>
+          <span id="wizard-step-indicator" class="text-navy-900 font-mono text-[11px]">Step 1 of 2</span>
           <button id="btn-close-wizard" class="ml-3 text-slate-400 hover:text-slate-700 text-base font-bold">×</button>
         </div>
       </div>
@@ -428,14 +428,14 @@ import Layout from '../layouts/Layout.astro';
       <!-- WIZARD STEP 1: Account Authentication (Sign In / Sign Up) -->
       <div id="wizard-step-1" class="space-y-5">
         <div class="space-y-1">
-          <h2 class="text-xl font-bold text-navy-900">Selamat Datang di Stuff8!</h2>
-          <p class="text-slate-600 text-xs">Masuk atau buat akun baru yuk buat mulai ngerapiin barang-barangmu.</p>
+          <h2 class="text-xl font-bold text-navy-900">Welcome to Stuff8!</h2>
+          <p class="text-slate-600 text-xs">Sign in or create a new account to start organizing your items.</p>
         </div>
 
         <!-- Auth Toggle Switcher -->
         <div class="flex rounded-lg bg-navy-100 p-1 border border-navy-100 text-xs font-semibold text-slate-600">
-          <button id="tab-auth-signin" type="button" class="flex-1 py-2 rounded-md bg-white text-navy-900 font-bold shadow-xs transition-all">Masuk</button>
-          <button id="tab-auth-signup" type="button" class="flex-1 py-2 rounded-md hover:text-navy-900 transition-all">Buat Akun Baru</button>
+          <button id="tab-auth-signin" type="button" class="flex-1 py-2 rounded-md bg-white text-navy-900 font-bold shadow-xs transition-all">Sign in</button>
+          <button id="tab-auth-signup" type="button" class="flex-1 py-2 rounded-md hover:text-navy-900 transition-all">Create a New Account</button>
         </div>
 
         <!-- SIGN IN FORM -->
@@ -444,14 +444,14 @@ import Layout from '../layouts/Layout.astro';
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
-            <input type="text" id="signin-username" required placeholder="Masukkan username kamu" class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="signin-username" required placeholder="Enter your username" class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Kata Sandi</label>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
             <div class="relative">
               <input type="password" id="signin-password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 pr-20 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
-              <button type="button" data-password-toggle="signin-password" aria-label="Tampilkan kata sandi" aria-pressed="false" class="absolute inset-y-0 right-0 px-3 text-xs font-semibold text-slate-500 hover:text-navy-900 focus:outline-none focus-visible:text-navy-900">
+              <button type="button" data-password-toggle="signin-password" aria-label="Show password" aria-pressed="false" class="absolute inset-y-0 right-0 px-3 text-xs font-semibold text-slate-500 hover:text-navy-900 focus:outline-none focus-visible:text-navy-900">
                 <svg data-password-eye="hidden" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z" /><circle cx="12" cy="12" r="2.75" stroke-width="2" /></svg>
                 <svg data-password-eye="visible" class="hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 3 18 18M10.584 10.587A2 2 0 0 0 13.414 13.4M9.88 5.3A10.9 10.9 0 0 1 12 5.1c6 0 9.75 6.9 9.75 6.9a18.5 18.5 0 0 1-3.04 3.88M6.23 6.23A18.4 18.4 0 0 0 2.25 12s3.75 6.9 9.75 6.9a10.9 10.9 0 0 0 3.18-.48" /></svg>
               </button>
@@ -459,7 +459,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
 
           <button type="submit" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-2">
-            <span>Masuk ke Akun</span>
+            <span>Sign in to Account</span>
             <span>→</span>
           </button>
         </form>
@@ -469,8 +469,8 @@ import Layout from '../layouts/Layout.astro';
           <div id="auth-signup-error" class="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs hidden"></div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap</label>
-            <input type="text" id="signup-name" required placeholder="Contoh: Alex Rivera" class="w-full px-3.5 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+            <input type="text" id="signup-name" required placeholder="e.g., Alex Rivera" class="w-full px-3.5 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
@@ -485,10 +485,10 @@ import Layout from '../layouts/Layout.astro';
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Kata Sandi</label>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
             <div class="relative">
               <input type="password" id="signup-password" required placeholder="Password123!" class="w-full px-3.5 py-2 pr-20 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
-              <button type="button" data-password-toggle="signup-password" aria-label="Tampilkan kata sandi" aria-pressed="false" class="absolute inset-y-0 right-0 px-3 text-xs font-semibold text-slate-500 hover:text-navy-900 focus:outline-none focus-visible:text-navy-900">
+              <button type="button" data-password-toggle="signup-password" aria-label="Show password" aria-pressed="false" class="absolute inset-y-0 right-0 px-3 text-xs font-semibold text-slate-500 hover:text-navy-900 focus:outline-none focus-visible:text-navy-900">
                 <svg data-password-eye="hidden" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z" /><circle cx="12" cy="12" r="2.75" stroke-width="2" /></svg>
                 <svg data-password-eye="visible" class="hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 3 18 18M10.584 10.587A2 2 0 0 0 13.414 13.4M9.88 5.3A10.9 10.9 0 0 1 12 5.1c6 0 9.75 6.9 9.75 6.9a18.5 18.5 0 0 1-3.04 3.88M6.23 6.23A18.4 18.4 0 0 0 2.25 12s3.75 6.9 9.75 6.9a10.9 10.9 0 0 0 3.18-.48" /></svg>
               </button>
@@ -496,7 +496,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
 
           <button type="submit" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-2">
-            <span>Buat Akun & Lanjut</span>
+            <span>Create Account & Continue</span>
             <span>→</span>
           </button>
         </form>
@@ -505,105 +505,105 @@ import Layout from '../layouts/Layout.astro';
       <!-- WIZARD STEP 2: Feature Walkthrough -->
       <div id="wizard-step-2" class="space-y-5 hidden">
         <div class="space-y-1">
-          <h2 class="text-xl font-bold text-navy-900">Gimana Cara Kerja Stuff8?</h2>
-          <p class="text-slate-600 text-xs">Urus inventaris dulu, jualannya belakangan. Simak 3 langkah mudah ini:</p>
+          <h2 class="text-xl font-bold text-navy-900">How Does Stuff8 Work?</h2>
+          <p class="text-slate-600 text-xs">Organize your inventory first, sell later. Here are 3 easy steps:</p>
         </div>
 
         <div class="space-y-3">
           <div class="p-3.5 rounded-lg bg-paper-100 border border-navy-100 flex items-start gap-3">
             <div class="w-7 h-7 rounded-md bg-navy-900 text-white flex items-center justify-center text-xs shrink-0 font-bold">1</div>
             <div>
-              <h4 class="text-sm font-bold text-navy-900">Inventaris Digital Privat</h4>
-              <p class="text-slate-600 text-xs mt-0.5">Catat semua barangmu secara privat. Simpan lokasi barang, harga beli, kondisi, dan perkiraan nilainya.</p>
+              <h4 class="text-sm font-bold text-navy-900">Private Digital Inventory</h4>
+              <p class="text-slate-600 text-xs mt-0.5">Log all your items privately. Save the item's location, purchase price, condition, and estimated value.</p>
             </div>
           </div>
 
           <div class="p-3.5 rounded-lg bg-paper-100 border border-navy-100 flex items-start gap-3">
             <div class="w-7 h-7 rounded-md bg-navy-900 text-white flex items-center justify-center text-xs shrink-0 font-bold">2</div>
             <div>
-              <h4 class="text-sm font-bold text-navy-900">Sekali klik .. ke Marketplace!</h4>
-              <p class="text-slate-600 text-xs mt-0.5">Begitu mau jual barang, tinggal aktifkan status "Dijual", barang langsung tayang di marketplace publik.</p>
+              <h4 class="text-sm font-bold text-navy-900">One click .. to the Marketplace!</h4>
+              <p class="text-slate-600 text-xs mt-0.5">When you want to sell an item, just flip the "For Sale" toggle and it goes live on the public marketplace.</p>
             </div>
           </div>
 
           <div class="p-3.5 rounded-lg bg-paper-100 border border-navy-100 flex items-start gap-3">
             <div class="w-7 h-7 rounded-md bg-navy-900 text-white flex items-center justify-center text-xs shrink-0 font-bold">3</div>
             <div>
-              <h4 class="text-sm font-bold text-navy-900">Penawaran & Nego Langsung</h4>
-              <p class="text-slate-600 text-xs mt-0.5">Pembeli yang tertarik bakal ngirim penawaran tunai. Tinggal terima tawaran yang pas buat transaksi.</p>
+              <h4 class="text-sm font-bold text-navy-900">Direct Offers & Negotiation</h4>
+              <p class="text-slate-600 text-xs mt-0.5">Interested buyers will send cash offers. Just accept the right one to complete the deal.</p>
             </div>
           </div>
         </div>
 
         <div class="flex justify-between items-center pt-2">
-          <button type="button" id="btn-wizard-back-1" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold">← Kembali</button>
-          <button type="button" id="btn-wizard-next-2" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Selesai →</button>
+          <button type="button" id="btn-wizard-back-1" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold">← Back</button>
+          <button type="button" id="btn-wizard-next-2" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Done →</button>
         </div>
       </div>
 
       <!-- WIZARD STEP 3: Add First Inventory Item -->
       <div id="wizard-step-3" class="space-y-5 hidden">
         <div class="space-y-1">
-          <h2 class="text-xl font-bold text-navy-900">Tambah Barang Pertama Kamu</h2>
-          <p class="text-slate-600 text-xs">Isi galeri pribadimu dengan barang pertamamu.</p>
+          <h2 class="text-xl font-bold text-navy-900">Add Your First Item</h2>
+          <p class="text-slate-600 text-xs">Fill your private gallery with your first item.</p>
         </div>
 
         <form id="wizard-form-first-item" class="space-y-3.5">
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Barang</label>
-            <input type="text" id="w-item-title" required placeholder="Contoh: Kamera Sony Alpha A7 III Body Only" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Item Name</label>
+            <input type="text" id="w-item-title" required placeholder="e.g., Sony Alpha A7 III Camera Body Only" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Category</label>
               <select id="w-item-category" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none">
-                <option value="Cameras">Kamera</option>
-                <option value="Electronics">Elektronik</option>
-                <option value="Bicycles">Sepeda</option>
-                <option value="Books">Buku</option>
-                <option value="Musical Instruments">Alat Musik</option>
-                <option value="Furniture">Furnitur</option>
+                <option value="Cameras">Camera</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Bicycles">Bicycle</option>
+                <option value="Books">Books</option>
+                <option value="Musical Instruments">Musical Instruments</option>
+                <option value="Furniture">Furniture</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Kondisi</label>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Condition</label>
               <select id="w-item-condition" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none">
-                <option value="Like New">Mulus Beli Baru</option>
-                <option value="Good">Bagus</option>
-                <option value="Fair">Cukup</option>
-                <option value="Used">Pernah Pakai</option>
+                <option value="Like New">Like New</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Used">Used</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Deskripsi Barang</label>
-            <textarea id="w-item-description" rows="2" placeholder="Tulis kelengkapan, garansi, atau catatan minus barang..." class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none"></textarea>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Item Description</label>
+            <textarea id="w-item-description" rows="2" placeholder="Add inclusions, warranty, or any flaws..." class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none"></textarea>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Perkiraan Harga (Rp)</label>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Estimated Price (Rp)</label>
               <input type="number" id="w-item-est-value" placeholder="18000000" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Lokasi Simpan</label>
-              <input type="text" id="w-item-location" placeholder="Lemari Kaca Rak 2" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Storage Location</label>
+              <input type="text" id="w-item-location" placeholder="Glass Cabinet Shelf 2" class="w-full px-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-sm focus:border-navy-900 focus:outline-none" />
             </div>
           </div>
 
           <div class="p-3 rounded-lg bg-paper-100 border border-navy-100 flex items-center justify-between">
             <div>
-              <span class="block text-xs font-semibold text-navy-900">Langsung Dipajang di Marketplace?</span>
-              <span class="block text-[11px] text-slate-500">Barang bakal langsung kelihatan oleh pengguna lain</span>
+              <span class="block text-xs font-semibold text-navy-900">List it directly in the Marketplace?</span>
+              <span class="block text-[11px] text-slate-500">The item will be immediately visible to other users</span>
             </div>
             <input type="checkbox" id="w-item-sellable" class="w-4 h-4 accent-navy-900 rounded cursor-pointer" />
           </div>
 
           <div class="flex justify-between items-center pt-2">
-            <button type="button" id="btn-wizard-back-2" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold">← Kembali</button>
-            <button type="submit" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Simpan & Selesai</button>
+            <button type="button" id="btn-wizard-back-2" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold">← Back</button>
+            <button type="submit" class="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold shadow-xs">Save & Done</button>
           </div>
         </form>
       </div>
@@ -616,8 +616,8 @@ import Layout from '../layouts/Layout.astro';
     <div class="bg-white border border-navy-100 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl relative max-h-[calc(100dvh-2rem)] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-navy-100 pb-3">
         <div>
-          <h3 class="text-lg font-bold text-navy-900">Simulasi Penawaran Harga</h3>
-          <p class="text-xs text-slate-500">Simulasikan penawaran pembeli untuk barang ini</p>
+          <h3 class="text-lg font-bold text-navy-900">Price Offer Simulation</h3>
+          <p class="text-xs text-slate-500">Simulate a buyer's offer for this item</p>
         </div>
         <button id="btn-close-bid-modal" class="text-slate-400 hover:text-slate-700 text-xl font-bold">×</button>
       </div>
@@ -628,56 +628,56 @@ import Layout from '../layouts/Layout.astro';
         <!-- Logged in random user badge -->
         <div class="p-3 rounded-xl bg-paper-100 border border-navy-100 flex items-center justify-between">
           <div class="space-y-0.5">
-            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Penawar (Logged-in User)</span>
+            <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Bidder (Logged-in User)</span>
             <span id="bid-sim-name" class="block text-sm font-bold text-navy-900">Budi Santoso</span>
           </div>
-          <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Simulasi User</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Simulated User</span>
         </div>
 
         <!-- Product info -->
         <div class="p-3 rounded-xl bg-paper-100 border border-navy-100 space-y-0.5">
-          <span id="bid-item-title" class="block font-bold text-navy-900 text-sm">Nama Barang</span>
-          <span id="bid-asking-price" class="block text-slate-600 text-xs font-semibold">Harga Buka: Rp 0</span>
+          <span id="bid-item-title" class="block font-bold text-navy-900 text-sm">Item Name</span>
+          <span id="bid-asking-price" class="block text-slate-600 text-xs font-semibold">Opening Price: Rp 0</span>
         </div>
 
         <!-- Bidding price input with steppers and percentage buttons -->
         <div class="space-y-2">
           <div class="flex items-start justify-between gap-2 min-h-[44px]">
             <div class="pt-0.5">
-              <label class="block text-xs font-bold text-navy-900">Jumlah Penawaran Kamu</label>
-              <p class="text-[11px] text-slate-500 font-medium">Bisa diatur dengan stepper atau %</p>
+              <label class="block text-xs font-bold text-navy-900">Your Offer Amount</label>
+              <p class="text-[11px] text-slate-500 font-medium">Adjustable with steppers or %</p>
             </div>
             <div class="flex flex-col items-end gap-1 shrink-0">
-              <span id="bid-diff-badge" class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-navy-100 text-slate-700 border border-navy-200 transition-all select-none whitespace-nowrap">Harga Pas (0%)</span>
+              <span id="bid-diff-badge" class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-navy-100 text-slate-700 border border-navy-200 transition-all select-none whitespace-nowrap">Exact Price (0%)</span>
               <span id="bid-amount-formatted" class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 shadow-2xs select-none whitespace-nowrap">Rp 0</span>
             </div>
           </div>
           
           <div class="flex items-center gap-2">
             <button type="button" id="btn-bid-step-down" class="px-3.5 py-2.5 rounded-lg bg-navy-100 hover:bg-navy-200 text-navy-900 text-xs font-bold border border-navy-200 transition-all select-none">
-              - 100rb
+              - 100K
             </button>
             <div class="relative flex-1">
               <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm select-none">Rp</span>
               <input type="text" inputmode="numeric" id="bid-amount" required class="w-full pl-9 pr-3 py-2 rounded-lg bg-white border border-navy-200 text-navy-900 text-base font-bold text-center focus:border-navy-900 focus:outline-none" />
             </div>
             <button type="button" id="btn-bid-step-up" class="px-3.5 py-2.5 rounded-lg bg-navy-100 hover:bg-navy-200 text-navy-900 text-xs font-bold border border-navy-200 transition-all select-none">
-              + 100rb
+              + 100K
             </button>
           </div>
 
           <!-- Quick percentage shortcuts & reset buttons -->
           <div class="grid grid-cols-4 gap-1.5 pt-1">
             <button type="button" id="btn-bid-pct-down" class="text-xs py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 font-bold border border-navy-100 transition-all shadow-2xs select-none">-5%</button>
-            <button type="button" id="btn-bid-pct-reset" class="text-xs py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 font-bold border border-navy-100 transition-all shadow-2xs select-none">Harga Pas</button>
-            <button type="button" id="btn-bid-highest" class="text-xs py-2 rounded-lg bg-navy-900 text-white font-bold shadow-2xs transition-all select-none">Harga Tertinggi</button>
+            <button type="button" id="btn-bid-pct-reset" class="text-xs py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 font-bold border border-navy-100 transition-all shadow-2xs select-none">Exact Price</button>
+            <button type="button" id="btn-bid-highest" class="text-xs py-2 rounded-lg bg-navy-900 text-white font-bold shadow-2xs transition-all select-none">Highest Price</button>
             <button type="button" id="btn-bid-pct-up" class="text-xs py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 font-bold border border-navy-100 transition-all shadow-2xs select-none">+5%</button>
           </div>
         </div>
 
         <div class="flex justify-end gap-3 pt-3 border-t border-navy-100">
-          <button type="button" id="btn-cancel-bid-modal" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-sm font-semibold">Batal</button>
-          <button type="submit" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-sm font-bold shadow-xs transition-all">Kirim Penawaran</button>
+          <button type="button" id="btn-cancel-bid-modal" class="px-4 py-2 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 text-sm font-semibold">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-sm font-bold shadow-xs transition-all">Send Offer</button>
         </div>
       </form>
     </div>
@@ -699,7 +699,7 @@ import Layout from '../layouts/Layout.astro';
           <div>
             <div class="flex items-center gap-2">
               <h3 id="chat-bidder-name" class="font-bold text-white text-sm sm:text-base">Budi Santoso</h3>
-              <span id="chat-buyer-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Bidder Pilihan</span>
+              <span id="chat-buyer-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Chosen Bidder</span>
             </div>
             <p id="chat-item-subtitle" class="text-slate-400 text-xs truncate max-w-xs sm:max-w-sm">Kamera Fujifilm X100V • Rp 21.000.000</p>
           </div>
@@ -711,11 +711,11 @@ import Layout from '../layouts/Layout.astro';
       <div class="px-4 py-2 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between text-xs text-emerald-900 shrink-0">
         <span class="font-semibold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          Status: <span id="chat-bid-status-badge" class="font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">Dalam Diskusi (Interview)</span>
+          Status: <span id="chat-bid-status-badge" class="font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">In Discussion (Interview)</span>
           <strong id="chat-agreed-amount" class="text-emerald-700 font-mono ml-1">Rp 21.000.000</strong>
         </span>
         <button type="button" id="btn-chat-mark-sold" onclick="openConfirmSoldModalFromChat()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1">
-          <span>🏷️ Tandai SOLD</span>
+          <span>🏷️ Mark SOLD</span>
         </button>
       </div>
 
@@ -726,18 +726,18 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Quick Approach Chips -->
       <div class="px-3 py-2 bg-white border-t border-navy-100 flex items-center gap-1.5 overflow-x-auto text-[11px] font-medium shrink-0">
-        <span class="text-slate-400 shrink-0 font-bold px-1">Balas Cepat:</span>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Halo! Kapan kita bisa ketemuan COD?</button>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Lokasi penyerahan barang di mana ya?</button>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Barang lengkap dus ori & siap COD!</button>
-        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Bisa bayar via QRIS atau Tunai</button>
+        <span class="text-slate-400 shrink-0 font-bold px-1">Quick Replies:</span>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Hi! When can we meet for COD?</button>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">Where should we hand off the item?</button>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">The item is complete with the original box & ready for COD!</button>
+        <button type="button" class="chat-quick-chip px-2.5 py-1 rounded-full bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 shrink-0 transition-all">You can pay via QRIS or cash</button>
       </div>
 
       <!-- Input Form -->
       <form id="form-chat-send" class="p-3 bg-white border-t border-navy-100 flex items-center gap-2 shrink-0">
-        <input type="text" id="chat-input-message" autocomplete="off" required placeholder="Tulis pesan ke bidder pilihan..." class="flex-1 px-4 py-2.5 rounded-xl bg-navy-100 border border-navy-100 text-navy-900 text-sm focus:border-navy-900 focus:bg-white focus:outline-none transition-all" />
+        <input type="text" id="chat-input-message" autocomplete="off" required placeholder="Write a message to the chosen bidder..." class="flex-1 px-4 py-2.5 rounded-xl bg-navy-100 border border-navy-100 text-navy-900 text-sm focus:border-navy-900 focus:bg-white focus:outline-none transition-all" />
         <button type="submit" class="px-5 py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs flex items-center gap-1.5 shrink-0 transition-all">
-          <span>Kirim</span>
+          <span>Send</span>
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
         </button>
       </form>
@@ -752,30 +752,30 @@ import Layout from '../layouts/Layout.astro';
           🏷️
         </div>
         <div>
-          <h3 class="font-extrabold text-navy-900 text-lg">Konfirmasi Produk Terjual (SOLD)</h3>
-          <p class="text-xs text-slate-500">Tutup proses bidding & perpindahan kepemilikan</p>
+          <h3 class="font-extrabold text-navy-900 text-lg">Confirm Item Sold (SOLD)</h3>
+          <p class="text-xs text-slate-500">Close the bidding process & transfer ownership</p>
         </div>
       </div>
       
       <div class="p-4 rounded-xl bg-paper-100 border border-navy-100 space-y-2 text-xs text-slate-700">
-        <p>Apakah Anda yakin transaksi COD dengan <strong id="confirm-sold-buyer-name" class="text-navy-900 font-bold">Pembeli</strong> untuk produk <strong id="confirm-sold-item-title" class="text-navy-900 font-bold">Produk</strong> telah <strong>SELESAI</strong>?</p>
+        <p>Are you sure the COD transaction with <strong id="confirm-sold-buyer-name" class="text-navy-900 font-bold">Buyer</strong> for <strong id="confirm-sold-item-title" class="text-navy-900 font-bold">Item</strong> is <strong>COMPLETE</strong>?</p>
         <div class="pt-2 border-t border-navy-100 flex justify-between font-semibold">
-          <span>Harga Transaksi Akhir:</span>
+          <span>Final Transaction Price:</span>
           <span id="confirm-sold-amount" class="text-emerald-700 font-mono font-bold text-sm">Rp 0</span>
         </div>
         <p class="text-[11px] text-slate-500 pt-1">
-          • Status produk di Marketplace akan berubah menjadi <strong class="text-rose-600">SOLD</strong>.<br/>
-          • Penawaran lain untuk barang ini otomatis menjadi <strong>Outbid</strong>.<br/>
-          • Riwayat perpindahan kepemilikan (Provenance) resmi tercatat di sistem.
+          • The item's status in the Marketplace will change to <strong class="text-rose-600">SOLD</strong>.<br/>
+          • Other offers for this item automatically become <strong>Outbid</strong>.<br/>
+          • The official ownership history (Provenance) is recorded in the system.
         </p>
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-2">
         <button type="button" id="btn-cancel-sold-confirm" onclick="document.getElementById('modal-confirm-sold').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-navy-100 hover:bg-navy-200 text-slate-700 text-xs font-semibold transition-all">
-          Batal
+          Cancel
         </button>
         <button type="button" id="btn-execute-sold-confirm" onclick="executeMarkSold()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-all flex items-center gap-1.5">
-          <span>Ya, Konfirmasi SOLD</span>
+          <span>Yes, Confirm SOLD</span>
         </button>
       </div>
     </div>
@@ -788,8 +788,8 @@ import Layout from '../layouts/Layout.astro';
         <div class="flex items-center gap-2">
           <span class="text-xl">📜</span>
           <div>
-            <h3 class="font-extrabold text-navy-900 text-base">Riwayat Kepemilikan</h3>
-            <p id="ownership-item-title" class="text-xs text-slate-500 font-semibold">Nama Barang</p>
+            <h3 class="font-extrabold text-navy-900 text-base">Ownership History</h3>
+            <p id="ownership-item-title" class="text-xs text-slate-500 font-semibold">Item Name</p>
           </div>
         </div>
         <button onclick="document.getElementById('modal-ownership-history').classList.add('hidden')" class="text-slate-400 hover:text-slate-700 text-xl font-bold p-1">×</button>
@@ -801,7 +801,7 @@ import Layout from '../layouts/Layout.astro';
 
       <div class="pt-3 border-t border-navy-100 flex justify-end">
         <button type="button" onclick="document.getElementById('modal-ownership-history').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold">
-          Tutup
+          Close
         </button>
       </div>
     </div>
@@ -878,11 +878,11 @@ import Layout from '../layouts/Layout.astro';
     function expandableDesc(text: string, fallback: string, maxLines: number, extraClasses = ''): string {
       const safe = escapeHtml((text || fallback).trim());
       if (safe.length < 100) return `<span class="${extraClasses}">${safe}</span>`;
-      return `<span class="desc-wrapper ${extraClasses}"><span class="desc-text line-clamp-${maxLines}">${safe}</span><button type="button" onclick="this.previousElementSibling.classList.contains('line-clamp-${maxLines}')?(this.previousElementSibling.classList.remove('line-clamp-${maxLines}'),this.textContent='Sembunyikan'):(this.previousElementSibling.classList.add('line-clamp-${maxLines}'),this.textContent='Selengkapnya')" class="desc-toggle ml-1 text-[11px] font-bold text-clay-600 hover:underline whitespace-nowrap">Selengkapnya</button></span>`;
+      return `<span class="desc-wrapper ${extraClasses}"><span class="desc-text line-clamp-${maxLines}">${safe}</span><button type="button" onclick="this.previousElementSibling.classList.contains('line-clamp-${maxLines}')?(this.previousElementSibling.classList.remove('line-clamp-${maxLines}'),this.textContent='Hide'):(this.previousElementSibling.classList.add('line-clamp-${maxLines}'),this.textContent='Show more')" class="desc-toggle ml-1 text-[11px] font-bold text-clay-600 hover:underline whitespace-nowrap">Show more</button></span>`;
     }
 
     function showNotice(message: string) {
-      window.stuff8Toast?.(message, { variant: 'info', title: 'Perhatian' });
+      window.stuff8Toast?.(message, { variant: 'info', title: 'Notice' });
     }
 
     // Reveal-on-scroll for landing sections (respects reduced motion).
@@ -923,8 +923,8 @@ import Layout from '../layouts/Layout.astro';
 
     function categoryLabel(category: string) {
       const labels: Record<string, string> = {
-        Electronics: 'Elektronik', Cameras: 'Kamera', Bicycles: 'Sepeda',
-        Books: 'Buku', 'Musical Instruments': 'Alat Musik', Furniture: 'Furnitur'
+        Electronics: 'Electronics', Cameras: 'Cameras', Bicycles: 'Bicycles',
+        Books: 'Books', 'Musical Instruments': 'Musical Instruments', Furniture: 'Furniture'
       };
       return labels[category] || category;
     }
@@ -1002,7 +1002,7 @@ import Layout from '../layouts/Layout.astro';
       };
 
       categoryTabs.innerHTML = [
-        renderTab('all', 'Semua', inventoryMeta.total),
+        renderTab('all', 'All', inventoryMeta.total),
         ...categories.map(category => renderTab(category, categoryLabel(category), inventoryMeta.category_counts.find(entry => entry.category === category)?.count || 0))
       ].join('');
       syncCategorySelects();
@@ -1030,7 +1030,7 @@ import Layout from '../layouts/Layout.astro';
         input.type = reveal ? 'text' : 'password';
         button.querySelector<SVGElement>('[data-password-eye="hidden"]')?.classList.toggle('hidden', reveal);
         button.querySelector<SVGElement>('[data-password-eye="visible"]')?.classList.toggle('hidden', !reveal);
-        button.setAttribute('aria-label', reveal ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+        button.setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
         button.setAttribute('aria-pressed', String(reveal));
       });
     });
@@ -1165,7 +1165,7 @@ import Layout from '../layouts/Layout.astro';
     function renderProductPhotoCarousel(item: any, carouselKey: string, imageClass: string) {
       const photos = Array.isArray(item.photos) ? item.photos.filter(Boolean) : [];
       if (photos.length === 0) {
-        return `<img src="${storagePhotoUrl()}" alt="Gambar barang belum tersedia" loading="lazy" decoding="async" class="${imageClass} object-contain p-5" />`;
+        return `<img src="${storagePhotoUrl()}" alt="No item image available" loading="lazy" decoding="async" class="${imageClass} object-contain p-5" />`;
       }
 
       const currentIndex = ((productPhotoIndexes.get(carouselKey) || 0) + photos.length) % photos.length;
@@ -1177,17 +1177,17 @@ import Layout from '../layouts/Layout.astro';
       return `
         <div data-slide-track="${carouselKey}" class="flex size-full" style="transition:transform .35s cubic-bezier(.4,0,.2,1)">
           ${photos.map((slide, index) => {
-            const label = escapeHtml(item.title || `Media barang ${index + 1}`);
+            const label = escapeHtml(item.title || `Item media ${index + 1}`);
             return isVideoKey(slide)
               ? videoMarkup({ src: storagePhotoUrl(slide), className: `${imageClass} object-cover shrink-0`, label, controls: true })
               : thumbImageSrc(PHOTOS_API, slide, label, `${imageClass} object-cover shrink-0`);
           }).join('')}
         </div>
         ${photos.length > 1 ? `
-          <button type="button" onclick="${previousAction}" class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto sebelumnya">
+          <button type="button" onclick="${previousAction}"             class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Previous photo">
             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" /></svg>
           </button>
-          <button type="button" onclick="${nextAction}" class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Foto berikutnya">
+          <button type="button" onclick="${nextAction}" class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-1.5 text-navy-900 shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900" aria-label="Next photo">
             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" /></svg>
           </button>
           <span class="absolute bottom-2 right-2 rounded-full bg-navy-950/70 px-2 py-0.5 text-[11px] font-semibold text-white" data-slide-count="${carouselKey}">${currentIndex + 1}/${photos.length}</span>
@@ -1202,7 +1202,7 @@ import Layout from '../layouts/Layout.astro';
     function openItemEditor(itemId: string) {
       const item = items.find(entry => entry.id === itemId);
       if (!item || !currentSession?.user || item.owner_id !== currentSession.user.id) {
-        showNotice('Hanya pemilik barang yang dapat mengubah data ini.');
+        showNotice('Only the item owner can edit this.');
         return;
       }
       location.assign(`/inventory/form/?id=${encodeURIComponent(itemId)}`);
@@ -1212,7 +1212,7 @@ import Layout from '../layouts/Layout.astro';
       item?.is_sold || item?.isSold
       || (typeof item?.status === 'string' && item.status.toLowerCase() === 'sold')
     );
-    const soldListingLink = (item: any) => `<a href="${marketplaceDetailPath(item)}" onclick="event.stopPropagation()" class="text-xs font-bold text-navy-900 underline hover:text-navy-700">Lihat listing</a>`;
+    const soldListingLink = (item: any) => `<a href="${marketplaceDetailPath(item)}" onclick="event.stopPropagation()" class="text-xs font-bold text-navy-900 underline hover:text-navy-700">View listing</a>`;
 
     // Modal Triggers
     async function resetInventory() { inventoryPage = 1; await goToInventoryPage(1); }
@@ -1241,7 +1241,7 @@ import Layout from '../layouts/Layout.astro';
 
     // Wizard Controls
     function setWizardStep(step: 1 | 2) {
-      if (wizardStepIndicator) wizardStepIndicator.textContent = `Langkah ${step} dari 2`;
+      if (wizardStepIndicator) wizardStepIndicator.textContent = `Step ${step} of 2`;
       step1?.classList.toggle('hidden', step !== 1);
       step2?.classList.toggle('hidden', step !== 2);
       step3?.classList.add('hidden');
@@ -1349,13 +1349,13 @@ import Layout from '../layouts/Layout.astro';
           await loadData();
         } else {
           if (authSigninError) {
-            authSigninError.textContent = data.message || data.error || 'Gagal masuk. Username atau kata sandi salah, coba cek lagi ya.';
+            authSigninError.textContent = data.message || data.error || 'Sign-in failed. Wrong username or password, please check again.';
             authSigninError.classList.remove('hidden');
           }
         }
       } catch (err) {
         if (authSigninError) {
-          authSigninError.textContent = 'Gagal terhubung ke layanan Auth di ' + AUTH_API;
+          authSigninError.textContent = 'Failed to connect to the Auth service at ' + AUTH_API;
           authSigninError.classList.remove('hidden');
         }
       }
@@ -1382,7 +1382,7 @@ import Layout from '../layouts/Layout.astro';
         try {
           data = raw ? JSON.parse(raw) : {};
         } catch {
-          throw new Error('Layanan Auth mengembalikan respons yang tidak valid. Coba lagi.');
+          throw new Error('The Auth service returned an invalid response. Try again.');
         }
         if (res.ok && data.token) {
           currentSession = data;
@@ -1394,13 +1394,13 @@ import Layout from '../layouts/Layout.astro';
           setWizardStep(2);
         } else {
           if (authSignupError) {
-            authSignupError.textContent = data.message || data.error || 'Gagal pendaftaran. Cek syarat kata sandi atau username/email yang mungkin sudah terdaftar.';
+            authSignupError.textContent = data.message || data.error || 'Registration failed. Check the password requirements or whether the username/email is already registered.';
             authSignupError.classList.remove('hidden');
           }
         }
       } catch (err) {
         if (authSignupError) {
-          authSignupError.textContent = 'Gagal terhubung ke layanan Auth di ' + AUTH_API;
+          authSignupError.textContent = 'Failed to connect to the Auth service at ' + AUTH_API;
           authSignupError.classList.remove('hidden');
         }
       }
@@ -1426,7 +1426,7 @@ import Layout from '../layouts/Layout.astro';
         const freshPermissions = await fetchAccessRights(AUTH_API, currentSession?.token || '');
         const authorizedUser = { ...currentSession?.user, permissions: freshPermissions.length ? freshPermissions : (currentSession?.user?.permissions ?? []) };
         if (!can(authorizedUser, 'marketplace:publish')) {
-          window.stuff8Toast?.('Verifikasi email kamu dulu untuk bisa menjual barang di Marketplace.', { variant: 'error', title: 'Belum bisa dijual' });
+          window.stuff8Toast?.('Verify your email first to sell items in the Marketplace.', { variant: 'error', title: 'Cannot sell yet' });
           (document.getElementById('w-item-sellable') as HTMLInputElement).checked = false;
           return;
         }
@@ -1460,14 +1460,14 @@ import Layout from '../layouts/Layout.astro';
               body: JSON.stringify({
                 item_id: newItem.id,
               seller_id: currentSession.user.id,
-              seller_name: currentSession.user.name || currentSession.user.username || 'Pemilik Stuff8',
+              seller_name: currentSession.user.name || currentSession.user.username || 'Stuff8 owner',
                 title: newItem.title,
                 description: newItem.description,
                 category: newItem.category,
                 condition: newItem.condition,
                 photos: newItem.photos || [],
                 asking_price: estVal,
-                general_location: location || 'Area Lokal',
+                general_location: location || 'Local Area',
                 sellable: true
               })
             });
@@ -1478,7 +1478,7 @@ import Layout from '../layouts/Layout.astro';
       }
 
       localStorage.setItem('stuff8_wizard_completed', 'true');
-      window.stuff8Toast?.('Barang pertama kamu tersimpan dan siap diurus.', { variant: 'success', title: 'Selamat datang di Stuff8!' });
+      window.stuff8Toast?.('Your first item is saved and ready to manage.', { variant: 'success', title: 'Welcome to Stuff8!' });
       closeWizard();
       await loadData();
     });
@@ -1499,45 +1499,45 @@ import Layout from '../layouts/Layout.astro';
     }> = {
       camera: {
         id: 'demo-camera',
-        title: 'Kamera Compact Fujifilm X100V',
-        category: 'Kamera & Fotografi',
-        location: 'Lokasi: Lemari Rak B',
+        title: 'Fujifilm X100V Compact Camera',
+        category: 'Camera & Photography',
+        location: 'Location: Closet Shelf B',
         value: 21750000,
-        condition: 'Mulus Beli Baru',
-        desc: 'Kondisi mulus banget, lensa fix 23mm F2, shutter count di bawah 2.500. Lengkap dus ori dan strap kulit.',
+        condition: 'Like New',
+        desc: 'Flawless condition, fixed 23mm F2 lens, shutter count under 2,500. Comes with original box and leather strap.',
         img: '/fujifilm-camera.jpg',
         isSellable: false
       },
       bike: {
         id: 'demo-bike',
-        title: 'Sepeda Balap Vintage Specialized Allez',
-        category: 'Olahraga & Sepeda',
-        location: 'Lokasi: Rak Garasi #1',
+        title: 'Vintage Specialized Allez Road Bike',
+        category: 'Sports & Cycling',
+        location: 'Location: Garage Rack #1',
         value: 10200000,
-        condition: 'Bagus',
-        desc: 'Frame alloy ringan, groupset Shimano 105, baru aja diservis rutin. Siap gowes.',
+        condition: 'Good',
+        desc: 'Lightweight alloy frame, Shimano 105 groupset, freshly serviced. Ready to ride.',
         img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600&q=80',
         isSellable: false
       },
       macbook: {
         id: 'demo-macbook',
         title: 'Apple MacBook Pro 14" M2 Pro',
-        category: 'Elektronik & Laptop',
-        location: 'Lokasi: Laci Meja Kerja',
+        category: 'Electronics & Laptops',
+        location: 'Location: Desk Drawer',
         value: 27000000,
-        condition: 'Mulus Beli Baru',
-        desc: 'RAM 16GB, SSD 512GB, Space Gray. Kebugaran baterai 98%. Lengkap dengan charger MagSafe ori.',
+        condition: 'Like New',
+        desc: '16GB RAM, 512GB SSD, Space Gray. 98% battery health. Includes original MagSafe charger.',
         img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80',
         isSellable: false
       },
       guitar: {
         id: 'demo-guitar',
-        title: 'Gitar Akustik Taylor GS Mini',
-        category: 'Alat Musik',
-        location: 'Lokasi: Sudut Studio',
+        title: 'Taylor GS Mini Acoustic Guitar',
+        category: 'Musical Instruments',
+        location: 'Location: Studio Corner',
         value: 6300000,
-        condition: 'Bagus',
-        desc: 'Kayu mahogany, karakter suara hangat dan nyaring. Bonus gigbag ori Taylor.',
+        condition: 'Good',
+        desc: 'Mahogany wood, warm and resonant sound. Comes with the original Taylor gig bag.',
         img: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=600&q=80',
         isSellable: false
       }
@@ -1568,24 +1568,24 @@ import Layout from '../layouts/Layout.astro';
 
       if (item.isSellable) {
         if (badgeEl) {
-          badgeEl.textContent = 'Dipajang di Marketplace';
+          badgeEl.textContent = 'Listed on the Marketplace';
           badgeEl.className = 'absolute top-3 right-3 px-3 py-1 rounded-md text-xs font-bold bg-navy-900 text-white shadow-xs backdrop-blur-xs transition-all';
         }
         if (btnToggle) {
-          btnToggle.innerHTML = '<span>Sembunyikan dari Marketplace</span>';
+          btnToggle.innerHTML = '<span>Hide from the Marketplace</span>';
           btnToggle.className = 'inline-flex items-center gap-2 rounded-full bg-navy-200 hover:bg-slate-300 px-4 py-2 text-xs font-bold text-navy-900 transition-all';
         }
-        if (toggleLabel) toggleLabel.textContent = 'Status: Lagi tayang di feed marketplace';
+        if (toggleLabel) toggleLabel.textContent = 'Status: Currently live on the marketplace feed';
       } else {
         if (badgeEl) {
-          badgeEl.textContent = 'Simpanan Privat';
+          badgeEl.textContent = 'Private Collection';
           badgeEl.className = 'absolute right-3 top-3 rounded-md bg-navy-900/90 px-3 py-1 text-xs font-bold text-white shadow-xs backdrop-blur-xs transition-all';
         }
         if (btnToggle) {
-          btnToggle.innerHTML = '<span>Aktifkan Status Dijual</span>';
+          btnToggle.innerHTML = '<span>Activate For Sale</span>';
           btnToggle.className = 'inline-flex items-center gap-2 rounded-full bg-navy-900 hover:bg-navy-800 px-4 py-2 text-xs font-bold text-white shadow-xs transition-all';
         }
-        if (toggleLabel) toggleLabel.textContent = 'Status: Cuma Disimpan Privat';
+        if (toggleLabel) toggleLabel.textContent = 'Status: Private Only';
       }
     }
 
@@ -1634,10 +1634,10 @@ import Layout from '../layouts/Layout.astro';
       const elOther = document.getElementById('calc-val-other');
       const totalDisplay = document.getElementById('calc-total-display');
 
-      if (elElec) elElec.textContent = `${rElec} barang (Rp ${valElec.toLocaleString('id-ID')})`;
-      if (elSport) elSport.textContent = `${rSport} barang (Rp ${valSport.toLocaleString('id-ID')})`;
-      if (elMusic) elMusic.textContent = `${rMusic} barang (Rp ${valMusic.toLocaleString('id-ID')})`;
-      if (elOther) elOther.textContent = `${rOther} barang (Rp ${valOther.toLocaleString('id-ID')})`;
+      if (elElec) elElec.textContent = `${rElec} items (Rp ${valElec.toLocaleString('id-ID')})`;
+      if (elSport) elSport.textContent = `${rSport} items (Rp ${valSport.toLocaleString('id-ID')})`;
+      if (elMusic) elMusic.textContent = `${rMusic} items (Rp ${valMusic.toLocaleString('id-ID')})`;
+      if (elOther) elOther.textContent = `${rOther} items (Rp ${valOther.toLocaleString('id-ID')})`;
       if (totalDisplay) totalDisplay.textContent = `Rp ${total.toLocaleString('id-ID')}`;
     }
 
@@ -1731,7 +1731,7 @@ import Layout from '../layouts/Layout.astro';
             location.assign(`/inventory/form/?id=${encodeURIComponent(editParam)}`);
             return;
           }
-          showNotice('Barang ini tidak dapat diedit: bukan milik Anda atau sudah berpindah tangan.');
+          showNotice('This item cannot be edited: it is not yours or it has already changed hands.');
           history.replaceState(null, '', '/inventory/');
         }
 
@@ -1754,14 +1754,14 @@ import Layout from '../layouts/Layout.astro';
                   body: JSON.stringify({
                     item_id: item.id,
                     seller_id: item.owner_id,
-                    seller_name: currentSession?.user?.name || currentSession?.user?.username || 'Pemilik Stuff8',
+                    seller_name: currentSession?.user?.name || currentSession?.user?.username || 'Stuff8 owner',
                     title: item.title,
                     description: item.description,
                     category: item.category,
                     condition: item.condition,
                     photos: item.photos || [],
                     asking_price: item.asking_price || item.estimated_value || 0,
-                    general_location: item.storage_location || 'Area Lokal',
+                    general_location: item.storage_location || 'Local Area',
                     sellable: true
                   })
                 }).catch(() => {});
@@ -1839,7 +1839,7 @@ import Layout from '../layouts/Layout.astro';
       }
       const key = itemId.replace('demo-', '');
       const item = items.find(i => i.id === itemId) || marketplaceListings.find(m => m.item_id === itemId) || demoItems[key];
-      const sellerName = item?.owner_name || 'Penjual Asal (Owner Pertama)';
+      const sellerName = item?.owner_name || 'Original Seller (First Owner)';
 
       const initialRecords: any[] = [{
         id: 'prov_init_' + itemId,
@@ -1863,7 +1863,7 @@ import Layout from '../layouts/Layout.astro';
           to_owner_name: item?.buyer_name || 'Ahmad Fauzi',
           price: item?.final_price || item?.asking_price || 0,
           transferred_at: item?.sold_at || new Date().toISOString(),
-          notes: 'Terjual via Bidding COD & Disetujui Penjual'
+          notes: 'Sold via COD bidding & approved by the seller'
         });
       }
 
@@ -1880,7 +1880,7 @@ import Layout from '../layouts/Layout.astro';
 
       const key = itemId.replace('demo-', '');
       const item = items.find(i => i.id === itemId) || marketplaceListings.find(m => m.item_id === itemId) || demoItems[key];
-      const itemTitle = item ? item.title : `Barang #${itemId}`;
+      const itemTitle = item ? item.title : `Item #${itemId}`;
       if (titleEl) titleEl.textContent = itemTitle;
 
       let records: any[] = [];
@@ -1899,7 +1899,7 @@ import Layout from '../layouts/Layout.astro';
         const isLatest = idx === records.length - 1;
         const isSoldRecord = (rec.notes || '').toLowerCase().includes('terjual') || (rec.notes || '').toLowerCase().includes('sold');
         const isInitialRecord = (rec.notes || '').toLowerCase().includes('terdaftar pertama') || (rec.notes || '').toLowerCase().includes('katalog inventory');
-        const dateStr = rec.transferred_at ? (new Date(rec.transferred_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })) : 'Baru saja';
+        const dateStr = rec.transferred_at ? (new Date(rec.transferred_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })) : 'Just now';
 
         return `
           <div class="relative pl-8 pb-4 border-l-2 ${isLatest ? 'border-emerald-500' : 'border-navy-100'} last:pb-0">
@@ -1951,8 +1951,8 @@ import Layout from '../layouts/Layout.astro';
       if (allListings.length === 0) {
         visitorMktGrid.innerHTML = `
           <div class="col-span-full p-8 rounded-2xl bg-white border border-navy-100 text-center space-y-3 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-            <h4 class="text-sm font-bold text-navy-900">Belum Ada Barang Dipajang</h4>
-            <p class="text-xs text-slate-500 max-w-sm mx-auto">Aktifkan status dijual pada contoh barang di atas untuk memajangnya di marketplace komunitas.</p>
+            <h4 class="text-sm font-bold text-navy-900">No Items Listed Yet</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">Turn on For Sale for the sample items above to list them in the community marketplace.</p>
           </div>
         `;
       } else {
@@ -1985,11 +1985,11 @@ import Layout from '../layouts/Layout.astro';
                 <div class="absolute top-3 right-3 flex flex-col gap-1 items-end">
                   ${isSold ? `
                     <span class="px-2.5 py-1 rounded-md text-xs font-black bg-rose-600 text-white shadow-md">
-                      🏷️ SOLD / TERJUAL
+                      🏷️ SOLD
                     </span>
                   ` : hasInterview ? `
                     <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500 text-white shadow-xs flex items-center gap-1">
-                      💬 Dalam Diskusi
+                      💬 In Discussion
                     </span>
                   ` : `
                     <span class="num px-2.5 py-1 rounded-md text-xs font-bold bg-brand-600 text-white shadow-xs">
@@ -2002,24 +2002,24 @@ import Layout from '../layouts/Layout.astro';
                 <div>
                   <span class="text-xs font-bold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
                   <h3 class="font-bold text-navy-900 text-base leading-snug">${item.title}</h3>
-                  ${expandableDesc(item.description || '', 'Tanpa deskripsi', 2, 'text-xs text-slate-600 block mt-1')}
+                  ${expandableDesc(item.description || '', 'No description', 2, 'text-xs text-slate-600 block mt-1')}
                 </div>
 
                 <div class="space-y-2 pt-1">
                   ${isSold ? `
                     <div class="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex justify-between items-center">
-                      <span>Terjual ke: <strong>${item.buyer_name || 'Pembeli'}</strong></span>
+                        <span>Sold to: <strong>${item.buyer_name || 'Buyer'}</strong></span>
                       <strong class="num text-emerald-700">Rp ${parseInt((item.final_price || item.asking_price || 0).toString()).toLocaleString('id-ID')}</strong>
                     </div>
                     <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2.5 rounded-lg border border-navy-100 hover:bg-paper-100 text-navy-900 font-bold text-xs transition-all flex items-center justify-center gap-1.5">
-                      <span>📜 Riwayat Kepemilikan (Provenance)</span>
+                      <span>📜 Ownership History (Provenance)</span>
                     </button>
                   ` : `
                     <button onclick="openBidModal('${itemId}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-xs transition-all">
-                      Ajukan Penawaran Harga
+                      Submit a Price Offer
                     </button>
                     <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2 rounded-lg border border-navy-100 hover:bg-paper-100 text-slate-600 font-semibold text-[11px] transition-all flex items-center justify-center gap-1">
-                      <span>📜 Riwayat Kepemilikan</span>
+                      <span>📜 Ownership History</span>
                     </button>
                   `}
                 </div>
@@ -2043,7 +2043,7 @@ import Layout from '../layouts/Layout.astro';
       }
       inventoryPagination.className = 'flex items-center justify-center gap-1 pt-2';
       const pages: string[] = [];
-      pages.push(`<button type="button" class="page-btn rounded-lg border border-navy-100 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-brand-50 hover:text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed" ${inventoryPage <= 1 ? 'disabled' : ''} data-page="${inventoryPage - 1}" aria-label="Halaman sebelumnya">&laquo; Sebelumnya</button>`);
+      pages.push(`<button type="button" class="page-btn rounded-lg border border-navy-100 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-brand-50 hover:text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed" ${inventoryPage <= 1 ? 'disabled' : ''} data-page="${inventoryPage - 1}" aria-label="Previous page">&laquo; Previous</button>`);
       const maxVisible = 5;
       let start = Math.max(1, inventoryPage - Math.floor(maxVisible / 2));
       let end = Math.min(totalPages, start + maxVisible - 1);
@@ -2053,7 +2053,7 @@ import Layout from '../layouts/Layout.astro';
         pages.push(`<button type="button" class="page-btn rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${p === inventoryPage ? 'border-brand-600 bg-brand-600 text-white' : 'border-navy-100 bg-white text-slate-600 hover:bg-brand-50 hover:text-brand-700'}" data-page="${p}">${p}</button>`);
       }
       if (end < totalPages) pages.push(`<span class="px-1 text-xs text-slate-400">...</span>`);
-      pages.push(`<button type="button" class="page-btn rounded-lg border border-navy-100 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-brand-50 hover:text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed" ${inventoryPage >= totalPages ? 'disabled' : ''} data-page="${inventoryPage + 1}" aria-label="Halaman berikutnya">Selanjutnya &raquo;</button>`);
+      pages.push(`<button type="button" class="page-btn rounded-lg border border-navy-100 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-brand-50 hover:text-brand-700 disabled:opacity-40 disabled:cursor-not-allowed" ${inventoryPage >= totalPages ? 'disabled' : ''} data-page="${inventoryPage + 1}" aria-label="Next page">Next &raquo;</button>`);
       inventoryPagination.innerHTML = pages.join('');
       inventoryPagination.querySelectorAll<HTMLButtonElement>('.page-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -2081,9 +2081,9 @@ import Layout from '../layouts/Layout.astro';
       const totalVal = inventoryMeta.total_value;
       if (inventoryTotalValue) {
         if (hasInventory) animateNumber(inventoryTotalValue, totalVal, n => `Rp ${n.toLocaleString('id-ID')}`);
-        else inventoryTotalValue.textContent = 'Belum ada nilai inventaris';
+        else inventoryTotalValue.textContent = 'No inventory value yet';
       }
-      if (inventoryTotalCount) inventoryTotalCount.textContent = hasInventory ? `${inventoryMeta.total} barang` : 'Belum ada barang';
+      if (inventoryTotalCount) inventoryTotalCount.textContent = hasInventory ? `${inventoryMeta.total} items` : 'No items yet';
 
       renderCategoryTabs();
 
@@ -2107,24 +2107,24 @@ import Layout from '../layouts/Layout.astro';
           const hasSelectedCategory = selectedInventoryCategory !== 'all';
           const showMarketplaceInvite = !hasSelectedCategory && !inventorySearch;
           const marketplaceAvailability = marketplaceListingTotal === 1
-            ? '1 barang sedang tersedia di Marketplace.'
-            : `${marketplaceListingTotal.toLocaleString('id-ID')} barang sedang tersedia di Marketplace.`;
+            ? '1 item is currently available on the Marketplace.'
+            : `${marketplaceListingTotal.toLocaleString('id-ID')} items are currently available on the Marketplace.`;
           gridInventory.innerHTML = `
             <div class="flex min-h-80 flex-1 flex-col items-center justify-center rounded-2xl border border-navy-100 bg-white p-6 text-center shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
-              <img src="/images/no-item-image.webp" alt="Inventaris masih kosong" class="mb-4 size-36 object-contain sm:size-40" loading="lazy" decoding="async" />
+              <img src="/images/no-item-image.webp" alt="Inventory is still empty" class="mb-4 size-36 object-contain sm:size-40" loading="lazy" decoding="async" />
               <div class="space-y-1">
-                <h3 class="text-sm font-bold text-navy-900">${hasSelectedCategory ? `Belum ada barang di ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'Belum ada barang'}</h3>
-                <p class="mx-auto max-w-sm text-xs leading-relaxed text-slate-600">Tambahkan barang untuk mulai mengatur inventarismu.</p>
+                <h3 class="text-sm font-bold text-navy-900">${hasSelectedCategory ? `No items in ${escapeHtml(categoryLabel(selectedInventoryCategory))}` : 'No items yet'}</h3>
+                <p class="mx-auto max-w-sm text-xs leading-relaxed text-slate-600">Add an item to start organizing your inventory.</p>
               </div>
               <a href="/inventory/form/" class="mt-3 inline-flex min-h-9 items-center justify-center rounded-full bg-navy-900 px-3 py-2 text-xs font-bold text-white shadow-xs transition-colors hover:bg-navy-800">
-                Tambah barang
+                Add item
               </a>
               ${showMarketplaceInvite ? `
                 <div class="mt-5 max-w-sm border-t border-navy-100 pt-4">
-                  <p class="text-sm font-semibold text-navy-900">Sambil mulai, cari inspirasi di Marketplace.</p>
+                  <p class="text-sm font-semibold text-navy-900">While you get started, find some inspiration in the Marketplace.</p>
                   <p id="empty-inventory-marketplace-count" class="mt-1 text-xs leading-relaxed text-slate-500">${marketplaceAvailability}</p>
                   <a href="/marketplace/" class="mt-3 inline-flex items-center gap-1 text-xs font-bold text-brand-700 transition-colors hover:text-brand-800">
-                    Lihat Marketplace <span aria-hidden="true">→</span>
+                    View Marketplace <span aria-hidden="true">→</span>
                   </a>
                 </div>
               ` : ''}
@@ -2136,15 +2136,15 @@ import Layout from '../layouts/Layout.astro';
               <div class="card-img-zoom relative size-20 shrink-0 overflow-hidden rounded-xl bg-navy-100">${renderProductPhotoCarousel(item, `inventory-list-${item.id}`, 'size-full')}</div>
               <div class="min-w-0 flex-1">
                 <div class="flex items-start justify-between gap-3"><div class="min-w-0"><p class="truncate text-[11px] font-bold uppercase tracking-wider text-clay-600">${item.category}</p><h3 class="truncate text-sm font-bold text-navy-900">${item.title}</h3></div><span class="num shrink-0 text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span></div>
-                ${expandableDesc(item.description || '', 'Tanpa deskripsi', 1, 'text-xs text-slate-500 block mt-1')}
+                ${expandableDesc(item.description || '', 'No description', 1, 'text-xs text-slate-500 block mt-1')}
                 ${isItemSold(item)
-                  ? `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-bold text-brand-700">✓ SOLD (Terjual)</span>${soldListingLink(item)}</div>`
-                  : `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-semibold ${item.sellable ? 'text-navy-900' : 'text-slate-500'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span><button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" class="text-xs font-bold text-clay-700 hover:underline">${item.sellable ? 'Sembunyikan' : 'Jual'}</button></div>`}
+                  ? `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-bold text-brand-700">✓ SOLD</span>${soldListingLink(item)}</div>`
+                  : `<div class="mt-2 flex items-center justify-between"><span class="text-[11px] font-semibold ${item.sellable ? 'text-navy-900' : 'text-slate-500'}">${item.sellable ? 'For Sale' : 'Private Collection'}</span><button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" class="text-xs font-bold text-clay-700 hover:underline">${item.sellable ? 'Hide' : 'Sell'}</button></div>`}
               </div>
             </article>
           ` : inventoryView === 'thumbnail' ? `
             <article onclick="location.assign('/inventory/detail/?id=${encodeURIComponent(item.id)}')" class="card-interactive cursor-pointer overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-[0_1px_2px_rgba(15,30,25,0.04)] hover:border-clay-300 hover:shadow-md">
-              <div class="card-img-zoom relative aspect-square bg-navy-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-bold text-white">SOLD (Terjual)</span>` : ''}</div>
+              <div class="card-img-zoom relative aspect-square bg-navy-100">${renderProductPhotoCarousel(item, `inventory-thumbnail-${item.id}`, 'size-full')}${isItemSold(item) ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[10px] font-bold text-white">SOLD</span>` : ''}</div>
               <div class="space-y-1 p-3"><p class="truncate text-[11px] font-bold text-clay-600">${item.category}</p><h3 class="mt-0.5 truncate text-sm font-bold text-navy-900">${item.title}</h3><p class="num text-sm font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</p></div>
             </article>
           ` : `
@@ -2152,8 +2152,8 @@ import Layout from '../layouts/Layout.astro';
               <div class="card-img-zoom h-36 sm:h-48 bg-navy-100 relative overflow-hidden flex items-center justify-center">
                 ${renderProductPhotoCarousel(item, `inventory-card-${item.id}`, 'w-full h-full')}
                 ${isItemSold(item)
-                  ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[11px] font-bold text-white shadow-xs">SOLD (Terjual)</span>`
-                  : `<span class="absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-semibold ${item.sellable ? 'bg-navy-900 text-white shadow-xs' : 'bg-navy-200 text-slate-700'}">${item.sellable ? 'Dijual' : 'Koleksi Pribadi'}</span>`}
+                  ? `<span class="absolute top-2 right-2 rounded-md bg-brand-600 px-2 py-1 text-[11px] font-bold text-white shadow-xs">SOLD</span>`
+                  : `<span class="absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-semibold ${item.sellable ? 'bg-navy-900 text-white shadow-xs' : 'bg-navy-200 text-slate-700'}">${item.sellable ? 'For Sale' : 'Private Collection'}</span>`}
               </div>
               <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
                 <div>
@@ -2162,30 +2162,30 @@ import Layout from '../layouts/Layout.astro';
                     ${item.condition ? `<span class="shrink-0 rounded-md bg-navy-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">${escapeHtml(item.condition)}</span>` : ''}
                   </div>
                   <h3 class="font-bold text-navy-900 text-base leading-snug mt-1">${item.title}</h3>
-                  ${expandableDesc(item.description || '', 'Tanpa deskripsi', 2, 'text-xs text-slate-500 block mt-1')}
+                  ${expandableDesc(item.description || '', 'No description', 2, 'text-xs text-slate-500 block mt-1')}
                 </div>
 
                 <div class="pt-3 border-t border-navy-100 text-xs space-y-1.5">
                   <div class="flex justify-between text-slate-500">
-                    <span>Lokasi Simpan:</span> <span class="font-medium text-navy-800">${item.storage_location || '-'}</span>
+                    <span>Storage Location:</span> <span class="font-medium text-navy-800">${item.storage_location || '-'}</span>
                   </div>
                   <div class="flex justify-between items-baseline text-slate-500">
-                    <span>Nilai Jual:</span> <span class="num text-base font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span>
+                    <span>Sale Value:</span> <span class="num text-base font-extrabold text-clay-700">Rp ${(item.estimated_value || 0).toLocaleString('id-ID')}</span>
                   </div>
                   ${item.sellable ? `<div class="flex justify-between items-baseline text-navy-900 font-bold">
-                    <span>Harga Buka:</span> <span class="num text-base">Rp ${(item.asking_price || 0).toLocaleString('id-ID')}</span>
+                    <span>Opening Price:</span> <span class="num text-base">Rp ${(item.asking_price || 0).toLocaleString('id-ID')}</span>
                   </div>` : ''}
                   ${isItemSold(item) ? `<div class="flex justify-between font-bold text-sm text-brand-700">
-                    <span>Terjual ke:</span> <span class="num">${escapeHtml(item.buyer_name || 'Pembeli')} · Rp ${(item.final_price || 0).toLocaleString('id-ID')}</span>
+                    <span>Sold to:</span> <span class="num">${escapeHtml(item.buyer_name || 'Buyer')} · Rp ${(item.final_price || 0).toLocaleString('id-ID')}</span>
                   </div>` : ''}
                 </div>
 
                 <div class="flex items-center justify-between border-t border-navy-100 pt-3">
                   ${isItemSold(item)
-                    ? `<span class="text-xs font-bold text-brand-700">✓ SOLD (Terjual)</span>${soldListingLink(item)}`
+                    ? `<span class="text-xs font-bold text-brand-700">✓ SOLD</span>${soldListingLink(item)}`
                     : `<span class="text-xs font-semibold text-slate-600">Marketplace</span>
-                  <button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" role="switch" aria-checked="${item.sellable}" aria-label="${item.sellable ? 'Sembunyikan dari marketplace' : 'Tampilkan di marketplace'}" class="relative h-6 w-11 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay-500 ${item.sellable ? 'bg-brand-600' : 'bg-slate-300 hover:bg-slate-400'}">
-                    <span class="sr-only">${item.sellable ? 'Sembunyikan dari marketplace' : 'Tampilkan di marketplace'}</span>
+                  <button onclick="event.stopPropagation(); toggleSellable('${item.id}')" type="button" role="switch" aria-checked="${item.sellable}" aria-label="${item.sellable ? 'Hide from marketplace' : 'Show in marketplace'}" class="relative h-6 w-11 rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clay-500 ${item.sellable ? 'bg-brand-600' : 'bg-slate-300 hover:bg-slate-400'}">
+                    <span class="sr-only">${item.sellable ? 'Hide from marketplace' : 'Show in marketplace'}</span>
                     <span class="absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow-sm transition-transform ${item.sellable ? 'translate-x-5' : 'translate-x-0'}"></span>
                   </button>`}
                 </div>
@@ -2211,8 +2211,8 @@ import Layout from '../layouts/Layout.astro';
           gridMarketplace.innerHTML = `
             <div class="col-span-full p-12 rounded-2xl bg-white border border-navy-100 text-center space-y-4 shadow-xs">
               <div class="space-y-1">
-                <h3 class="text-navy-900 font-bold text-base">Belum Ada Barang Dipajang</h3>
-                <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Aktifkan status dijual pada barang di inventaris pribadimu untuk menayangkannya di sini.</p>
+                <h3 class="text-navy-900 font-bold text-base">No Items Listed Yet</h3>
+                <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Turn on For Sale for items in your personal inventory to list them here.</p>
               </div>
             </div>
           `;
@@ -2230,11 +2230,11 @@ import Layout from '../layouts/Layout.astro';
                   <div class="absolute top-3 right-3 flex flex-col gap-1 items-end">
                     ${isSold ? `
                       <span class="px-2.5 py-1 rounded-md text-xs font-black bg-rose-600 text-white shadow-md">
-                        🏷️ SOLD / TERJUAL
+                        🏷️ SOLD
                       </span>
                     ` : hasInterview ? `
                       <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500 text-white shadow-xs flex items-center gap-1">
-                        💬 Dalam Diskusi
+                        💬 In Discussion
                       </span>
                     ` : `
                       <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-navy-900 text-white shadow-xs">
@@ -2247,24 +2247,24 @@ import Layout from '../layouts/Layout.astro';
                   <div>
                     <span class="text-xs font-semibold text-brand-700 uppercase tracking-wider">${item.category} • ${item.condition}</span>
                     <h3 class="font-bold text-navy-900 text-base leading-snug">${item.title}</h3>
-                  ${expandableDesc(item.description || '', 'Tanpa deskripsi', 2, 'text-xs text-slate-600')}
+                  ${expandableDesc(item.description || '', 'No description', 2, 'text-xs text-slate-600')}
                   </div>
 
                   <div class="space-y-2 pt-1">
                     ${isSold ? `
                       <div class="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex justify-between items-center">
-                        <span>Terjual ke: <strong>${item.buyer_name || 'Pembeli'}</strong></span>
+                      <span>Sold to: <strong>${item.buyer_name || 'Buyer'}</strong></span>
                         <strong class="font-mono text-emerald-700">Rp ${parseInt((item.final_price || item.asking_price || 0).toString()).toLocaleString('id-ID')}</strong>
                       </div>
                       <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2.5 rounded-lg border border-navy-200 hover:bg-paper-100 text-slate-700 font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-2xs">
-                        <span>📜 Riwayat Kepemilikan (Provenance)</span>
+                        <span>📜 Ownership History (Provenance)</span>
                       </button>
                     ` : `
                       <button onclick="openBidModal('${itemId}', '${item.title}', ${item.asking_price || 0})" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all">
-                        Ajukan Penawaran Harga
+                        Submit a Price Offer
                       </button>
                       <button onclick="openOwnershipHistoryModal('${itemId}')" class="w-full py-2 rounded-lg border border-navy-100 hover:bg-paper-100 text-slate-600 font-semibold text-[11px] transition-all flex items-center justify-center gap-1">
-                        <span>📜 Riwayat Kepemilikan</span>
+                        <span>📜 Ownership History</span>
                       </button>
                     `}
                   </div>
@@ -2281,8 +2281,8 @@ import Layout from '../layouts/Layout.astro';
           listBids.innerHTML = `
             <div class="p-12 rounded-2xl bg-white border border-navy-100 text-center space-y-4 shadow-xs">
               <div class="space-y-1">
-                <h3 class="text-navy-900 font-bold text-base">Belum Ada Penawaran Masuk</h3>
-                <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">Saat calon pembeli ngirim penawaran tunai pada barangmu, daftarnya bakal muncul di sini.</p>
+                <h3 class="text-navy-900 font-bold text-base">No Incoming Offers Yet</h3>
+                <p class="text-slate-600 text-xs max-w-sm mx-auto leading-relaxed">When potential buyers send cash offers on your items, they will show up here.</p>
               </div>
             </div>
           `;
@@ -2290,14 +2290,14 @@ import Layout from '../layouts/Layout.astro';
           listBids.innerHTML = bids.map(bid => {
             const item = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id);
             const statusStr = typeof bid.status === 'string' ? bid.status : Object.keys(bid.status || {})[0] || 'Pending';
-            const statusDisplay = statusStr === 'Accepted' || statusStr === 'accepted' ? 'Diterima' : 'Menunggu Respons';
+            const statusDisplay = statusStr === 'Accepted' || statusStr === 'accepted' ? 'Accepted' : 'Awaiting Response';
             return `
               <div class="p-5 rounded-2xl bg-white border border-navy-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
                 <div class="space-y-1">
-                  <span class="text-xs font-bold uppercase tracking-wider text-brand-700">${item ? item.title : 'Barang #' + bid.item_id.substring(0, 8)}</span>
-                  <h4 class="font-bold text-navy-900 text-base">Penawaran: Rp ${(bid.amount || 0).toLocaleString('id-ID')} <span class="text-xs font-normal text-slate-500">oleh ${bid.buyer_name}</span></h4>
-                  <p class="text-slate-600 text-xs">${bid.note || 'Tidak ada pesan'}</p>
-                  <span class="inline-block text-xs text-slate-500">Kontak: <code class="text-navy-900 bg-navy-100 px-1.5 py-0.5 rounded border border-navy-100">${bid.contact_info}</code></span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-brand-700">${item ? item.title : 'Item #' + bid.item_id.substring(0, 8)}</span>
+                  <h4 class="font-bold text-navy-900 text-base">Offer: Rp ${(bid.amount || 0).toLocaleString('id-ID')} <span class="text-xs font-normal text-slate-500">by ${bid.buyer_name}</span></h4>
+                  <p class="text-slate-600 text-xs">${bid.note || 'No message'}</p>
+                  <span class="inline-block text-xs text-slate-500">Contact: <code class="text-navy-900 bg-navy-100 px-1.5 py-0.5 rounded border border-navy-100">${bid.contact_info}</code></span>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -2305,7 +2305,7 @@ import Layout from '../layouts/Layout.astro';
                     ${statusDisplay}
                   </span>
                   ${statusStr === 'Pending' || statusStr === 'pending' ? `
-                    <button onclick="acceptBid('${bid.id}')" class="px-4 py-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs">Terima Penawaran</button>
+                    <button onclick="acceptBid('${bid.id}')" class="px-4 py-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs">Accept Offer</button>
                   ` : ''}
                 </div>
               </div>
@@ -2343,7 +2343,7 @@ import Layout from '../layouts/Layout.astro';
         const freshPermissions = await fetchAccessRights(AUTH_API, currentSession?.token || '');
         const authorizedUser = { ...currentSession?.user, permissions: freshPermissions.length ? freshPermissions : (currentSession?.user?.permissions ?? []) };
         if (!can(authorizedUser, 'marketplace:publish')) {
-          window.stuff8Toast?.('Verifikasi email kamu dulu untuk bisa menjual barang di Marketplace.', { variant: 'error', title: 'Belum bisa dijual' });
+          window.stuff8Toast?.('Verify your email first to sell items in the Marketplace.', { variant: 'error', title: 'Cannot sell yet' });
           return;
         }
       }
@@ -2366,20 +2366,20 @@ import Layout from '../layouts/Layout.astro';
           body: JSON.stringify({
             item_id: item.id,
             seller_id: item.owner_id || (currentSession && currentSession.user ? currentSession.user.id : 'user_guest'),
-            seller_name: currentSession?.user?.name || currentSession?.user?.username || 'Pemilik Stuff8',
+            seller_name: currentSession?.user?.name || currentSession?.user?.username || 'Stuff8 owner',
             title: item.title,
             description: item.description,
             category: item.category,
             condition: item.condition,
             photos: item.photos || [],
             asking_price: askingPrice || 0,
-            general_location: item.storage_location || 'Area Lokal',
+            general_location: item.storage_location || 'Local Area',
             sellable: newSellable
           })
         });
 
         await loadData();
-        window.stuff8Toast?.(newSellable ? 'Barang kini tayang dan bisa ditawar di Pasar.' : 'Listing ditarik dari Pasar, kembali jadi koleksi pribadi.', { variant: 'success', title: newSellable ? 'Dipajang di Pasar' : 'Ditarik dari Pasar' });
+        window.stuff8Toast?.(newSellable ? 'Your item is now live and open to offers on the Marketplace.' : 'Listing removed from the Marketplace, back to a private collection.', { variant: 'success', title: newSellable ? 'Listed on the Marketplace' : 'Removed from the Marketplace' });
       } catch (err) {
         console.error('Failed to toggle sellable state:', err);
       }
@@ -2423,11 +2423,11 @@ import Layout from '../layouts/Layout.astro';
             diffBadgeEl.textContent = `-Rp ${absDiff.toLocaleString('id-ID')} (${pctStr})`;
             diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 border border-rose-300 transition-all select-none whitespace-nowrap";
           } else {
-            diffBadgeEl.textContent = "Harga Pas (0%)";
+            diffBadgeEl.textContent = "Exact Price (0%)";
             diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-navy-100 text-slate-700 border border-navy-200 transition-all select-none whitespace-nowrap";
           }
         } else {
-          diffBadgeEl.textContent = "Harga Pas";
+          diffBadgeEl.textContent = "Exact Price";
           diffBadgeEl.className = "text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-navy-100 text-slate-700 border border-navy-200 transition-all select-none whitespace-nowrap";
         }
       }
@@ -2458,8 +2458,8 @@ import Layout from '../layouts/Layout.astro';
         currentHighestBid = currentBidBasePrice;
       }
 
-      document.getElementById('bid-asking-price')!.textContent = `Harga Buka: Rp ${price.toLocaleString('id-ID')}` +
-        (currentHighestBid > currentBidBasePrice ? ` • Tertinggi: Rp ${currentHighestBid.toLocaleString('id-ID')}` : '');
+      document.getElementById('bid-asking-price')!.textContent = `Opening Price: Rp ${price.toLocaleString('id-ID')}` +
+        (currentHighestBid > currentBidBasePrice ? ` • Highest: Rp ${currentHighestBid.toLocaleString('id-ID')}` : '');
 
       // Find existing bidders for this item to ensure 1 offer per user
       const existingBidders = new Set<string>(
@@ -2469,7 +2469,7 @@ import Layout from '../layouts/Layout.astro';
       const availableNames = INDONESIAN_NAMES.filter(name => !existingBidders.has(name));
       const chosenName = availableNames.length > 0
         ? availableNames[Math.floor(Math.random() * availableNames.length)]
-        : `Penawaran #${existingBidders.size + 1}`;
+        : `Offer #${existingBidders.size + 1}`;
 
       document.getElementById('bid-sim-name')!.textContent = chosenName;
 
@@ -2553,12 +2553,12 @@ import Layout from '../layouts/Layout.astro';
       const currentUserId = currentSession?.user?.id || 'seller_id';
 
       container.innerHTML = msgList.map(msg => {
-        const isMe = msg.sender_id === currentUserId || msg.sender_name?.includes('Penjual') || msg.sender_name === currentSession?.user?.name;
-        const timeStr = msg.created_at ? (new Date(msg.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })) : 'Baru saja';
+        const isMe = msg.sender_id === currentUserId || msg.sender_name?.includes('Seller') || msg.sender_name === currentSession?.user?.name;
+        const timeStr = msg.created_at ? (new Date(msg.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })) : 'Just now';
 
         return `
           <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1">
-            <span class="text-[10px] text-slate-400 font-semibold px-1">${isMe ? 'Anda (Penjual)' : msg.sender_name} • ${timeStr}</span>
+            <span class="text-[10px] text-slate-400 font-semibold px-1">${isMe ? 'You (Seller)' : msg.sender_name} • ${timeStr}</span>
             <div class="max-w-[82%] px-4 py-2.5 rounded-2xl text-xs leading-relaxed ${
               isMe 
                 ? 'bg-navy-900 text-white rounded-tr-none shadow-xs' 
@@ -2581,7 +2581,7 @@ import Layout from '../layouts/Layout.astro';
       if (inputEl) inputEl.value = '';
 
       const senderId = currentSession?.user?.id || 'seller_id';
-      const senderName = currentSession?.user?.name || currentSession?.user?.username || 'Penjual';
+      const senderName = currentSession?.user?.name || currentSession?.user?.username || 'Seller';
 
       const newMsg = {
         id: 'msg_' + Date.now(),
@@ -2614,15 +2614,15 @@ import Layout from '../layouts/Layout.astro';
 
       // Trigger automatic realistic reply from chosen bidder after 1.2s
       const targetBid = bids.find(b => b.id === bidId);
-      const buyerName = targetBid ? targetBid.buyer_name : 'Bidder Pilihan';
+      const buyerName = targetBid ? targetBid.buyer_name : 'Chosen Bidder';
       
       setTimeout(async () => {
         if (activeChatBidId === bidId) {
           const replies = [
-            `Siap kak! Lokasi COD di mana yang enak? Saya ikut arahan penjual.`,
-            `Oke sip, barangnya lengkap dan sesuai deskripsi kan kak? Jam 4 sore ini saya longgar.`,
-            `Terima kasih sudah menyetujui tawaran saya kak! Nanti bayarnya langsung cash / QRIS ya.`,
-            `Bisa share lokasi pastinya kak? Nanti saya meluncur ke lokasi.`
+            `Ready! Where's a good spot for COD? I'll follow your lead.`,
+            `Great, the item is complete and matches the description, right? I'm free at 4 PM today.`,
+            `Thanks for accepting my offer! I'll pay in cash or via QRIS.`,
+            `Could you share the exact location? I'll head over.`
           ];
           const autoReplyText = replies[Math.floor(Math.random() * replies.length)];
           const replyMsg = {
@@ -2686,15 +2686,15 @@ import Layout from '../layouts/Layout.astro';
         return s === 'Accepted' || s === 'accepted';
       });
 
-      if (badge) badge.textContent = `${acceptedBids.length} Obrolan Aktif`;
+      if (badge) badge.textContent = `${acceptedBids.length} Active Chats`;
 
       if (container) {
         if (acceptedBids.length === 0) {
           container.innerHTML = `
             <div class="col-span-full p-6 rounded-xl bg-paper-100 border border-navy-100 text-center space-y-2">
-              <p class="text-navy-900 text-xs font-semibold">Belum Ada Penawaran Disetujui</p>
+              <p class="text-navy-900 text-xs font-semibold">No Approved Offers Yet</p>
               <p class="text-slate-600 text-[11px] max-w-md mx-auto leading-relaxed">
-                Ketika kamu menyetujui penawaran harga dari pembeli di tab "Penawaran & Nego", widget chat realtime akan aktif di sini untuk melakukan pendekatan dan menyepakati transaksi COD.
+                When you approve a buyer's price offer in the "Offers & Negotiation" tab, a real-time chat widget activates here for reaching out and agreeing on a COD transaction.
               </p>
             </div>
           `;
@@ -2748,12 +2748,12 @@ import Layout from '../layouts/Layout.astro';
                 ? 'bg-navy-900 text-white border-navy-900 shadow-xs' 
                 : 'bg-navy-100 text-slate-700 border-navy-100 hover:bg-navy-200'
             }">
-              Semua (${allVisitorDeals.length})
+              All (${allVisitorDeals.length})
             </button>
             ${itemIds.map(itemId => {
               const key = itemId.replace('demo-', '');
               const itemObj = items.find(i => i.id === itemId) || marketplaceListings.find(m => m.item_id === itemId) || demoItems[key];
-              const title = itemObj ? itemObj.title : `Produk #${itemId.substring(0, 6)}`;
+              const title = itemObj ? itemObj.title : `Item #${itemId.substring(0, 6)}`;
               // Shorter truncate for mobile
               const shortTitle = title.length > 18 ? title.substring(0, 16) + '...' : title;
               const count = itemMap[itemId];
@@ -2782,9 +2782,9 @@ import Layout from '../layouts/Layout.astro';
                 💬
               </div>
               <div class="space-y-1 max-w-md mx-auto">
-                <h4 class="text-navy-900 font-bold text-sm">Belum Ada Penawaran pada Barang Marketplace</h4>
+                <h4 class="text-navy-900 font-bold text-sm">No Offers on Marketplace Items Yet</h4>
                 <p class="text-slate-600 text-xs leading-relaxed">
-                  Alur simulasi ini menggunakan data riil. Silakan klik tombol <strong class="text-emerald-700 font-bold">"Ajukan Penawaran Harga"</strong> pada salah satu barang di marketplace di atas untuk mengirim penawaran dan menguji alur negosiasi & chat realtime per produk!
+                  This demo flow uses real data. Click the <strong class="text-emerald-700 font-bold">"Submit a Price Offer"</strong> button on one of the marketplace items above to send an offer and test the negotiation & real-time chat flow per product!
                 </p>
               </div>
             </div>
@@ -2807,7 +2807,7 @@ import Layout from '../layouts/Layout.astro';
         visitorContainer.className = "grid grid-cols-1 gap-4";
         visitorContainer.innerHTML = `
           <div class="col-span-full p-6 rounded-xl bg-paper-100 border border-navy-100 text-center text-slate-600 text-xs">
-            Belum ada penawaran untuk produk ini.
+            No offers for this item yet.
           </div>
         `;
         return;
@@ -2823,7 +2823,7 @@ import Layout from '../layouts/Layout.astro';
       const freshBid = bids.find(b => b.id === activeBid.id) || activeBid;
       const key = (activeBid.item_id || '').replace('demo-', '');
       const item = items.find(i => i.id === activeBid.item_id) || marketplaceListings.find(m => m.item_id === activeBid.item_id) || demoItems[key];
-      const itemTitle = item ? item.title : `Barang #${(activeBid.item_id || 'item').substring(0, 8)}`;
+      const itemTitle = item ? item.title : `Item #${(activeBid.item_id || 'item').substring(0, 8)}`;
       
       // Check if THIS specific bid is the winning/sold bid (use freshBid for latest status)
       const isBidSold = freshBid.status === 'Sold';
@@ -2836,7 +2836,7 @@ import Layout from '../layouts/Layout.astro';
           id: 'welcome_msg',
           sender_id: activeBid.buyer_id || 'bidder',
           sender_name: activeBid.buyer_name,
-          message: `Halo Penjual! Penawaran saya sebesar Rp ${(activeBid.amount || 0).toLocaleString('id-ID')} telah disetujui. Terima kasih banyak! Siap untuk janji ketemuan / COD.`,
+          message: `Hi Seller! My offer of Rp ${(activeBid.amount || 0).toLocaleString('id-ID')} has been approved. Thank you so much! Ready to schedule a meetup / COD.`,
           created_at: new Date().toISOString()
         }];
       }
@@ -2846,16 +2846,16 @@ import Layout from '../layouts/Layout.astro';
       visitorContainer.innerHTML = `
         <!-- Left Column: Vertical Bidder List -->
         <div class="lg:col-span-5 space-y-2">
-          <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider px-1 mb-2">Daftar Penawar (Pilih Bidder):</span>
+          <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider px-1 mb-2">Bidders List (Pick a Bidder):</span>
           <div class="space-y-2 max-h-[480px] overflow-y-auto pr-1">
             ${filteredDeals.map(bid => {
               const bKey = (bid.item_id || '').replace('demo-', '');
               const bItem = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id) || demoItems[bKey];
-              const bTitle = bItem ? bItem.title : `Barang #${(bid.item_id || 'item').substring(0, 8)}`;
+              const bTitle = bItem ? bItem.title : `Item #${(bid.item_id || 'item').substring(0, 8)}`;
               const bInitial = (bid.buyer_name || 'B').charAt(0).toUpperCase();
               const isSelected = bid.id === activeVisitorChatBidId;
               const msgs = localChatMessages[bid.id] || [];
-              const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Penawaran disetujui — Siap obrol transaksi COD';
+              const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Offer approved — Ready to chat about the COD transaction';
 
               return `
                 <div onclick="selectVisitorBidder('${bid.id}')" class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
@@ -2899,25 +2899,25 @@ import Layout from '../layouts/Layout.astro';
                 <div class="flex items-center gap-2">
                   <h4 class="font-bold text-navy-900 text-sm">${activeBid.buyer_name}</h4>
                   ${isBidSold ? `
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">👤 Pemilik Baru</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">👤 New Owner</span>
                   ` : `
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Bidder</span>
                   `}
                 </div>
-                <span class="text-xs text-slate-500">Kontak: ${activeBid.contact_info}</span>
+                <span class="text-xs text-slate-500">Contact: ${activeBid.contact_info}</span>
               </div>
             </div>
             <div class="flex items-center gap-2 self-start sm:self-auto">
               <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${isItemSold ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'} border">
-                ${isItemSold ? 'SOLD (Terjual)' : 'Dalam Diskusi COD'}
+                ${isItemSold ? 'SOLD' : 'In COD Discussion'}
               </span>
               ${isItemSold ? `
                 <button type="button" disabled class="px-3.5 py-1.5 rounded-lg bg-slate-400 text-white font-bold text-xs shadow-xs cursor-not-allowed flex items-center gap-1">
-                  <span>✓ Sudah Terjual</span>
+                  <span>✓ Already Sold</span>
                 </button>
               ` : `
                 <button type="button" onclick="openConfirmSoldModalFromChat('${activeBid.id}')" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1">
-                  <span>🏷️ Tandai SOLD</span>
+                  <span>🏷️ Mark SOLD</span>
                 </button>
               `}
             </div>
@@ -2927,7 +2927,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="p-3 rounded-xl bg-paper-100 border border-navy-100 flex items-center justify-between text-xs">
             <span class="font-bold text-navy-900 truncate">${itemTitle}</span>
             <div class="shrink-0 text-right">
-              <span class="text-slate-500 block text-[10px]">Harga Disepakati:</span>
+              <span class="text-slate-500 block text-[10px]">Agreed Price:</span>
               <span class="text-emerald-700 font-extrabold text-sm">Rp ${(activeBid.amount || 0).toLocaleString('id-ID')}</span>
             </div>
           </div>
@@ -2939,16 +2939,16 @@ import Layout from '../layouts/Layout.astro';
 
           <!-- Quick Chips -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] text-slate-600 no-scrollbar">
-            <button type="button" onclick="sendInlineVisitorMessage('Siap kak! Lokasi COD di mana?')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">Lokasi COD?</button>
-            <button type="button" onclick="sendInlineVisitorMessage('Jam berapa jam ketemuan?')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">Jam ketemuan?</button>
-            <button type="button" onclick="sendInlineVisitorMessage('Bisa bayar tunai / QRIS pas COD ya.')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">Tunai / QRIS</button>
+            <button type="button" onclick="sendInlineVisitorMessage('Ready! Where should we do the COD?')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">COD location?</button>
+            <button type="button" onclick="sendInlineVisitorMessage('What time works for the meetup?')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">What time to meet?</button>
+            <button type="button" onclick="sendInlineVisitorMessage('You can pay in cash or via QRIS at COD.')" class="px-2.5 py-1 rounded-lg bg-navy-100 hover:bg-navy-200 text-slate-700 border border-navy-100 font-medium shrink-0 transition-all">Cash / QRIS</button>
           </div>
 
           <!-- Message Input Form -->
           <form id="visitor-inline-chat-form" onsubmit="event.preventDefault(); const input = document.getElementById('visitor-inline-chat-input'); if(input && input.value) sendInlineVisitorMessage(input.value);" class="flex items-center gap-2">
-            <input type="text" id="visitor-inline-chat-input" placeholder="Tulis pesan obrolan ke ${activeBid.buyer_name}..." required class="flex-1 px-3.5 py-2.5 rounded-lg bg-white border border-navy-200 text-navy-900 text-xs focus:border-navy-900 focus:outline-none" />
+            <input type="text" id="visitor-inline-chat-input" placeholder="Write a chat message to ${activeBid.buyer_name}..." required class="flex-1 px-3.5 py-2.5 rounded-lg bg-white border border-navy-200 text-navy-900 text-xs focus:border-navy-900 focus:outline-none" />
             <button type="submit" class="px-4 py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs transition-all shrink-0">
-              Kirim
+              Send
             </button>
           </form>
         </div>
@@ -2961,10 +2961,10 @@ import Layout from '../layouts/Layout.astro';
     function renderSingleApprovedBidCard(bid: any, isVisitorDemo: boolean = false) {
       const key = (bid.item_id || '').replace('demo-', '');
       const item = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id) || demoItems[key];
-      const itemTitle = item ? item.title : `Barang #${(bid.item_id || 'item').substring(0, 8)}`;
+      const itemTitle = item ? item.title : `Item #${(bid.item_id || 'item').substring(0, 8)}`;
       const initial = (bid.buyer_name || 'B').charAt(0).toUpperCase();
       const msgs = localChatMessages[bid.id] || [];
-      const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Penawaran disetujui — Siap obrol transaksi COD';
+      const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1].message : 'Offer approved — Ready to chat about the COD transaction';
 
       return `
         <div class="p-4 rounded-xl bg-white border border-navy-100 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-3 shadow-xs">
@@ -2975,18 +2975,18 @@ import Layout from '../layouts/Layout.astro';
               </div>
               <div class="min-w-0">
                 <h4 class="font-bold text-navy-900 text-sm truncate">${bid.buyer_name}</h4>
-                <span class="text-[11px] text-slate-500 block truncate">Kontak: ${bid.contact_info}</span>
+                <span class="text-[11px] text-slate-500 block truncate">Contact: ${bid.contact_info}</span>
               </div>
             </div>
             <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
-              Penawaran Disetujui
+              Offer Approved
             </span>
           </div>
 
           <div class="p-3 rounded-lg bg-paper-100 border border-navy-100 space-y-1">
             <div class="text-navy-900 font-semibold text-xs truncate">${itemTitle}</div>
             <div class="flex justify-between items-center text-xs">
-              <span class="text-slate-500">Harga Disepakati:</span>
+              <span class="text-slate-500">Agreed Price:</span>
               <span class="text-emerald-700 font-extrabold text-sm">Rp ${(bid.amount || 0).toLocaleString('id-ID')}</span>
             </div>
             <div class="text-[11px] text-slate-500 truncate pt-1 border-t border-navy-100 flex items-center gap-1">
@@ -2997,7 +2997,7 @@ import Layout from '../layouts/Layout.astro';
 
           <button onclick="openChatModal('${bid.id}')" class="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs shadow-xs flex items-center justify-center gap-2 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-            <span>Pendekatan & Chat Realtime →</span>
+            <span>Reach Out & Real-Time Chat →</span>
           </button>
         </div>
       `;
@@ -3016,7 +3016,7 @@ import Layout from '../layouts/Layout.astro';
 
       const key = (bid.item_id || '').replace('demo-', '');
       const item = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id) || demoItems[key];
-      const itemTitle = item ? item.title : `Barang #${bid.item_id.substring(0, 8)}`;
+      const itemTitle = item ? item.title : `Item #${bid.item_id.substring(0, 8)}`;
 
       const buyerNameEl = document.getElementById('confirm-sold-buyer-name');
       const titleEl = document.getElementById('confirm-sold-item-title');
@@ -3039,7 +3039,7 @@ import Layout from '../layouts/Layout.astro';
       const itemId = bid.item_id;
       const key = itemId.replace('demo-', '');
       const item = items.find(i => i.id === itemId) || marketplaceListings.find(m => m.item_id === itemId) || demoItems[key];
-      const sellerName = item?.owner_name || 'Penjual (Owner Asal)';
+      const sellerName = item?.owner_name || 'Seller (Original Owner)';
       const buyerName = bid.buyer_name;
       const finalPrice = bid.amount || 0;
       const buyerId = bid.buyer_id || 'buyer_' + Date.now();
@@ -3101,7 +3101,7 @@ import Layout from '../layouts/Layout.astro';
           to_owner_name: sellerName,
           price: initialPrice,
           transferred_at: new Date(Date.now() - 86400000 * 2).toISOString(), // 2 days ago
-          notes: 'Terdaftar pertama kali di Katalog Inventory & Marketplace'
+        notes: 'First registered in the Inventory & Marketplace Catalog'
         }];
       }
       
@@ -3115,7 +3115,7 @@ import Layout from '../layouts/Layout.astro';
         to_owner_name: buyerName,
         price: finalPrice,
         transferred_at: new Date().toISOString(),
-        notes: 'Terjual via Penawaran Bidding & Transaksi COD'
+        notes: 'Sold via bid offer & COD transaction'
       });
 
       // Backend API calls
@@ -3164,7 +3164,7 @@ import Layout from '../layouts/Layout.astro';
       if (!bid) return;
 
       const item = items.find(i => i.id === bid.item_id) || marketplaceListings.find(m => m.item_id === bid.item_id);
-      const itemTitle = item ? item.title : `Barang #${bid.item_id.substring(0, 8)}`;
+      const itemTitle = item ? item.title : `Item #${bid.item_id.substring(0, 8)}`;
 
       const nameEl = document.getElementById('chat-bidder-name');
       const avatarEl = document.getElementById('chat-bidder-avatar');
@@ -3186,10 +3186,10 @@ import Layout from '../layouts/Layout.astro';
       // Update buyer badge based on whether THIS bid won
       if (buyerBadgeEl) {
         if (isBidSold) {
-          buyerBadgeEl.textContent = '👤 Pemilik Baru';
+          buyerBadgeEl.textContent = '👤 New Owner';
           buyerBadgeEl.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
         } else {
-          buyerBadgeEl.textContent = 'Bidder Pilihan';
+          buyerBadgeEl.textContent = 'Chosen Bidder';
           buyerBadgeEl.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
         }
       }
@@ -3197,10 +3197,10 @@ import Layout from '../layouts/Layout.astro';
       // Update status badge based on whether item is sold
       if (statusBadgeEl) {
         if (isItemSold) {
-          statusBadgeEl.textContent = 'SOLD (Terjual)';
+          statusBadgeEl.textContent = 'SOLD';
           statusBadgeEl.className = 'font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300';
         } else {
-          statusBadgeEl.textContent = 'Dalam Diskusi (Interview)';
+          statusBadgeEl.textContent = 'In Discussion (Interview)';
           statusBadgeEl.className = 'font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300';
         }
       }
@@ -3209,12 +3209,12 @@ import Layout from '../layouts/Layout.astro';
       const markSoldBtn = document.getElementById('btn-chat-mark-sold');
       if (markSoldBtn) {
         if (isItemSold) {
-          markSoldBtn.innerHTML = '<span>✓ Sudah Terjual</span>';
+          markSoldBtn.innerHTML = '<span>✓ Already Sold</span>';
           markSoldBtn.className = 'px-3.5 py-1.5 rounded-lg bg-slate-400 text-white font-bold text-xs shadow-xs cursor-not-allowed flex items-center gap-1';
           markSoldBtn.setAttribute('disabled', 'true');
           markSoldBtn.onclick = null;
         } else {
-          markSoldBtn.innerHTML = '<span>🏷️ Tandai SOLD</span>';
+          markSoldBtn.innerHTML = '<span>🏷️ Mark SOLD</span>';
           markSoldBtn.className = 'px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1';
           markSoldBtn.removeAttribute('disabled');
         }
@@ -3226,7 +3226,7 @@ import Layout from '../layouts/Layout.astro';
           id: 'welcome_msg',
           sender_id: bid.buyer_id || 'bidder',
           sender_name: bid.buyer_name,
-          message: `Halo Penjual! Penawaran saya sebesar Rp ${(bid.amount || 0).toLocaleString('id-ID')} telah kamu setujui. Terima kasih banyak! Siap untuk janji ketemuan / COD.`,
+          message: `Hi Seller! You've approved my offer of Rp ${(bid.amount || 0).toLocaleString('id-ID')}. Thank you so much! Ready to schedule a meetup / COD.`,
           created_at: new Date().toISOString()
         }];
       }
@@ -3295,7 +3295,7 @@ import Layout from '../layouts/Layout.astro';
     document.getElementById('form-bid')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const itemId = (document.getElementById('bid-item-id') as HTMLInputElement).value;
-      const buyerName = document.getElementById('bid-sim-name')?.textContent || 'User Simulasi';
+      const buyerName = document.getElementById('bid-sim-name')?.textContent || 'Simulated User';
       const amount = getBidAmountValue();
 
       if (!demoBids[itemId]) {
@@ -3305,7 +3305,7 @@ import Layout from '../layouts/Layout.astro';
       // Ensure single offer per user
       const alreadySubmitted = demoBids[itemId].some(b => b.buyer_name === buyerName);
       if (alreadySubmitted) {
-        showNotice(`Pengguna "${buyerName}" sudah pernah memberikan penawaran untuk barang ini.`);
+        showNotice(`The user "${buyerName}" has already placed an offer on this item.`);
         return;
       }
 

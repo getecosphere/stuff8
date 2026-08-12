@@ -39,7 +39,7 @@ export const slugify = (title: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 48)
-    .replace(/-+$/g, '') || 'barang';
+    .replace(/-+$/g, '') || 'item';
 
 export const encodeItemToken = (id: string): string => {
   const hex = String(id || '').toLowerCase().replace(/-/g, '');

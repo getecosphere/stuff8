@@ -85,7 +85,7 @@ export function openLightbox(source: LightboxPhoto[], startIndex = 0) {
   overlay.className = 'lb-overlay';
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
-  overlay.setAttribute('aria-label', 'Pratinjau foto barang');
+  overlay.setAttribute('aria-label', 'Item photo preview');
 
   figure = document.createElement('figure');
   figure.className = 'lb-figure';
@@ -97,19 +97,19 @@ export function openLightbox(source: LightboxPhoto[], startIndex = 0) {
   const closeButton = document.createElement('button');
   closeButton.type = 'button';
   closeButton.className = 'lb-close';
-  closeButton.setAttribute('aria-label', 'Tutup pratinjau');
+  closeButton.setAttribute('aria-label', 'Close preview');
   closeButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>';
 
   const prevButton = document.createElement('button');
   prevButton.type = 'button';
   prevButton.className = 'lb-nav lb-nav-prev';
-  prevButton.setAttribute('aria-label', 'Foto sebelumnya');
+  prevButton.setAttribute('aria-label', 'Previous photo');
   prevButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>';
 
   const nextButton = document.createElement('button');
   nextButton.type = 'button';
   nextButton.className = 'lb-nav lb-nav-next';
-  nextButton.setAttribute('aria-label', 'Foto berikutnya');
+  nextButton.setAttribute('aria-label', 'Next photo');
   nextButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/></svg>';
 
   counter = document.createElement('div');

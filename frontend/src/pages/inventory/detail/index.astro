@@ -8,9 +8,9 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     <Breadcrumb
       currentId="breadcrumb-current"
       crumbs={[
-        { label: 'Beranda', href: '/' },
-        { label: 'Inventaris', href: '/inventory/' },
-        { label: 'Detail Barang' }
+        { label: 'Home', href: '/' },
+        { label: 'Inventory', href: '/inventory/' },
+        { label: 'Item Details' }
       ]}
     />
     <article id="inventory-detail" class="mt-4 rounded-2xl border border-navy-100 bg-white p-5 shadow-[0_1px_2px_rgba(15,30,25,0.04)]">
@@ -57,36 +57,36 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     const isSold = (item: any) => Boolean(item?.is_sold || item?.isSold || (typeof item?.status === 'string' && item.status.toLowerCase() === 'sold'));
 
     async function load() {
-      if (!id) throw new Error('Barang tidak ditemukan.');
+      if (!id) throw new Error('Item not found.');
       if (!user()?.id) {
-        root.innerHTML = `<div class="py-10 text-center"><h1 class="text-lg font-extrabold text-navy-900">Detail Inventaris</h1><p class="mt-2 text-sm text-slate-600">Masuk terlebih dahulu untuk melihat detail barang.</p><a href="/auth/signup/?return_to=${encodeURIComponent(location.pathname + location.search)}" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Daftar atau masuk</a></div>`;
+        root.innerHTML = `<div class="py-10 text-center"><h1 class="text-lg font-extrabold text-navy-900">Inventory Details</h1><p class="mt-2 text-sm text-slate-600">Sign in first to view item details.</p><a href="/auth/signup/?return_to=${encodeURIComponent(location.pathname + location.search)}" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Sign up or sign in</a></div>`;
         return;
       }
       const response = await fetch(`${INVENTORY}/items/${encodeURIComponent(id)}`, { headers: headers() });
-      if (!response.ok) throw new Error('Barang tidak tersedia atau sudah dihapus.');
+      if (!response.ok) throw new Error('Item unavailable or has been deleted.');
       const item = await response.json();
       const prettyPath = inventoryDetailPath(item);
       if (location.pathname !== prettyPath) history.replaceState(null, '', prettyPath);
       const sold = isSold(item);
       const breadcrumbCurrent = document.getElementById('breadcrumb-current');
-      if (breadcrumbCurrent) breadcrumbCurrent.textContent = item.title || 'Detail Barang';
-      document.title = `${item.title || 'Detail Barang'} - Stuff8`;
+      if (breadcrumbCurrent) breadcrumbCurrent.textContent = item.title || 'Item Details';
+      document.title = `${item.title || 'Item Details'} - Stuff8`;
       const photos = Array.isArray(item.photos) && item.photos.length ? item.photos : [undefined];
       const statusBadge = sold
-        ? `<span class="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white">✓ SOLD (Terjual)</span>`
-        : `<span class="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold ${item.sellable ? 'bg-navy-900 text-white' : 'bg-slate-200 text-slate-700'}">${item.sellable ? 'Dijual di Marketplace' : 'Koleksi Pribadi'}</span>`;
+        ? `<span class="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white">✓ SOLD</span>`
+        : `<span class="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold ${item.sellable ? 'bg-navy-900 text-white' : 'bg-slate-200 text-slate-700'}">${item.sellable ? 'For Sale on the Marketplace' : 'Private Collection'}</span>`;
       root.innerHTML = `
         <div class="grid gap-6 md:grid-cols-2">
           <div class="min-w-0 space-y-3">
           <div data-photo-carousel class="min-w-0 space-y-3">
             <div data-main-photo role="button" tabindex="0" class="group relative aspect-square w-full cursor-zoom-in overflow-hidden rounded-xl bg-slate-100">
               <div data-slide-track class="flex size-full" style="transition:transform .35s cubic-bezier(.4,0,.2,1)">${photos.map((photo: string) => isVideoKey(photo)
-                ? videoMarkup({ src: photoUrl(photo), className: 'size-full shrink-0 object-cover', label: `${escapeHtml(item.title || 'Video barang')} — video` })
-                : `<img src="${photoUrl(photo)}" alt="${escapeHtml(item.title || 'Foto barang')}" class="size-full shrink-0 object-cover transition-transform duration-500 group-hover:scale-[1.03]" />`).join('')}</div>
-              <span class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-navy-950/70 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-sm transition-colors group-hover:bg-navy-950"><svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v11m0 5 4.879-4.879m0 0a3 3 0 1 0 4.243-4.242 3 3 0 0 0-4.243 4.242Z"/></svg>Perbesar</span>
-              ${photos.length > 1 ? `<button type="button" data-slide-prev class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Foto sebelumnya"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" /></svg></button><button type="button" data-slide-next class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Foto berikutnya"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" /></svg></button><span class="absolute bottom-2.5 right-2.5 rounded-full bg-navy-950/70 px-2 py-0.5 text-[11px] font-semibold text-white" data-slide-count>1/${photos.length}</span>` : ''}
+                ? videoMarkup({ src: photoUrl(photo), className: 'size-full shrink-0 object-cover', label: `${escapeHtml(item.title || 'Item video')} — video` })
+                : `<img src="${photoUrl(photo)}" alt="${escapeHtml(item.title || 'Item photo')}" class="size-full shrink-0 object-cover transition-transform duration-500 group-hover:scale-[1.03]" />`).join('')}</div>
+              <span class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-navy-950/70 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-sm transition-colors group-hover:bg-navy-950"><svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v11m0 5 4.879-4.879m0 0a3 3 0 1 0 4.243-4.242 3 3 0 0 0-4.243 4.242Z"/></svg>Zoom in</span>
+              ${photos.length > 1 ? `<button type="button" data-slide-prev class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Previous photo"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" /></svg></button><button type="button" data-slide-next class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white" aria-label="Next photo"><svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" /></svg></button><span class="absolute bottom-2.5 right-2.5 rounded-full bg-navy-950/70 px-2 py-0.5 text-[11px] font-semibold text-white" data-slide-count>1/${photos.length}</span>` : ''}
             </div>
-            ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-slide-thumb="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-navy-100 transition hover:border-clay-400">${isVideoKey(photo) ? videoThumbMarkup(`Video ${index + 1}`) : `<img src="${thumbPhotoUrl(photo)}" alt="Foto ${index + 1}" class="size-full object-cover" onerror="this.onerror=null;this.src='${photoUrl(photo)}'" />`}</button>`).join('')}</div>` : ''}
+            ${photos.length > 1 ? `<div class="flex gap-2 overflow-x-auto">${photos.map((photo: string, index: number) => `<button type="button" data-slide-thumb="${index}" class="size-14 shrink-0 overflow-hidden rounded-lg border border-navy-100 transition hover:border-clay-400">${isVideoKey(photo) ? videoThumbMarkup(`Video ${index + 1}`) : `<img src="${thumbPhotoUrl(photo)}" alt="Photo ${index + 1}" class="size-full object-cover" onerror="this.onerror=null;this.src='${photoUrl(photo)}'" />`}</button>`).join('')}</div>` : ''}
           </div>
           </div>
           <div class="min-w-0 space-y-4">
@@ -94,23 +94,23 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
               <p class="text-xs font-bold uppercase tracking-wider text-clay-600">${escapeHtml(item.category || '')} · ${escapeHtml(item.condition || '')}</p>
               ${statusBadge}
             </div>
-            <h1 class="font-display text-2xl font-extrabold tracking-tight text-navy-900">${escapeHtml(item.title || 'Tanpa judul')}</h1>
-            ${detailDesc(item.description, 'Tanpa deskripsi')}
-            ${sold ? `<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-sm font-extrabold text-emerald-800">Terjual</p><p class="mt-1 text-sm leading-relaxed text-emerald-700">${escapeHtml(item.buyer_name ? `Terjual ke ${item.buyer_name}` : 'Barang sudah terjual')} seharga ${money(item.final_price || item.asking_price)}.</p><a href="${marketplaceDetailPath(item)}" class="mt-2 inline-block text-sm font-bold text-emerald-800 underline">Lihat listing marketplace →</a></div>` : ''}
+            <h1 class="font-display text-2xl font-extrabold tracking-tight text-navy-900">${escapeHtml(item.title || 'Untitled')}</h1>
+            ${detailDesc(item.description, 'No description')}
+            ${sold ? `<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-sm font-extrabold text-emerald-800">Sold</p><p class="mt-1 text-sm leading-relaxed text-emerald-700">${escapeHtml(item.buyer_name ? `Sold to ${item.buyer_name}` : 'Item already sold')} for ${money(item.final_price || item.asking_price)}.</p><a href="${marketplaceDetailPath(item)}" class="mt-2 inline-block text-sm font-bold text-emerald-800 underline">View marketplace listing →</a></div>` : ''}
             <dl class="grid grid-cols-2 gap-3 border-y border-navy-100 py-4 text-sm">
-              <div><dt class="text-xs text-slate-500">Harga beli</dt><dd class="num mt-0.5 font-bold text-navy-900">${money(item.purchase_price)}</dd></div>
-              <div><dt class="text-xs text-slate-500">Nilai jual</dt><dd class="num mt-0.5 font-extrabold text-clay-700">${money(item.estimated_value)}</dd></div>
-              ${item.sellable ? `<div class="col-span-2"><dt class="text-xs text-slate-500">Harga buka</dt><dd class="num mt-0.5 font-extrabold text-clay-700">${money(item.asking_price)}</dd></div>` : ''}
-              <div class="col-span-2"><dt class="text-xs text-slate-500">Lokasi simpan (privat)</dt><dd class="mt-0.5 font-semibold text-navy-900">${escapeHtml(item.storage_location || '-')}</dd></div>
+              <div><dt class="text-xs text-slate-500">Purchase price</dt><dd class="num mt-0.5 font-bold text-navy-900">${money(item.purchase_price)}</dd></div>
+              <div><dt class="text-xs text-slate-500">Sale value</dt><dd class="num mt-0.5 font-extrabold text-clay-700">${money(item.estimated_value)}</dd></div>
+              ${item.sellable ? `<div class="col-span-2"><dt class="text-xs text-slate-500">Opening price</dt><dd class="num mt-0.5 font-extrabold text-clay-700">${money(item.asking_price)}</dd></div>` : ''}
+              <div class="col-span-2"><dt class="text-xs text-slate-500">Storage location (private)</dt><dd class="mt-0.5 font-semibold text-navy-900">${escapeHtml(item.storage_location || '-')}</dd></div>
             </dl>
             <div class="flex items-center gap-3">
-              <a href="/inventory/" class="inline-flex items-center justify-center rounded-full border border-navy-100 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-clay-50">Kembali</a>
+              <a href="/inventory/" class="inline-flex items-center justify-center rounded-full border border-navy-100 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-clay-50">Back</a>
               <a href="/inventory/form/?id=${encodeURIComponent(item.id)}" class="inline-flex items-center justify-center rounded-full bg-clay-600 px-4 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-clay-700">Edit</a>
             </div>
           </div>
         </div>
       `;
-      const galleryPhotos = (photos[0] ? photos : [photos[0]]).map((photo: string) => ({ src: photoUrl(photo), alt: `${escapeHtml(item.title || 'Foto barang')} — foto` }));
+      const galleryPhotos = (photos[0] ? photos : [photos[0]]).map((photo: string) => ({ src: photoUrl(photo), alt: `${escapeHtml(item.title || 'Item photo')} — photo` }));
       let currentPhoto = 0;
       initSlider(root.querySelector('[data-photo-carousel]')!, {
         onIndexChange: index => {
@@ -132,6 +132,6 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
       installVideoBehaviors();
       applyMuteToAll();
     }
-    load().catch(error => { root.innerHTML = `<div class="py-10 text-center text-sm text-rose-700">${escapeHtml(error?.message || 'Barang tidak dapat dimuat.')}</div>`; });
+    load().catch(error => { root.innerHTML = `<div class="py-10 text-center text-sm text-rose-700">${escapeHtml(error?.message || 'Item could not be loaded.')}</div>`; });
   </script>
 </Layout>

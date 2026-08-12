@@ -5,7 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 <Layout>
   <div class="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col px-4 py-5 sm:px-6 lg:px-8">
     <div class="mb-4">
-      <h1 class="page-heading">Nego sampai deal</h1>
+      <h1 class="page-heading">Negotiate to a deal</h1>
     </div>
     <div id="chat-app" class="grid min-h-0 flex-1 overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-xs md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
       <aside class="min-h-0 max-h-44 overflow-y-auto border-b border-navy-100 bg-paper-100 p-3 md:max-h-none md:border-b-0 md:border-r">
@@ -23,27 +23,27 @@ import Layout from '../../layouts/Layout.astro';
       </section>
     </div>
   </div>
-  <div id="chat-media-viewer" class="fixed inset-0 z-[100] hidden items-center justify-center bg-navy-950/95 p-4" role="dialog" aria-modal="true" aria-label="Pratinjau gambar chat">
-    <button id="chat-media-close" type="button" class="absolute right-5 top-5 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl leading-none text-white hover:bg-white/25" aria-label="Tutup gambar">×</button>
-    <button id="chat-media-prev" type="button" class="absolute left-4 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:left-8" aria-label="Gambar sebelumnya">‹</button>
+  <div id="chat-media-viewer" class="fixed inset-0 z-[100] hidden items-center justify-center bg-navy-950/95 p-4" role="dialog" aria-modal="true" aria-label="Chat image preview">
+    <button id="chat-media-close" type="button" class="absolute right-5 top-5 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl leading-none text-white hover:bg-white/25" aria-label="Close image">×</button>
+    <button id="chat-media-prev" type="button" class="absolute left-4 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:left-8" aria-label="Previous image">‹</button>
     <figure class="flex max-h-full max-w-full flex-col items-center gap-3"><img id="chat-media-image" class="max-h-[82vh] max-w-full rounded-xl object-contain shadow-2xl" alt="" /><figcaption id="chat-media-caption" class="max-w-[90vw] truncate text-sm font-semibold text-white"></figcaption></figure>
-    <button id="chat-media-next" type="button" class="absolute right-4 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-8" aria-label="Gambar berikutnya">›</button>
+    <button id="chat-media-next" type="button" class="absolute right-4 inline-flex size-11 items-center justify-center rounded-full bg-white/15 text-3xl text-white hover:bg-white/25 sm:right-8" aria-label="Next image">›</button>
   </div>
-  <div id="attachment-source-dialog" class="fixed inset-0 z-[90] hidden items-end justify-center bg-navy-950/35 p-4 sm:items-center" role="dialog" aria-modal="true" aria-label="Pilih sumber lampiran">
+  <div id="attachment-source-dialog" class="fixed inset-0 z-[90] hidden items-end justify-center bg-navy-950/35 p-4 sm:items-center" role="dialog" aria-modal="true" aria-label="Choose attachment source">
     <div class="w-full max-w-sm rounded-2xl bg-white p-4 shadow-2xl">
-      <p class="mb-3 text-sm font-bold text-navy-900">Tambahkan lampiran</p>
-      <div class="grid grid-cols-2 gap-3"><button id="attachment-camera" type="button" class="rounded-xl bg-navy-900 px-4 py-3 text-sm font-bold text-white">Kamera</button><button id="attachment-gallery" type="button" class="rounded-xl border border-navy-100 px-4 py-3 text-sm font-bold text-navy-900">Galeri</button></div>
-      <button id="attachment-source-cancel" type="button" class="mt-3 w-full rounded-xl px-4 py-2 text-sm font-semibold text-slate-500">Batal</button>
+      <p class="mb-3 text-sm font-bold text-navy-900">Add attachment</p>
+      <div class="grid grid-cols-2 gap-3"><button id="attachment-camera" type="button" class="rounded-xl bg-navy-900 px-4 py-3 text-sm font-bold text-white">Camera</button><button id="attachment-gallery" type="button" class="rounded-xl border border-navy-100 px-4 py-3 text-sm font-bold text-navy-900">Gallery</button></div>
+      <button id="attachment-source-cancel" type="button" class="mt-3 w-full rounded-xl px-4 py-2 text-sm font-semibold text-slate-500">Cancel</button>
     </div>
   </div>
-  <div id="chat-complete-sale-dialog" class="fixed inset-0 z-[95] hidden items-center justify-center bg-navy-950/45 p-4" role="dialog" aria-modal="true" aria-label="Tandai barang terjual">
+  <div id="chat-complete-sale-dialog" class="fixed inset-0 z-[95] hidden items-center justify-center bg-navy-950/45 p-4" role="dialog" aria-modal="true" aria-label="Mark item as sold">
     <form id="chat-complete-sale-form" class="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl">
-      <div class="flex items-start justify-between gap-4"><div><h2 class="text-lg font-bold text-navy-900">Tandai barang terjual</h2><p id="chat-sale-buyer" class="mt-1 text-sm text-slate-500"></p></div><button id="chat-complete-sale-close" type="button" class="text-2xl leading-none text-slate-400" aria-label="Tutup">×</button></div>
-      <label class="mt-5 block text-sm font-bold text-navy-900" for="chat-sale-price">Harga jual akhir</label>
+      <div class="flex items-start justify-between gap-4"><div><h2 class="text-lg font-bold text-navy-900">Mark item as sold</h2><p id="chat-sale-buyer" class="mt-1 text-sm text-slate-500"></p></div><button id="chat-complete-sale-close" type="button" class="text-2xl leading-none text-slate-400" aria-label="Close">×</button></div>
+      <label class="mt-5 block text-sm font-bold text-navy-900" for="chat-sale-price">Final sale price</label>
       <input id="chat-sale-price" inputmode="numeric" class="mt-2 w-full rounded-xl border border-navy-100 px-3 py-2.5 text-base font-semibold text-navy-900" />
-      <p class="mt-2 text-xs leading-5 text-slate-500">Barang berpindah ke inventaris pembeli. Semua penawar akan menerima kabar penutup melalui Inbox dan email.</p>
+      <p class="mt-2 text-xs leading-5 text-slate-500">The item moves to the buyer's inventory. All bidders will be notified via Inbox and email.</p>
       <p id="chat-sale-error" class="mt-3 hidden rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert"></p>
-      <div class="mt-5 flex justify-end gap-2"><button id="chat-complete-sale-cancel" type="button" class="rounded-xl px-4 py-2.5 text-sm font-bold text-slate-600">Batal</button><button class="rounded-xl bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Konfirmasi terjual</button></div>
+      <div class="mt-5 flex justify-end gap-2"><button id="chat-complete-sale-cancel" type="button" class="rounded-xl px-4 py-2.5 text-sm font-bold text-slate-600">Cancel</button><button class="rounded-xl bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Confirm sale</button></div>
     </form>
   </div>
 
@@ -91,19 +91,19 @@ import Layout from '../../layouts/Layout.astro';
     const toDate = (value: any) => new Date(typeof value === 'string' ? value : value?.$date || value?.date || 0);
     const displayDate = (value: any) => {
       const date = toDate(value);
-      return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+      return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
     };
     const relativeTime = (value: any) => {
       const date = toDate(value);
       if (Number.isNaN(date.getTime())) return '';
       const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
-      if (seconds < 45) return 'Baru saja';
-      if (seconds < 3600) return `${Math.floor(seconds / 60)} menit yang lalu`;
-      if (seconds < 86400) return `${Math.floor(seconds / 3600)} jam yang lalu`;
-      if (seconds < 604800) return `${Math.floor(seconds / 86400)} hari yang lalu`;
-      return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+      if (seconds < 45) return 'Just now';
+      if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+      if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`;
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
     };
-    const profileName = (profile: any) => profile?.name || profile?.full_name || profile?.username || 'Pengguna Stuff8';
+    const profileName = (profile: any) => profile?.name || profile?.full_name || profile?.username || 'Stuff8 user';
     async function profileFor(id: string) {
       if (id === user()?.id) return user();
       if (profiles.has(id)) return profiles.get(id);
@@ -165,11 +165,11 @@ import Layout from '../../layouts/Layout.astro';
 
     function attachmentMarkup(file: any, extraImages = 0) {
       const url = attachmentUrl(file.key);
-      const filename = escapeHtml(file.filename || 'Lampiran');
+      const filename = escapeHtml(file.filename || 'Attachment');
       if (String(file.content_type || '').startsWith('image/')) {
-        return `<button type="button" data-chat-image="${escapeHtml(url)}" data-chat-image-name="${filename}" class="relative mt-2 block w-full overflow-hidden rounded-xl border border-white/20 bg-white/10 text-left" title="Buka gambar ${filename}"><img src="${url}" alt="${filename}" class="mx-auto max-h-64 w-auto max-w-full object-contain" />${extraImages ? `<span class="absolute inset-0 flex items-center justify-center bg-navy-950/55 text-2xl font-bold text-white">+${extraImages}</span>` : ''}<span class="block truncate px-2 py-1.5 text-xs font-semibold">${filename}</span></button>`;
+        return `<button type="button" data-chat-image="${escapeHtml(url)}" data-chat-image-name="${filename}" class="relative mt-2 block w-full overflow-hidden rounded-xl border border-white/20 bg-white/10 text-left" title="Open image ${filename}"><img src="${url}" alt="${filename}" class="mx-auto max-h-64 w-auto max-w-full object-contain" />${extraImages ? `<span class="absolute inset-0 flex items-center justify-center bg-navy-950/55 text-2xl font-bold text-white">+${extraImages}</span>` : ''}<span class="block truncate px-2 py-1.5 text-xs font-semibold">${filename}</span></button>`;
       }
-      return `<a class="mt-2 flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold underline" target="_blank" rel="noopener" href="${url}" title="Buka atau unduh ${filename}"><span aria-hidden="true">📎</span><span class="truncate">${filename}</span></a>`;
+      return `<a class="mt-2 flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold underline" target="_blank" rel="noopener" href="${url}" title="Open or download ${filename}"><span aria-hidden="true">📎</span><span class="truncate">${filename}</span></a>`;
     }
 
     function attachmentsMarkup(files: any[]) {
@@ -200,7 +200,7 @@ import Layout from '../../layouts/Layout.astro';
     function openMediaGallery(url: string) {
       mediaGallery = activeMessages.flatMap(message => (message.attachments || [])
         .filter((file: any) => String(file.content_type || '').startsWith('image/'))
-        .map((file: any) => ({ url: attachmentUrl(file.key), filename: file.filename || 'Gambar' })));
+        .map((file: any) => ({ url: attachmentUrl(file.key), filename: file.filename || 'Image' })));
       mediaIndex = Math.max(0, mediaGallery.findIndex(item => item.url === url));
       renderMediaViewer();
     }
@@ -225,16 +225,16 @@ import Layout from '../../layouts/Layout.astro';
     function showAttachmentError(file: File, message: string) {
       const id = `chat-upload-error-${++uploadSequence}`;
       const root = document.getElementById('messages');
-      root?.insertAdjacentHTML('beforeend', `<div id="${id}" class="flex justify-end"><div class="w-full max-w-sm rounded-2xl rounded-br-sm border border-rose-200 bg-rose-50 p-3"><div class="flex items-start gap-3"><div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg" aria-hidden="true">📄</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-bold text-navy-900">${escapeHtml(file.name)}</p><p class="mt-0.5 text-xs text-rose-700">${escapeHtml(message)}</p></div><button type="button" class="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-rose-700 hover:bg-rose-100" aria-label="Hapus pesan upload">×</button></div></div></div>`);
+      root?.insertAdjacentHTML('beforeend', `<div id="${id}" class="flex justify-end"><div class="w-full max-w-sm rounded-2xl rounded-br-sm border border-rose-200 bg-rose-50 p-3"><div class="flex items-start gap-3"><div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg" aria-hidden="true">📄</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-bold text-navy-900">${escapeHtml(file.name)}</p><p class="mt-0.5 text-xs text-rose-700">${escapeHtml(message)}</p></div><button type="button" class="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-rose-700 hover:bg-rose-100" aria-label="Remove upload message">×</button></div></div></div>`);
       document.querySelector(`#${id} button`)?.addEventListener('click', () => document.getElementById(id)?.remove());
       if (root) root.scrollTop = root.scrollHeight;
     }
 
     function uploadAttachment(file: File): Promise<any> {
-      if (!activeConversation || !user()?.id) return Promise.reject(new Error('Percakapan belum siap.'));
+      if (!activeConversation || !user()?.id) return Promise.reject(new Error('Conversation is not ready yet.'));
       const uploadId = `chat-upload-${++uploadSequence}`;
       const root = document.getElementById('messages');
-      root?.insertAdjacentHTML('beforeend', `<div id="${uploadId}" class="flex justify-end"><div class="w-full max-w-sm rounded-2xl rounded-br-sm border border-navy-100 bg-white p-3 shadow-xs"><div class="flex items-start gap-3"><div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-lg" aria-hidden="true">${file.type.startsWith('image/') ? '🖼️' : '📄'}</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-bold text-navy-900">${escapeHtml(file.name)}</p><p data-upload-status class="mt-0.5 text-xs text-slate-500">Menyiapkan upload…</p></div><button type="button" data-upload-cancel class="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-slate-500 hover:bg-rose-50 hover:text-rose-700" aria-label="Batalkan atau hapus upload">×</button></div><div class="mt-3 h-1.5 overflow-hidden rounded-full bg-navy-100"><span data-upload-progress class="block h-full w-0 rounded-full bg-brand-600 transition-[width] duration-150"></span></div><div data-upload-actions class="mt-3 hidden items-center gap-2"><button type="button" data-upload-retry class="rounded-lg bg-navy-900 px-3 py-1.5 text-xs font-bold text-white">Coba lagi</button><button type="button" data-upload-remove class="rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-600 hover:bg-navy-100">Hapus</button></div></div></div>`);
+      root?.insertAdjacentHTML('beforeend', `<div id="${uploadId}" class="flex justify-end"><div class="w-full max-w-sm rounded-2xl rounded-br-sm border border-navy-100 bg-white p-3 shadow-xs"><div class="flex items-start gap-3"><div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-lg" aria-hidden="true">${file.type.startsWith('image/') ? '🖼️' : '📄'}</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-bold text-navy-900">${escapeHtml(file.name)}</p><p data-upload-status class="mt-0.5 text-xs text-slate-500">Preparing upload…</p></div><button type="button" data-upload-cancel class="inline-flex size-7 shrink-0 items-center justify-center rounded-md text-slate-500 hover:bg-rose-50 hover:text-rose-700" aria-label="Cancel or remove upload">×</button></div><div class="mt-3 h-1.5 overflow-hidden rounded-full bg-navy-100"><span data-upload-progress class="block h-full w-0 rounded-full bg-brand-600 transition-[width] duration-150"></span></div><div data-upload-actions class="mt-3 hidden items-center gap-2"><button type="button" data-upload-retry class="rounded-lg bg-navy-900 px-3 py-1.5 text-xs font-bold text-white">Try again</button><button type="button" data-upload-remove class="rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-600 hover:bg-navy-100">Remove</button></div></div></div>`);
       root && (root.scrollTop = root.scrollHeight);
       return new Promise((resolve, reject) => {
         const card = document.getElementById(uploadId);
@@ -249,30 +249,30 @@ import Layout from '../../layouts/Layout.astro';
         const start = () => {
           actions?.classList.add('hidden'); actions?.classList.remove('flex');
           if (progress) { progress.className = 'block h-full w-0 rounded-full bg-brand-600 transition-[width] duration-150'; progress.style.width = '0'; }
-          if (status) status.textContent = 'Menyiapkan upload…';
+          if (status) status.textContent = 'Preparing upload…';
           xhr = new XMLHttpRequest();
           xhr.timeout = 60000;
           xhr.open('POST', `${CHAT}/conversations/${encodeURIComponent(activeConversation.conversation_id)}/attachments`);
           const token = session()?.token;
           if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-          xhr.upload.onprogress = event => { if (!event.lengthComputable) return; const percent = Math.min(95, Math.round((event.loaded / event.total) * 95)); if (progress) progress.style.width = `${percent}%`; if (status) status.textContent = `Mengunggah ke Storage… ${percent}%`; };
-          xhr.upload.onload = () => { if (status) status.textContent = 'Storage sedang menyiapkan file…'; };
-          xhr.onerror = () => fail('Upload gagal. Coba lagi.');
-          xhr.ontimeout = () => fail('Upload terlalu lama. Coba lagi.');
-          xhr.onabort = () => { if (!settled) { settled = true; remove(); reject(new DOMException('Upload dibatalkan.', 'AbortError')); } };
+          xhr.upload.onprogress = event => { if (!event.lengthComputable) return; const percent = Math.min(95, Math.round((event.loaded / event.total) * 95)); if (progress) progress.style.width = `${percent}%`; if (status) status.textContent = `Uploading to storage… ${percent}%`; };
+          xhr.upload.onload = () => { if (status) status.textContent = 'Storage is preparing the file…'; };
+          xhr.onerror = () => fail('Upload failed. Try again.');
+          xhr.ontimeout = () => fail('Upload took too long. Try again.');
+          xhr.onabort = () => { if (!settled) { settled = true; remove(); reject(new DOMException('Upload cancelled.', 'AbortError')); } };
           xhr.onload = () => {
             if (xhr!.status < 200 || xhr!.status >= 300) {
-              let message = 'Upload ditolak. Coba lagi.';
+              let message = 'Upload rejected. Try again.';
               try { message = JSON.parse(xhr!.responseText).error || message; } catch {}
               fail(message);
               return;
             }
-            try { const attachment = JSON.parse(xhr!.responseText); if (progress) progress.style.width = '100%'; if (status) status.textContent = 'Upload selesai. Mengirim ke percakapan…'; settled = true; resolve({ attachment, remove }); } catch { fail('Respons Storage tidak valid.'); }
+            try { const attachment = JSON.parse(xhr!.responseText); if (progress) progress.style.width = '100%'; if (status) status.textContent = 'Upload complete. Sending to conversation…'; settled = true; resolve({ attachment, remove }); } catch { fail('Invalid storage response.'); }
           };
           const form = new FormData(); form.append('owner_id', user().id); form.append('file', file); xhr.send(form);
         };
-        card?.querySelector<HTMLButtonElement>('[data-upload-cancel]')?.addEventListener('click', () => xhr ? xhr.abort() : (remove(), !settled && reject(new DOMException('Upload dibatalkan.', 'AbortError'))));
-        card?.querySelector<HTMLButtonElement>('[data-upload-remove]')?.addEventListener('click', () => { remove(); if (!settled) reject(new DOMException('Upload dibatalkan.', 'AbortError')); });
+        card?.querySelector<HTMLButtonElement>('[data-upload-cancel]')?.addEventListener('click', () => xhr ? xhr.abort() : (remove(), !settled && reject(new DOMException('Upload cancelled.', 'AbortError'))));
+        card?.querySelector<HTMLButtonElement>('[data-upload-remove]')?.addEventListener('click', () => { remove(); if (!settled) reject(new DOMException('Upload cancelled.', 'AbortError')); });
         retry?.addEventListener('click', start);
         start();
       });
@@ -280,16 +280,16 @@ import Layout from '../../layouts/Layout.astro';
 
     function signedOut() {
       listRoot.innerHTML = '';
-      panel.innerHTML = `<div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-navy-900">Masuk untuk melihat chat</h2><p class="mt-1 text-sm text-slate-500">Offer dan negosiasi hanya tersedia untuk akun aktif.</p><a href="/auth/signup/?return_to=/chat/" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Daftar atau masuk</a></div>`;
+      panel.innerHTML = `<div class="m-auto max-w-sm p-6 text-center"><h2 class="font-bold text-navy-900">Sign in to view chat</h2><p class="mt-1 text-sm text-slate-500">Offers and negotiations are only available for active accounts.</p><a href="/auth/signup/?return_to=/chat/" class="mt-4 inline-flex rounded-lg bg-navy-900 px-4 py-2.5 text-sm font-bold text-white">Sign up or sign in</a></div>`;
     }
 
     function renderEmptyInbox() {
       chatApp.className = 'flex min-h-[32rem] flex-1 items-center justify-center overflow-hidden rounded-2xl border border-navy-100 bg-white px-6 py-10 text-center shadow-xs';
-      chatApp.innerHTML = `<div class="flex max-w-sm flex-col items-center"><img src="/images/empty-inbox.webp" alt="Belum ada offer marketplace" class="mb-4 size-36 object-contain sm:size-40" /><h2 class="text-base font-bold text-navy-900">Belum ada offer</h2><p class="mt-1 text-sm leading-6 text-slate-500">Mulai dengan menawar barang incaranmu di <a href="/marketplace/" class="font-bold text-brand-700 hover:underline">Marketplace</a> — begitu ada offer, percakapan produk muncul di sini.</p></div>`;
+      chatApp.innerHTML = `<div class="flex max-w-sm flex-col items-center"><img src="/images/empty-inbox.webp" alt="No marketplace offers yet" class="mb-4 size-36 object-contain sm:size-40" /><h2 class="text-base font-bold text-navy-900">No offers yet</h2><p class="mt-1 text-sm leading-6 text-slate-500">Start by bidding on items you love on the <a href="/marketplace/" class="font-bold text-brand-700 hover:underline">Marketplace</a> — once there's an offer, the product conversation appears here.</p></div>`;
     }
 
     async function renderList() {
-      if (!conversations.length) { listRoot.innerHTML = `<div class="rounded-xl border border-dashed border-navy-100 bg-white p-4 text-center"><p class="text-sm font-bold text-navy-900">Belum ada offer</p><p class="mt-1 text-xs text-slate-500">Mulai dengan menawar barang incaranmu di Marketplace.</p></div>`; return; }
+      if (!conversations.length) { listRoot.innerHTML = `<div class="rounded-xl border border-dashed border-navy-100 bg-white p-4 text-center"><p class="text-sm font-bold text-navy-900">No offers yet</p><p class="mt-1 text-xs text-slate-500">Start by bidding on items you love in the Marketplace.</p></div>`; return; }
       const updatedAt = (conversation: any) => toDate(conversation.updated_at).getTime() || 0;
       const ownerGroups = new Map<string, any[]>();
       const regularConversations: any[] = [];
@@ -309,7 +309,7 @@ import Layout from '../../layouts/Layout.astro';
         .map(async ([referenceId, group]) => {
           group.sort((left, right) => updatedAt(right) - updatedAt(left));
           const isExpanded = expandedProductTrees.has(referenceId);
-          const title = escapeHtml(group[0].context?.title || 'Produk marketplace');
+          const title = escapeHtml(group[0].context?.title || 'Marketplace item');
           const listing = await listingFor(referenceId);
           const nodes = await Promise.all(group.map(async conversation => {
             const customer = await profileFor(customerIdFor(conversation));
@@ -317,11 +317,11 @@ import Layout from '../../layouts/Layout.astro';
             const selected = activeConversation?.conversation_id === conversation.conversation_id;
             return `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="ml-2 flex w-[calc(100%-0.5rem)] items-center gap-2 rounded-lg border px-3 py-2 text-left transition ${selected ? 'border-navy-900 bg-white shadow-xs' : 'border-navy-100 bg-white hover:border-navy-200'}">${avatar(customer, 'size-8')}<span class="min-w-0"><span class="block truncate text-xs font-bold text-navy-900">${name}</span><span class="mt-0.5 block text-[11px] text-slate-500">${relativeTime(conversation.updated_at)}</span></span></button>`;
           }));
-          return `<div class="rounded-xl border border-navy-100 bg-white"><button type="button" data-product-tree="${escapeHtml(referenceId)}" aria-expanded="${isExpanded}" class="flex w-full items-center justify-between gap-3 p-3 text-left">${listingCover(listing)}<span class="min-w-0 flex-1"><span class="block truncate text-sm font-bold text-navy-900">${title}</span><span class="mt-1 block text-xs text-slate-500">${group.length} penawar aktif</span></span><span class="text-lg text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}" aria-hidden="true">⌄</span></button><div data-product-nodes="${escapeHtml(referenceId)}" class="space-y-2 border-t border-navy-100 p-2 ${isExpanded ? '' : 'hidden'}">${nodes.join('')}</div></div>`;
+          return `<div class="rounded-xl border border-navy-100 bg-white"><button type="button" data-product-tree="${escapeHtml(referenceId)}" aria-expanded="${isExpanded}" class="flex w-full items-center justify-between gap-3 p-3 text-left">${listingCover(listing)}<span class="min-w-0 flex-1"><span class="block truncate text-sm font-bold text-navy-900">${title}</span><span class="mt-1 block text-xs text-slate-500">${group.length} active bidders</span></span><span class="text-lg text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}" aria-hidden="true">⌄</span></button><div data-product-nodes="${escapeHtml(referenceId)}" class="space-y-2 border-t border-navy-100 p-2 ${isExpanded ? '' : 'hidden'}">${nodes.join('')}</div></div>`;
         }));
       const regularMarkup = (await Promise.all(regularConversations.sort((left, right) => updatedAt(right) - updatedAt(left)).map(async conversation => {
         const listing = await listingFor(conversation.context?.reference_id);
-        return `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="flex w-full items-center gap-3 rounded-xl border p-3 text-left transition ${activeConversation?.conversation_id === conversation.conversation_id ? 'border-navy-900 bg-white shadow-xs' : 'border-transparent hover:border-navy-100 hover:bg-white'}">${listingCover(listing)}<span class="min-w-0"><span class="block truncate text-sm font-bold text-navy-900">${escapeHtml(conversation.context?.title || 'Produk marketplace')}</span><span class="mt-1 block text-xs text-slate-500">${relativeTime(conversation.updated_at)}</span></span></button>`;
+        return `<button type="button" data-conversation="${escapeHtml(conversation.conversation_id)}" class="flex w-full items-center gap-3 rounded-xl border p-3 text-left transition ${activeConversation?.conversation_id === conversation.conversation_id ? 'border-navy-900 bg-white shadow-xs' : 'border-transparent hover:border-navy-100 hover:bg-white'}">${listingCover(listing)}<span class="min-w-0"><span class="block truncate text-sm font-bold text-navy-900">${escapeHtml(conversation.context?.title || 'Marketplace item')}</span><span class="mt-1 block text-xs text-slate-500">${relativeTime(conversation.updated_at)}</span></span></button>`;
       }))).join('');
       listRoot.innerHTML = `${ownerMarkup.join('')}${regularMarkup}`;
       document.querySelectorAll<HTMLButtonElement>('[data-product-tree]').forEach(button => button.addEventListener('click', () => {
@@ -339,12 +339,12 @@ import Layout from '../../layouts/Layout.astro';
       const sale = message.sale || {};
       const viewer = user()?.id;
       if (viewer === sale.buyer_id) {
-        return `Terima kasih, ${sale.title} sudah terjual kepadamu seharga ${money(sale.final_price)}. Barangnya sekarang masuk ke inventarismu. Semoga bermanfaat!`;
+        return `Thank you! ${sale.title} has been sold to you for ${money(sale.final_price)}. It's now in your inventory. Enjoy!`;
       }
       if (viewer === message.sender_id) {
-        return `Barang ${sale.title} sudah terjual kepada ${sale.buyer_name} seharga ${money(sale.final_price)}. Terima kasih sudah bertransaksi di Stuff8!`;
+        return `${sale.title} has been sold to ${sale.buyer_name} for ${money(sale.final_price)}. Thank you for transacting on Stuff8!`;
       }
-      return `Terima kasih sudah mengajukan penawaran untuk ${sale.title}. Barang ini sudah terjual kepada ${sale.buyer_name}, jadi negosiasi ini kami tutup. Semoga segera menemukan barang yang pas.`;
+      return `Thank you for placing an offer on ${sale.title}. This item has been sold to ${sale.buyer_name}, so this negotiation is now closed. We hope you find the perfect item soon.`;
     };
 
     async function renderMessage(message: any) {
@@ -354,7 +354,7 @@ import Layout from '../../layouts/Layout.astro';
       const mine = message.sender_id === user()?.id;
       const profile = await profileFor(message.sender_id);
       const files = attachmentsMarkup(message.attachments || []);
-      return `<div id="message-${message.message_id}" class="flex items-end gap-2 ${mine ? 'justify-end' : 'justify-start'}">${mine ? '' : avatar(profile)}<div class="max-w-[78%]"><p class="mb-1 text-[11px] font-semibold text-slate-500 ${mine ? 'text-right' : ''}">${escapeHtml(profileName(profile))}</p><div class="rounded-2xl px-3 py-2 text-sm ${mine ? 'rounded-br-sm bg-navy-900 text-white' : 'rounded-bl-sm bg-navy-100 text-navy-900'}">${message.offer_amount ? `<p class="mb-1 text-xs font-bold">Offer: ${money(message.offer_amount)}</p>` : ''}${message.body ? `<p>${escapeHtml(message.body)}</p>` : ''}${message.sticker_id ? `<p class="text-lg" aria-label="Stiker">💬 <span class="text-xs font-bold">${escapeHtml(message.sticker_id.replaceAll('-', ' '))}</span></p>` : ''}${files}</div><p class="mt-1 text-[10px] text-slate-400 ${mine ? 'text-right' : ''}">${relativeTime(message.created_at)}</p></div>${mine ? avatar(profile) : ''}</div>`;
+      return `<div id="message-${message.message_id}" class="flex items-end gap-2 ${mine ? 'justify-end' : 'justify-start'}">${mine ? '' : avatar(profile)}<div class="max-w-[78%]"><p class="mb-1 text-[11px] font-semibold text-slate-500 ${mine ? 'text-right' : ''}">${escapeHtml(profileName(profile))}</p><div class="rounded-2xl px-3 py-2 text-sm ${mine ? 'rounded-br-sm bg-navy-900 text-white' : 'rounded-bl-sm bg-navy-100 text-navy-900'}">${message.offer_amount ? `<p class="mb-1 text-xs font-bold">Offer: ${money(message.offer_amount)}</p>` : ''}${message.body ? `<p>${escapeHtml(message.body)}</p>` : ''}${message.sticker_id ? `<p class="text-lg" aria-label="Sticker">💬 <span class="text-xs font-bold">${escapeHtml(message.sticker_id.replaceAll('-', ' '))}</span></p>` : ''}${files}</div><p class="mt-1 text-[10px] text-slate-400 ${mine ? 'text-right' : ''}">${relativeTime(message.created_at)}</p></div>${mine ? avatar(profile) : ''}</div>`;
     }
 
     // One live socket per conversation. Sending is guarded by readyState so a
@@ -374,7 +374,7 @@ import Layout from '../../layouts/Layout.astro';
       const socket = new WebSocket(wsUrlFor(targetId));
       websocket = socket;
       socket.onopen = () => { socketReconnectAttempt = 0; };
-      socket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profileName(profile)} sedang mengetik`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { activeMessages.push(message); root.insertAdjacentHTML('beforeend', await renderMessage(message)); bindMediaGallery(root); root.scrollTop = root.scrollHeight; } await renderList(); };
+      socket.onmessage = async event => { const payload = JSON.parse(event.data); const root = document.getElementById('messages'); if (payload.type === 'typing') { const indicator = document.getElementById('typing-indicator'); if (indicator && payload.sender_id !== user()?.id) { const profile = await profileFor(payload.sender_id); indicator.setAttribute('aria-label', `${profileName(profile)} is typing`); indicator.classList.toggle('hidden', !payload.is_typing); indicator.classList.toggle('flex', payload.is_typing); } return; } const message = payload.type === 'message' ? payload.message : payload; const matchingConversation = conversations.find(candidate => candidate.conversation_id === activeConversation?.conversation_id); if (matchingConversation) matchingConversation.updated_at = message.created_at || new Date().toISOString(); if (root && !document.getElementById(`message-${message.message_id}`)) { activeMessages.push(message); root.insertAdjacentHTML('beforeend', await renderMessage(message)); bindMediaGallery(root); root.scrollTop = root.scrollHeight; } await renderList(); };
       socket.onclose = () => {
         if (websocket === socket) websocket = undefined;
         if (generation !== socketGeneration) return;
@@ -391,13 +391,13 @@ import Layout from '../../layouts/Layout.astro';
       if (conversation.context?.reference_id) expandedProductTrees.add(conversation.context.reference_id);
       await renderList();
       const listing = await listingFor(conversation.context?.reference_id);
-      const description = escapeHtml(listing?.description || 'Percakapan tentang barang ini.');
+      const description = escapeHtml(listing?.description || 'Conversation about this item.');
       const referenceId = conversation.context?.reference_id || '';
       const itemLink = referenceId
         ? marketplaceDetailPath({ id: referenceId, title: listing?.title || conversation.context?.title || '' })
         : `/marketplace/detail/?id=${encodeURIComponent(referenceId)}`;
       const canCompleteSale = listing?.seller_id === user()?.id && !listing?.is_sold;
-      panel.innerHTML = `<div class="flex items-center justify-between border-b border-navy-100 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><div class="ml-4 flex shrink-0 items-center gap-3"><a href="${itemLink}" class="text-xs font-bold text-navy-900 hover:underline">Lihat barang</a>${canCompleteSale ? '<button id="chat-complete-sale" type="button" class="rounded-lg bg-navy-900 px-3 py-2 text-xs font-bold text-white">Terjual</button>' : ''}</div></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-paper-100 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">Pengguna sedang mengetik</span></p><div class="sticky bottom-0 z-10 border-t border-navy-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-navy-100 px-3 py-2 text-sm" placeholder="Tulis pesan" /><input id="message-file" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><input id="message-camera" type="file" multiple accept="image/jpeg,image/png,image/webp" capture="environment" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-navy-100 px-3 text-sm" aria-label="Lampirkan gambar atau dokumen, maksimal 2 MB per file">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Kirim</button></form></div>`;
+      panel.innerHTML = `<div class="flex items-center justify-between border-b border-navy-100 p-4"><p class="line-clamp-2 text-xs leading-5 text-slate-500">${description}</p><div class="ml-4 flex shrink-0 items-center gap-3"><a href="${itemLink}" class="text-xs font-bold text-navy-900 hover:underline">View item</a>${canCompleteSale ? '<button id="chat-complete-sale" type="button" class="rounded-lg bg-navy-900 px-3 py-2 text-xs font-bold text-white">Sold</button>' : ''}</div></div><div id="messages" class="flex-1 min-w-0 space-y-3 overflow-y-auto bg-paper-100 p-4"></div><p id="typing-indicator" class="hidden min-h-16 items-center px-6 py-3" aria-live="polite"><span class="typing-visual" aria-hidden="true"><img src="/images/typing-bubble.webp" alt="" /><span class="typing-dots"><i></i><i></i><i></i></span></span><span class="sr-only">User is typing</span></p><div class="sticky bottom-0 z-10 border-t border-navy-100 bg-white"><form id="message-form" class="flex min-w-0 gap-2 p-3"><input id="message-input" class="min-w-0 flex-1 rounded-lg border border-navy-100 px-3 py-2 text-sm" placeholder="Write a message" /><input id="message-file" type="file" multiple accept="image/jpeg,image/png,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" class="hidden" /><input id="message-camera" type="file" multiple accept="image/jpeg,image/png,image/webp" capture="environment" class="hidden" /><button id="message-file-button" type="button" class="shrink-0 rounded-lg border border-navy-100 px-3 text-sm" aria-label="Attach an image or document, max 2 MB per file">＋</button><button class="shrink-0 whitespace-nowrap rounded-lg bg-navy-900 px-4 text-sm font-bold text-white">Send</button></form></div>`;
       const messagesResponse = await fetch(`${CHAT}/conversations/${conversation.conversation_id}/messages?participant_id=${encodeURIComponent(user().id)}`, { headers: chatHeaders() });
       const messages = messagesResponse.ok ? await messagesResponse.json() : [];
       activeMessages = messages;
@@ -415,7 +415,7 @@ import Layout from '../../layouts/Layout.astro';
         const priceInput = document.getElementById('chat-sale-price') as HTMLInputElement;
         const highestOffer = Math.max(Number(listing.asking_price || 0), ...messages.map((message: any) => Number(message.offer_amount || 0)));
         priceInput.value = money(highestOffer);
-        document.getElementById('chat-sale-buyer')!.textContent = `Pembeli: ${profileName(buyer)}`;
+        document.getElementById('chat-sale-buyer')!.textContent = `Buyer: ${profileName(buyer)}`;
         const closeSaleDialog = () => { dialog.classList.add('hidden'); dialog.classList.remove('flex'); };
         completeSaleButton.onclick = () => { dialog.classList.remove('hidden'); dialog.classList.add('flex'); priceInput.focus(); priceInput.select(); };
         document.getElementById('chat-complete-sale-close')!.onclick = closeSaleDialog;
@@ -428,12 +428,12 @@ import Layout from '../../layouts/Layout.astro';
           if (!response.ok) {
             const body = await response.text();
             const error = document.getElementById('chat-sale-error')!;
-            error.textContent = body.trim() || 'Barang belum dapat ditandai terjual. Coba lagi.';
+            error.textContent = body.trim() || 'Item could not be marked as sold. Try again.';
             error.classList.remove('hidden');
             return;
           }
           closeSaleDialog();
-          window.stuff8Toast?.('Barang sudah terjual dan masuk ke inventaris pembeli.', { variant: 'success', title: 'Transaksi selesai' });
+          window.stuff8Toast?.('Item sold and moved to the buyer\'s inventory.', { variant: 'success', title: 'Transaction complete' });
           // Stay on the chat page. Invalidate the cached listing so the sold
           // item re-renders without the Terjual button and the conversation
           // list reflects the new ownership.
@@ -468,7 +468,7 @@ import Layout from '../../layouts/Layout.astro';
         if (!selected.length) return;
         const allowed = selected.filter(file => {
           if (file.size <= MAX_CHAT_ATTACHMENT_BYTES) return true;
-          showAttachmentError(file, 'Ukuran lampiran maksimal 2 MB per file.');
+          showAttachmentError(file, 'Attachment size limit is 2 MB per file.');
           return false;
         });
         try {
@@ -489,7 +489,7 @@ import Layout from '../../layouts/Layout.astro';
     async function sendMessage(payload: any) {
       if (!activeConversation || !user()?.id) return;
       const response = await fetch(`${CHAT}/conversations/${activeConversation.conversation_id}/messages`, { method: 'POST', headers: { ...chatHeaders(), 'Content-Type': 'application/json' }, body: JSON.stringify({ sender_id: user().id, ...payload }) });
-      if (!response.ok) throw new Error('Pesan belum dapat dikirim.');
+      if (!response.ok) throw new Error('Message could not be sent.');
       const message = await response.json();
       const root = document.getElementById('messages');
       if (root && !document.getElementById(`message-${message.message_id}`)) {
@@ -503,7 +503,7 @@ import Layout from '../../layouts/Layout.astro';
     async function load() {
       if (!user()?.id) { signedOut(); return; }
       const response = await fetch(`${CHAT}/conversations?participant_id=${encodeURIComponent(user().id)}`, { headers: chatHeaders() });
-      if (!response.ok) throw new Error('Chat belum tersedia.');
+      if (!response.ok) throw new Error('Chat is not available yet.');
       const seen = new Set<string>();
       conversations = (await response.json()).filter((conversation: any) => conversation.context?.domain === 'marketplace').filter((conversation: any) => { const key = `${conversation.context?.reference_id}:${[...conversation.participant_ids].sort().join(':')}`; if (seen.has(key)) return false; seen.add(key); return true; });
       if (!conversations.length) { renderEmptyInbox(); return; }
