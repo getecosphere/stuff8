@@ -45,7 +45,7 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
     const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
     const detailDesc = (text: string, fallback: string) => {
       const safe = escapeHtml((text || fallback).trim());
-      return `<p class="whitespace-pre-line text-sm leading-relaxed text-slate-600">${safe}</p>`;
+      return `<p id="item-description" class="whitespace-pre-line text-sm leading-relaxed text-slate-600 line-clamp-4">${safe}</p><button type="button" data-desc-toggle class="hidden mt-1.5 text-xs font-bold text-brand-600 hover:underline" aria-expanded="false">Show more</button>`;
     };
     const photoUrl = (key?: string) => key ? `${STORAGE}/storage/content/${key.split('/').map(encodeURIComponent).join('/')}` : '/images/no-item-image.webp';
     const thumbPhotoUrl = (key?: string) => key && !isVideoKey(key)
@@ -177,6 +177,20 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
       });
       installVideoBehaviors();
       applyMuteToAll();
+      const descText = document.getElementById('item-description');
+      const descToggle = document.querySelector('[data-desc-toggle]');
+      if (descText && descToggle) {
+        if (descText.scrollHeight <= descText.clientHeight) {
+          descToggle.remove();
+        } else {
+          descToggle.classList.remove('hidden');
+          descToggle.addEventListener('click', () => {
+            const collapsed = descText.classList.toggle('line-clamp-4');
+            descToggle.textContent = collapsed ? 'Show more' : 'Show less';
+            descToggle.setAttribute('aria-expanded', String(!collapsed));
+          });
+        }
+      }
       document.getElementById('share-listing')?.addEventListener('click', () => shareListing(item, prettyPath));
       document.getElementById('start-negotiation')?.addEventListener('click', () => document.getElementById('offer-modal')?.classList.replace('hidden', 'flex'));
       const offerForm = document.getElementById('offer-form') as HTMLFormElement | null;
