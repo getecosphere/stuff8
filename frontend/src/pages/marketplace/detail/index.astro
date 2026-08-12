@@ -127,8 +127,23 @@ import Breadcrumb from '../../../components/Breadcrumb.astro';
           codLocation = sellerProfile.codLocation || '';
         }
       } catch { /* profile unreachable — hide the COD card */ }
+      // Resolve the meeting-point link (often a maps.app.goo.gl short link) to
+      // the full place URL + name via the marketplace backend, so the card can
+      // show the place name and a real map thumbnail.
+      let codName = '';
+      let codMapUrl = codLocation;
+      if (codLocation) {
+        try {
+          const mapRes = await fetch(`${API}/cod-map?url=${encodeURIComponent(codLocation)}`);
+          if (mapRes.ok) {
+            const mapInfo = await mapRes.json();
+            codName = mapInfo.name || '';
+            codMapUrl = mapInfo.resolved_url || codLocation;
+          }
+        } catch { /* resolution unavailable — keep the minimal card */ }
+      }
       const codCard = codLocation
-        ? `<div class="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3"><div class="flex items-center gap-1.5 text-xs font-bold text-emerald-800"><svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>Meet for Cash on Delivery</div><p class="mt-1 text-xs text-emerald-900">The owner meets buyers at this location for COD.</p><a href="${escapeHtml(codLocation)}" target="_blank" rel="noopener" class="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700">Open meeting point in Google Maps</a></div>`
+        ? `<div class="mt-3 overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50"><div class="space-y-1 p-3"><div class="flex items-center gap-1.5 text-xs font-bold text-emerald-800"><svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>Meet for Cash on Delivery</div><p class="text-xs text-emerald-900">The owner meets buyers at this location for COD.</p>${codName ? `<p class="mt-1 text-sm font-bold text-emerald-950">${escapeHtml(codName)}</p>` : ''}</div>${codMapUrl ? `<iframe src="https://maps.google.com/maps?q=${encodeURIComponent(codName || codMapUrl)}&z=17&hl=en&output=embed" title="${escapeHtml(codName || 'COD meeting point map')}" class="block h-40 w-full border-0 border-y border-emerald-200 bg-emerald-100" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : ''}<div class="p-3"><a href="${escapeHtml(codMapUrl)}" target="_blank" rel="noopener" class="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700">Open meeting point in Google Maps</a></div></div>`
         : '';
 
       const authenticated = !!sender()?.id;
