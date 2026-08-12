@@ -42,7 +42,7 @@ import Layout from '../layouts/Layout.astro';
             </button>
           </div>
 
-          <!-- Dua-wajah flow: barang privat -> 1 klik -> tayang di Pasar -->
+          <!-- Two-sided flow: private item -> 1 click -> listed on the Marketplace -->
           <div data-reveal style="--reveal-delay: 320ms" class="mx-auto max-w-3xl pt-8" aria-label="How Stuff8 works: keep items private, then list them in the marketplace">
             <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
               <div class="card overflow-hidden text-left">
@@ -1850,7 +1850,7 @@ import Layout from '../layouts/Layout.astro';
         to_owner_name: sellerName,
         price: item?.purchase_price || item?.asking_price || item?.value || 0,
         transferred_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-        notes: 'Terdaftar pertama kali di Katalog Inventory & Marketplace'
+        notes: 'First listed in the Inventory & Marketplace catalog'
       }];
 
       if (item?.is_sold || item?.isSold) {
@@ -1898,7 +1898,7 @@ import Layout from '../layouts/Layout.astro';
       timelineEl.innerHTML = records.map((rec, idx) => {
         const isLatest = idx === records.length - 1;
         const isSoldRecord = (rec.notes || '').toLowerCase().includes('terjual') || (rec.notes || '').toLowerCase().includes('sold');
-        const isInitialRecord = (rec.notes || '').toLowerCase().includes('terdaftar pertama') || (rec.notes || '').toLowerCase().includes('katalog inventory');
+        const isInitialRecord = (rec.notes || '').toLowerCase().includes('first listed') || (rec.notes || '').toLowerCase().includes('inventory & marketplace') || (rec.notes || '').toLowerCase().includes('terdaftar pertama') || (rec.notes || '').toLowerCase().includes('katalog inventory');
         const dateStr = rec.transferred_at ? (new Date(rec.transferred_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })) : 'Just now';
 
         return `
