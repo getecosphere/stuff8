@@ -195,8 +195,8 @@ ownershipHistoryStore[itemId] = [
 ## 6. Implementasi Kode Terkait
 
 ### File Utama
-- **Frontend**: `stuff8_composition/frontend/src/pages/index.astro`
-- **Layout**: `stuff8_composition/frontend/src/layouts/Layout.astro`
+- **Frontend**: `stuff8_core/frontend/src/pages/index.astro`
+- **Layout**: `stuff8_core/frontend/src/layouts/Layout.astro`
 
 ### Fungsi Kunci
 
