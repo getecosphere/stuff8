@@ -5,3 +5,11 @@ dist/
 .env.*
 !.env.example
 .DS_Store
+# eco-generated runtime files
+ecosystem.config.js
+ecosystem.config.cjs
+.configure-state
+.eco/
+.eco-rust-hash
+dump.rdb
+appendonlydir/
