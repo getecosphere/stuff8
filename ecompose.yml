@@ -76,17 +76,17 @@ domains:
 
 services:
   email-manager-backend:
-    lxs: email-manager@1.0.0
+    lxs: email-manager@1.0.1
     grants:
       secrets: [MONGODB_URI, BREVO_API_KEY, MAIL_FROM_EMAIL, MAIL_FROM_NAME]
 
   chat-backend:
-    lxs: chat@1.0.1
+    lxs: chat@1.0.2
     grants:
       secrets: [MONGODB_URI, REDIS_URL, JWT_SECRET]
 
   auth-backend:
-    lxs: auth@1.0.1
+    lxs: auth@1.0.2
     grants:
       secrets: [JWT_SECRET, MONGODB_URI]
 
@@ -96,7 +96,7 @@ services:
       - node@20
 
   storage-backend:
-    lxs: storage@1.0.4
+    lxs: storage@1.0.5
     grants:
       secrets: [S3_ENDPOINT, S3_REGION, S3_BUCKET, S3_ACCESS_KEY, S3_SECRET_KEY]
 
@@ -118,12 +118,12 @@ services:
       - rust
       - mongodb@7
   profile-backend:
-    lxs: profile@1.0.1
+    lxs: profile@1.0.2
     grants:
       secrets: [JWT_SECRET, MONGODB_URI]
 
   notifications-backend:
-    lxs: notifications@1.0.1
+    lxs: notifications@1.0.2
     grants:
       secrets: [JWT_SECRET, MONGODB_URI]
 
