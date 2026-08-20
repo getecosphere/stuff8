@@ -1435,7 +1435,7 @@ import Layout from '../layouts/Layout.astro';
       try {
         const res = await fetch(`${INVENTORY_API}/items`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.token}` },
           body: JSON.stringify({
             owner_id: currentSession.user.id,
             title,
@@ -1664,7 +1664,7 @@ import Layout from '../layouts/Layout.astro';
         if (inventorySearch) inventoryParams.set('search', inventorySearch);
         
         const resItems = ownerId
-          ? await fetch(`${INVENTORY_API}/items?${inventoryParams}`).then(r => r.ok ? r.json() : null)
+          ? await fetch(`${INVENTORY_API}/items?${inventoryParams}`, { headers: { 'Authorization': `Bearer ${currentSession.token}` } }).then(r => r.ok ? r.json() : null)
           : null;
 
         if (Array.isArray(resItems)) {
@@ -2351,7 +2351,7 @@ import Layout from '../layouts/Layout.astro';
       try {
         await fetch(`${INVENTORY_API}/items/${id}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.token}` },
           body: JSON.stringify({
             owner_id: currentSession.user.id,
             sellable: newSellable,
@@ -3139,7 +3139,7 @@ import Layout from '../layouts/Layout.astro';
       try {
         await fetch(`${INVENTORY_API}/items/${itemId}/transfer-owner`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...(() => { const s = JSON.parse(localStorage.getItem('stuff8_session') || 'null'); return s?.token ? { 'Authorization': `Bearer ${s.token}` } : {}; })() },
           body: JSON.stringify({
             new_owner_id: buyerId,
             purchase_price: finalPrice,

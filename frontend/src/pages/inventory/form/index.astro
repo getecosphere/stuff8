@@ -934,7 +934,7 @@ const maxVideoMB = Number(import.meta.env.PUBLIC_MAX_VIDEO_MB) || 200;
         return;
       }
       try {
-        const response = await fetch(`${INVENTORY_API}/items/${editingItemId}?owner_id=${encodeURIComponent(user().id)}`, { method: 'DELETE' });
+        const response = await fetch(`${INVENTORY_API}/items/${editingItemId}?owner_id=${encodeURIComponent(user().id)}`, { method: 'DELETE', headers: authHeaders() });
         if (!response.ok) throw new Error(await response.text());
         // Remove the public marketplace listing (if any) so a deleted item
         // doesn't stay up for sale.

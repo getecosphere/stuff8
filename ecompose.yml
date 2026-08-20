@@ -80,22 +80,12 @@ services:
     runtimes: [rust, mongodb@7]
     access:
       routes:
-        # Public browsing (homepage + listing pages, no Bearer). Write/owner
-        # endpoints are self-enforced by the backend (authenticated_owner).
-        - path: /api/marketplace/health
-          level: public
-        - path: /api/marketplace/categories
-          level: public
-        - path: /api/marketplace/featured
-          level: public
-        - path: /api/marketplace/cod-map
-          level: public
-        - path: /api/marketplace/listings
-          level: public
-        - path: /api/marketplace/listings/*
-          level: public
+        # Stuff8 is a public marketplace: browsing and listing reads are open.
+        # Write/owner endpoints (sync-item, mark-sold, ...) are self-enforced
+        # by the backend (authenticated_owner) — the frontend sends Bearer on
+        # those, so the gateway lets them through and the backend gates them.
         - path: /api/marketplace/*
-          level: auth
+          level: public
 
   bidding-backend:
     path: ../bidding/backend
@@ -103,16 +93,10 @@ services:
     runtimes: [rust, mongodb@7]
     access:
       routes:
-        # Browsing (listing summaries, bid count on public detail pages).
-        # Bid writes are self-enforced by the backend.
-        - path: /api/bidding/health
-          level: public
-        - path: /api/bidding/listing-summaries
-          level: public
-        - path: /api/bidding/items/*/bids
-          level: public
+        # Public marketplace: bid browsing is open; write/action endpoints
+        # (bids, messages, accept, ...) are self-enforced by the backend.
         - path: /api/bidding/*
-          level: auth
+          level: public
 
   # ── Reusable capabilities from the LXS registry ──────────────────────────
   auth-backend:
