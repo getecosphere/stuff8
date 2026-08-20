@@ -1,0 +1,5 @@
+build-eco/
+dist/
+.eco-frontend-hash
+.eco-frontend-envhash
+.eco-astro-stage

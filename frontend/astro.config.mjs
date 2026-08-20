@@ -1,22 +1,19 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 
-const isDev = process.env.ECO_DEPLOY_MODE !== 'prod' && !process.env.CF_PAGES;
+const port = parseInt(process.env.PORT, 10) || 3000;
 
 export default defineConfig({
-  integrations: [tailwind()],
+  integrations: [
+    tailwind(),
+  ],
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+  server: { port, host: true },
   trailingSlash: 'always',
-  output: isDev ? 'static' : 'hybrid',
-  adapter: isDev ? undefined : cloudflare(),
   redirects: {
     '/signin': '/auth/signin/'
   },
-  server: {
-    port: Number(process.env.PORT) || 3000,
-    host: true
-  },
-  devToolbar: {
-    enabled: false
-  }
+  devToolbar: { enabled: false },
 });
