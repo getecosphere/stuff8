@@ -11,7 +11,11 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   server: { port, host: true },
-  trailingSlash: 'always',
+  // The estate gateway LXS normalizes trailing slashes on forward (strips the
+  // slash), so Astro must not re-add them with a 301 — 'always' + the gateway's
+  // normalization produced a redirect loop on /inventory/. 'ignore' serves
+  // both forms without redirecting.
+  trailingSlash: 'ignore',
   redirects: {
     '/signin': '/auth/signin/'
   },
